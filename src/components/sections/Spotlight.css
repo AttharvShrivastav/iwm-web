@@ -1,0 +1,266 @@
+:root {
+  --base-100: #ffffff;
+  --base-300: #a1a1aa;
+  --base-450: #18181b;
+  --base-500: #09090b;
+}
+
+.spotlight {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--base-500);
+  cursor: none;
+}
+
+.spotlight-outline {
+  display: none;
+}
+
+.spotlight-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+  background-color: var(--base-450);
+}
+
+.spotlight-intro-text-wrapper {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center; /* ADD THIS: Centers the items horizontally */
+  gap: 1.5rem; /* You can adjust this gap to bring the words closer/further apart */
+  z-index: 10;
+}
+
+.spotlight-intro-text {
+  /* REMOVED 'flex: 1;' from here */
+  position: relative;
+  will-change: transform;
+  color: var(--base-300);
+  text-align: center;
+}
+
+.spotlight-intro-text p {
+  font-family: 'Anton', sans-serif;
+  font-size: 8vw;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.spotlight-intro-text:nth-child(1) {
+  display: flex;
+  justify-content: center;
+}
+
+.spotlight-bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: scale(0);
+  will-change: transform;
+  border-radius: 0;
+  opacity: 0.8;
+}
+
+.spotlight-bg-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.5);
+  will-change: transform;
+}
+
+.spotlight-titles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  clip-path: polygon(
+    50svh 0px,
+    0px 50%,
+    50svh 100%,
+    100% calc(100% + 100svh),
+    100% -100svh
+  );
+  --before-opacity: 0;
+  --after-opacity: 0;
+  z-index: 5;
+}
+
+.spotlight-titles-container::before,
+.spotlight-titles-container::after {
+  content: "";
+  position: absolute;
+  width: 100svh;
+  height: 2px;
+  background: var(--base-100);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.spotlight-titles-container::before {
+  top: 0;
+  left: 0;
+  transform: rotate(-45deg) translate(-7rem);
+  opacity: var(--before-opacity);
+}
+
+.spotlight-titles-container::after {
+  bottom: 0;
+  left: 0;
+  transform: rotate(45deg) translate(-7rem);
+  opacity: var(--after-opacity);
+}
+
+.spotlight-titles {
+  position: relative;
+  left: 15%;
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12rem;
+  transform: translateY(100%);
+  z-index: 2;
+  padding: 50vh 0;
+}
+
+.spotlight-titles h1 {
+  font-family: 'Anton', sans-serif;
+  color: var(--base-100);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.spotlight-images {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  min-width: 300px;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.spotlight-img {
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  will-change: transform;
+  border-radius: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.spotlight-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spotlight-header {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  color: var(--base-100);
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  opacity: 0;
+}
+
+.spotlight-header p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--base-100);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 1000px) {
+  .spotlight-titles {
+    left: 5%;
+    width: 90%;
+    gap: 15rem;
+  }
+
+  .spotlight-titles h1 {
+    font-size: 2rem;
+  }
+
+  .spotlight-img {
+    width: 140px;
+    height: 100px;
+  }
+
+  .spotlight-header {
+    left: 2%;
+  }
+
+  .spotlight-header p {
+    font-size: 0.8rem;
+  }
+
+  .spotlight-titles-container {
+    clip-path: none;
+  }
+
+  .spotlight-titles-container::before,
+  .spotlight-titles-container::after {
+    display: none;
+  }
+}
+
+.spotlight-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 9999;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.spotlight-cursor span {
+  margin-top: 2px;
+}
+
+.spotlight-cursor svg {
+  width: 12px;
+  height: 12px;
+}

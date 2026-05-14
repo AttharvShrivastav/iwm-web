@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@100..800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Agrandir Regular';
+  src: url('./assets/fonts/Agrandir-Regular.woff2') format('woff2'),
+       url('./assets/fonts/Agrandir-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Agrandir Tight';
+  src: url('./assets/fonts/Agrandir-Tight.woff2') format('woff2'),
+       url('./assets/fonts/Agrandir-Tight.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-agrandir: "Agrandir Regular", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-agrandir-tight: "Agrandir Tight", "Agrandir Regular", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Agrandir Regular", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-hindi: "Anek Devanagari", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-agrandir;
+  }
+}
