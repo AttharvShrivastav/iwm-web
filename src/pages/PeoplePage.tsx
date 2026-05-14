@@ -11,7 +11,7 @@ export const PeoplePage: React.FC = () => {
         label="+ OUR PEOPLE"
         title="The Force Behind Urban Cleanliness"
         subtitle="A disciplined workforce of operators, engineers, and sanitation professionals delivering consistency, scale, and reliability across urban systems."
-        image="/src/assets/heroes/people-hero.png"
+        image="/assets/heroes/people-hero.png"
         topRightLink={{
           label: "READ OUR STORY",
           href: "/about"

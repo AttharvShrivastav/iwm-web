@@ -122,7 +122,7 @@ export const ServicesPage: React.FC = () => {
         label="+ SERVICES"
         title="Waste Management. Delivered at Scale."
         subtitle="An integrated suite of collection, processing, sweeping and recovery solutions driving efficiency, compliance, and sustainability at a city-wide scale."
-        image="/src/assets/heroes/services-hero.png"
+        image="/assets/heroes/services-hero.png"
         topRightLink={{
           label: "READ OUR STORY",
           href: "/about"

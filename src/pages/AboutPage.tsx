@@ -34,7 +34,7 @@ export const AboutPage: React.FC = () => {
         label="+ ABOUT US"
         title="Industrial Scale With Human Core"
         subtitle='"Excellent Execution. Innovation. Radical Dignity." These are not aspirations. They are the operating principles behind every project IWM has ever taken on.'
-        image="/src/assets/heroes/about-hero.png"
+        image="/assets/heroes/about-hero.png"
         topRightLink={{
           label: "READ OUR STORY",
           href: "#"

@@ -35,7 +35,7 @@ export const ContactPage: React.FC = () => {
         label="+ CONTACT"
         title="Let's Build Cleaner Cities Together"
         subtitle="Whether you're a municipal partner, a potential recruit, or interested in our services, we're ready to start the conversation."
-        image="/src/assets/heroes/contact-hero.png"
+        image="/assets/heroes/contact-hero.png"
         topRightLink={{
           label: "OUR SERVICES",
           href: "/services"
