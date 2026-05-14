@@ -30,111 +30,66 @@ export const Button: React.FC<ButtonProps> = ({
   // Split label into characters manually
   const chars = useMemo(() => label.split(''), [label]);
 
-  // Detect vertical entry direction
-  const getDirection = (e: React.MouseEvent) => {
-    if (!btnRef.current) return 'top';
-    const rect = btnRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top;
-
-    return y < rect.height / 2 ? 'top' : 'bottom';
-  };
-
-  useGSAP(() => {
+  const { contextSafe } = useGSAP(() => {
     if (!primaryRef.current || !secondaryRef.current) return;
 
     const primaryChars = primaryRef.current.querySelectorAll('.char');
     const secondaryChars = secondaryRef.current.querySelectorAll('.char');
 
     // Default initial state
-    gsap.set(primaryChars, { y: '0%' });
-    gsap.set(secondaryChars, { y: '100%' });
+    gsap.set(primaryChars, { yPercent: 0 });
+    gsap.set(secondaryChars, { yPercent: 100 });
   }, { scope: btnRef });
 
-  const handleMouseEnter = (e: React.MouseEvent) => {
-    const dir = getDirection(e);
+  const handleMouseEnter = contextSafe(() => {
     const primaryChars = primaryRef.current?.querySelectorAll('.char');
     const secondaryChars = secondaryRef.current?.querySelectorAll('.char');
 
     if (!primaryChars || !secondaryChars) return;
 
-    if (dir === 'top') {
-      // Coming from top: primary goes up, secondary comes from bottom
-      gsap.set(secondaryChars, { y: '100%' });
-      gsap.to(primaryChars, {
-        y: '-100%',
-        stagger: 0.02,
-        duration: 0.4,
-        ease: 'power3.out',
-        overwrite: true
-      });
-      gsap.to(secondaryChars, {
-        y: '0%',
-        stagger: 0.02,
-        duration: 0.4,
-        ease: 'power3.out',
-        overwrite: true
-      });
-    } else {
-      // Coming from bottom: primary goes down, secondary comes from top
-      gsap.set(secondaryChars, { y: '-100%' });
-      gsap.to(primaryChars, {
-        y: '100%',
-        stagger: 0.02,
-        duration: 0.4,
-        ease: 'power3.out',
-        overwrite: true
-      });
-      gsap.to(secondaryChars, {
-        y: '0%',
-        stagger: 0.02,
-        duration: 0.4,
-        ease: 'power3.out',
-        overwrite: true
-      });
-    }
-  };
+    // Always slide up
+    gsap.to(primaryChars, {
+      yPercent: -100,
+      stagger: 0.02,
+      duration: 0.4,
+      ease: 'power3.out',
+      overwrite: 'auto'
+    });
+    
+    // Ensure secondary starts at bottom, then animate to center
+    gsap.set(secondaryChars, { yPercent: 100 });
+    gsap.to(secondaryChars, {
+      yPercent: 0,
+      stagger: 0.02,
+      duration: 0.4,
+      ease: 'power3.out',
+      overwrite: 'auto'
+    });
+  });
 
-  const handleMouseLeave = (e: React.MouseEvent) => {
-    const dir = getDirection(e);
+  const handleMouseLeave = contextSafe(() => {
     const primaryChars = primaryRef.current?.querySelectorAll('.char');
     const secondaryChars = secondaryRef.current?.querySelectorAll('.char');
 
     if (!primaryChars || !secondaryChars) return;
 
-    if (dir === 'top') {
-      // Leaving from top: primary comes back from top, secondary goes to bottom
-      gsap.to(primaryChars, {
-        y: '0%',
-        stagger: 0.02,
-        duration: 0.3,
-        ease: 'power2.inOut',
-        overwrite: true
-      });
-      gsap.to(secondaryChars, {
-        y: '100%',
-        stagger: 0.02,
-        duration: 0.3,
-        ease: 'power2.inOut',
-        overwrite: true
-      });
-    } else {
-      // Leaving from bottom: primary comes back from bottom, secondary goes to top
-      gsap.to(primaryChars, {
-        y: '0%',
-        stagger: 0.02,
-        duration: 0.3,
-        ease: 'power2.inOut',
-        overwrite: true
-      });
-      gsap.to(secondaryChars, {
-        y: '-100%',
-        stagger: 0.02,
-        duration: 0.3,
-        ease: 'power2.inOut',
-        overwrite: true
-      });
-    }
-  };
+    // Slide back to original positions
+    gsap.to(primaryChars, {
+      yPercent: 0,
+      stagger: 0.02,
+      duration: 0.3,
+      ease: 'power2.inOut',
+      overwrite: 'auto'
+    });
+    
+    gsap.to(secondaryChars, {
+      yPercent: 100,
+      stagger: 0.02,
+      duration: 0.3,
+      ease: 'power2.inOut',
+      overwrite: 'auto'
+    });
+  });
 
   return (
     <button 
@@ -148,7 +103,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       <span className="relative block overflow-hidden leading-none">
         
-        <span ref={primaryRef} className="block">
+        <span ref={primaryRef} className="block pointer-events-none">
           {chars.map((char, i) => (
             <span key={i} className="char inline-block whitespace-pre">
               {char}
@@ -156,7 +111,7 @@ export const Button: React.FC<ButtonProps> = ({
           ))}
         </span>
 
-        <span ref={secondaryRef} className="absolute left-0 top-0 block">
+        <span ref={secondaryRef} className="absolute left-0 top-0 block pointer-events-none">
           {chars.map((char, i) => (
             <span key={i} className="char inline-block whitespace-pre">
               {char}

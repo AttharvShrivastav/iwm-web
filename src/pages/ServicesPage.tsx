@@ -14,94 +14,134 @@ export interface Service {
   features: string[];
 }
 
-
 export const servicesData: Service[] = [
   {
-    id: "material-recovery",
-    title: "Material Recovery Facility",
-    description: "Advanced recovery facilities designed to process and segregate recyclable materials from municipal waste streams.",
-    image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "Our Material Recovery Facilities (MRF) represent the pinnacle of waste segregation technology. We utilize a combination of mechanized sorting systems and manual expertise to ensure the highest possible recovery rates for plastics, paper, metals, and glass. By diverting these materials from landfills, we directly contribute to a circular economy and reduce the environmental footprint of municipal systems.",
+    id: "integrated-facility",
+    title: "Integrated Facility Management",
+    description: "Comprehensive one-stop solutions for large-scale operations, from housekeeping to technical maintenance.",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2070&auto=format&fit=crop",
+    fullWriteup: "Our Integrated Facility Management provides comprehensive, one-stop solutions tailored for large-scale operations. We meticulously manage every aspect of your infrastructure, covering housekeeping, deep cleaning, security, plumbing, gardening, and specialized technical services. By streamlining these critical functions into a seamless, unified operation, we ensure efficient and uninterrupted facility performance. Our approach guarantees that your physical assets are maintained to the highest standards, allowing you to focus entirely on your core municipal or corporate objectives.",
     features: [
-      "Mechanized sorting conveyors",
-      "Optical sorting technology",
-      "Magnetic and eddy current separators",
-      "Manual quality control checkpoints",
-      "Baling and logistics management"
+      "Unified operational management",
+      "Specialized technical services",
+      "Comprehensive housekeeping",
+      "Infrastructure security",
+      "Asset lifecycle optimization"
     ]
   },
   {
     id: "mechanized-sweeping",
     title: "Mechanized Road Sweeping",
-    description: "High-efficiency mechanized sweeping operations for urban roads, ensuring dust-free and clean city thoroughfares.",
+    description: "Advanced automated sweeping technology for emission-conscious and efficient urban cleaning.",
     image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "Sipahi's mechanized road sweeping operations are engineered for the challenges of dense urban environments. Our fleet of advanced vacuum sweepers operates with precision, removing fine dust and debris that manual sweeping often misses. This not only improves city aesthetics but also significantly enhances air quality by reducing PM10 and PM2.5 particles.",
+    fullWriteup: "We deploy advanced automated sweeping technology, utilizing highly specialized machines to efficiently remove dust, debris, and litter from city road surfaces. This modern approach ensures high-performance cleaning while strictly maintaining environmental and safety standards. By continually evaluating high-end European machinery and electric sweeper innovations, we aim to bring the most sophisticated, efficient, and emission-conscious street-cleaning infrastructure to Indian municipalities, ensuring our urban centers remain pristine and scalable.",
     features: [
-      "Advanced vacuum suction technology",
-      "Dual-broom system for edge-to-edge cleaning",
-      "Dust suppression water spray systems",
-      "GPS-tracked operation monitoring",
-      "Low-noise nighttime operations"
+      "High-end European machinery",
+      "PM10/PM2.5 dust suppression",
+      "Electric sweeper innovations",
+      "Night-time silent operations",
+      "Safety-first operational protocols"
+    ]
+  },
+  {
+    id: "manual-sweeping",
+    title: "Manual Road Sweeping",
+    description: "Precision traditional sweeping delivered with radical dignity and unparalleled attention to detail.",
+    image: "https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop",
+    fullWriteup: "Our manual road sweeping services rely on traditional street cleaning carried out by extensively trained workers to meticulously remove dust, litter, and waste, ensuring clean and hygienic roads. We approach this essential service through the lens of radical dignity, ensuring our frontline sanitation workers are equipped, respected, and empowered. By fostering a sense of pride and providing exceptional operational support, our teams deliver unparalleled attention to detail, creating cleaner, healthier communities across the nation.",
+    features: [
+      "Extensively trained workforce",
+      "Radical dignity approach",
+      "Meticulous litter removal",
+      "Workforce empowerment",
+      "Community health focus"
+    ]
+  },
+  {
+    id: "landscape-maintenance",
+    title: "Maintenance of Landscapes and Gardens",
+    description: "Expert horticultural upkeep of sprawling lawns and vital green spaces for corporate and municipal assets.",
+    image: "https://images.unsplash.com/photo-1558905619-17355266324d?q=80&w=2070&auto=format&fit=crop",
+    fullWriteup: "We provide expert maintenance of landscapes and gardens, executing regular upkeep of plants, sprawling lawns, and essential green spaces. Our dedicated horticultural teams ensure the healthy, sustained growth and pristine cleanliness of your environments, guaranteeing an attractive, professional appearance year-round. We understand that well-maintained greenery is crucial for the aesthetic and environmental health of any corporate or municipal campus, and we apply rigorous standards to preserve the vitality and beauty of these natural assets.",
+    features: [
+      "Professional horticultural teams",
+      "Pristine lawn maintenance",
+      "Year-round greenery care",
+      "Seasonal plant rotations",
+      "Sustainable irrigation practices"
     ]
   },
   {
     id: "jet-cleaning",
     title: "High Pressure Jet Cleaning",
-    description: "Deep cleaning services for urban infrastructure, monuments, and public spaces using specialized high-pressure equipment.",
+    description: "High-performance jet technology systems for fast, deep, and spotless restoration of urban surfaces.",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "Restoring the original glory of urban infrastructure requires more than basic cleaning. Our high-pressure jet cleaning service uses specialized machinery to remove stubborn grime, pollutants, and organic growth from public spaces, monuments, and pavements. We use eco-friendly additives and filtered water to ensure thorough cleaning without damaging surfaces.",
+    fullWriteup: "Experience powerful, high-performance cleaning with our advanced jet technology systems. Designed for heavy industrial and municipal applications, this mechanized solution effortlessly blasts away deeply ingrained dirt, heavy grease, and tough stains from various urban surfaces. By utilizing calibrated high-pressure water systems, we consistently deliver fast, deep, and spotless results every single time. This highly efficient service rapidly restores infrastructure aesthetics while minimizing chemical use and operational downtime in fast-moving environments.",
     features: [
-      "Variable pressure systems (up to 350 bar)",
-      "Hot/Cold water cleaning options",
-      "Surface-specific nozzle technology",
-      "Water recycling capabilities",
-      "Mobile self-contained units"
+      "Calibrated high-pressure systems",
+      "Industrial-grade grit removal",
+      "Chemical-minimized cleaning",
+      "Rapid surface restoration",
+      "Versatile application range"
     ]
   },
   {
-    id: "waste-collection",
-    title: "Waste Collection & Transport",
-    description: "Efficient and reliable waste collection systems designed for urban environments, ensuring timely removal.",
+    id: "door-to-door",
+    title: "Door to Door Collection",
+    description: "Structured residential waste pickup systems that serve as the foundation for resource recovery.",
     image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "Reliable waste collection is the backbone of urban sanitation. Sipahi operates a disciplined fleet of collection vehicles that follow strict, optimized routes to ensure no household or commercial point is left behind. Our transport systems are sealed and monitored to prevent secondary pollution during transit to processing facilities.",
+    fullWriteup: "Our highly efficient door-to-door collection systems ensure the timely, reliable pickup of waste directly from residential households, promoting unparalleled cleanliness and convenience. By establishing structured and heavily monitored collection routes, we actively support better, more systematic waste management practices at the source. This foundational service is critical for preventing urban overflow, directly contributing to a healthier, vastly more sustainable community and serving as the crucial first step in our integrated resource recovery workflows.",
     features: [
-      "Door-to-door collection models",
-      "Segregated waste compartments",
-      "Compact compactor vehicles",
-      "Real-time route optimization",
-      "Digital attendance and logging"
+      "Structured collection routes",
+      "Real-time monitoring systems",
+      "Source segregation awareness",
+      "Resource recovery foundation",
+      "Reliable pickup schedules"
     ]
   },
   {
-    id: "landfill-management",
-    title: "Landfill Management",
-    description: "Scientific management of landfill sites to minimize environmental impact and maximize space utilization.",
+    id: "bio-remediation",
+    title: "Bio Remediation - Legacy Waste",
+    description: "Eco-friendly stabilization of landfill sites using natural microorganisms to recover urban land.",
+    image: "https://images.unsplash.com/photo-1591193516411-ac56d827aa2d?q=80&w=2070&auto=format&fit=crop",
+    fullWriteup: "Our bioremediation of legacy waste tackles massive environmental challenges by utilizing natural microorganisms to actively break down and stabilize decades of old waste in overloaded landfills and dumpsites. This highly effective, eco-friendly process significantly reduces ground and air pollution, successfully recovers valuable urban land for future development, and heavily minimizes severe environmental and public health risks. We transform hazardous liabilities into neutralized, usable spaces, driving long-term sustainability for rapidly expanding cities.",
+    features: [
+      "Active biological stabilization",
+      "Urban land recovery",
+      "Significant pollution reduction",
+      "Scientific site management",
+      "Risk mitigation protocols"
+    ]
+  },
+  {
+    id: "water-rejuvenation",
+    title: "Water Rejuvenation",
+    description: "Advanced oxygen dissolution technology to revitalize dead water bodies and optimize treatment.",
+    image: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop",
+    fullWriteup: "Our water rejuvenation services utilize an advanced oxygen dissolution system that absolutely maximizes efficiency in large-scale water and wastewater treatment facilities. This cutting-edge technology significantly enhances natural biological breakdown processes, effectively controls hazardous odor and infrastructure corrosion, and heavily supports municipal environmental remediation. Through high-performance oxygen delivery, we restore dead water bodies and optimize processing plants, ensuring vital water resources are safely managed and ecologically revitalized for future generations.",
+    features: [
+      "High-performance oxygen dissolution",
+      "Biological breakdown enhancement",
+      "Odor and corrosion control",
+      "Environmental remediation support",
+      "Water body ecological restoration"
+    ]
+  },
+  {
+    id: "sewage-inspection",
+    title: "Sewage System Inspection & Maintenance",
+    description: "Robotics and AI-driven analytics for precision detection and maintenance of urban sewer systems.",
     image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "We move beyond the traditional dump-and-cover approach. Our scientific landfill management incorporates advanced compaction techniques to maximize volume efficiency, while leachate and gas management systems protect the surrounding soil and atmosphere. We also focus on the eventual remediation and capping of sites for future public use.",
+    fullWriteup: "We use advanced technology to thoroughly inspect underground sewage pipelines, accurately detecting hidden cracks, severe silt buildup, and critical blockages. By pioneering specialized robotics and AI-driven fluid analytics for municipal infrastructure, we accurately identify precise problem areas. This allows us to provide targeted, minimally invasive solutions that drastically improve flow efficiency, significantly reduce ongoing maintenance costs, and ensure the long-term durability and structural integrity of complex urban sewer systems.",
     features: [
-      "High-density compaction",
-      "Leachate collection and treatment",
-      "Methane gas monitoring",
-      "Erosion and sediment control",
-      "Site remediation planning"
-    ]
-  },
-  {
-    id: "composting",
-    title: "Composting & Organic Waste",
-    description: "Transforming organic waste into high-quality compost through mechanized processes.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop",
-    fullWriteup: "Organic waste shouldn't be a burden—it's a resource. Our composting facilities use aerobic decomposition processes to turn organic municipal waste into nutrient-rich soil conditioners. By processing organics separately, we reduce greenhouse gas emissions and provide high-quality compost for landscaping and agriculture.",
-    features: [
-      "Aerobic windrow composting",
-      "Mechanized screening and turning",
-      "Temperature and moisture monitoring",
-      "Odor control biofilters",
-      "Final product testing and bagging"
+      "Advanced robotic inspection",
+      "AI-driven fluid analytics",
+      "Minimally invasive solutions",
+      "Flow efficiency optimization",
+      "Structural integrity monitoring"
     ]
   }
 ];
-
 
 const serviceValues = [
   {
@@ -128,7 +168,6 @@ export const ServicesPage: React.FC = () => {
           href: "/about"
         }}
       />
-
 
       <ServiceList />
       <MachinerySection />

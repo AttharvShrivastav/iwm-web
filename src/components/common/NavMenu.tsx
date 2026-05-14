@@ -28,11 +28,22 @@ const socialLinks = [
   { label: 'X', href: '#' },
 ];
 
-const address = [
-  '663, East, Ring Rd,',
-  'Near Bombay Hospital,',
-  'Indore,',
-  'Madhya Pradesh 452018',
+// 1. Replaced single address array with an array of office objects
+const offices = [
+  {
+    city: 'INDORE OFFICE',
+    lines: [
+      '663, East, Ring Rd, Near Bombay Hospital,',
+      'Indore, Madhya Pradesh 452018',
+    ]
+  },
+  {
+    city: 'CHENNAI OFFICE',
+    lines: [
+      '506 PM House, Sri Shipping Building Alandru St,',
+      'St Thomas Mount, Chennai — 600016',
+    ]
+  }
 ];
 
 export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
@@ -53,11 +64,9 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       const tl = gsap.timeline();
       
-      // Reset panels to be above the screen
       gsap.set(panelsRef.current, { y: '-100%' });
       gsap.set(contentRef.current, { opacity: 0 });
 
-      // Panel reveal sequence: Top to Bottom
       tl.to(panelsRef.current, {
         y: '0%',
         duration: 1.2,
@@ -79,7 +88,7 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
       })
       .to(panelsRef.current, {
         y: '-100%',
-        duration: 0.8, // Faster
+        duration: 0.8,
         stagger: 0.05,
         ease: 'expo.inOut',
       }, '-=0.1');
@@ -131,8 +140,10 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
 
         {/* Main Grid */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 md:gap-8 items-center mt-6 md:mt-8 overflow-hidden">
+          
           {/* Left Column: Socials & Legal */}
-          <div className="flex flex-row md:flex-col gap-6 md:gap-12 h-full justify-between md:justify-center items-end md:items-start order-2 md:order-1">
+          <div className="flex flex-row md:flex-col gap-6 md:gap-10 h-full justify-between md:justify-center items-end md:items-start order-2 md:order-1">
+            
             <div className="flex flex-col gap-1">
               {socialLinks.map((link, i) => (
                 <Copy key={link.label} animateOnScroll={false} delay={1.2 + i * 0.05}>
@@ -146,16 +157,25 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
               ))}
             </div>
 
-            <div className="flex flex-col gap-1">
-              <p className="text-[10px] md:text-[11px] font-bold opacity-40 uppercase tracking-wider mb-1">Address</p>
-              {address.map((line, i) => (
-                <Copy key={line} animateOnScroll={false} delay={1.5 + i * 0.05}>
-                  <p className="text-[10px] md:text-[11px] font-medium opacity-80 leading-tight">
-                    {line}
+            {/* 2. Updated to map over the offices array */}
+            <div className="flex flex-col gap-6">
+              {offices.map((office, index) => (
+                <div key={office.city} className="flex flex-col gap-1">
+                  <p className="text-[10px] md:text-[11px] font-bold opacity-40 uppercase tracking-wider mb-1">
+                    {office.city}
                   </p>
-                </Copy>
+                  {office.lines.map((line, i) => (
+                    /* Added staggering to the delay based on office index so they cascade nicely */
+                    <Copy key={line} animateOnScroll={false} delay={1.5 + (index * 0.1) + (i * 0.05)}>
+                      <p className="text-[10px] md:text-[11px] font-medium opacity-80 leading-tight">
+                        {line}
+                      </p>
+                    </Copy>
+                  ))}
+                </div>
               ))}
             </div>
+
           </div>
 
           {/* Center Column: Main Links */}
