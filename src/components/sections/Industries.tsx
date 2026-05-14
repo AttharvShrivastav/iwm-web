@@ -6,13 +6,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
 
+
 import { Button } from '../common/Button';
 
 const industries = [
   {
     id: 'municipal',
     name: 'Municipal Corporations',
-    image: '/src/assets/home/industries/images/industry-municipal.png',
+    image: '/assets/home/industries/images/industry-municipal.png',
     fallbackImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop',
     clients: [
       { name: 'Indore Municipal Corporation', logo: '/src/assets/home/industries/logos/industry-municipal-logo-1.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
@@ -38,7 +39,7 @@ const industries = [
   {
     id: 'authority',
     name: 'Government Authority',
-    image: '/src/assets/home/industries/images/industry-authority.png',
+    image: '/assets/home/industries/images/industry-authority.png',
     fallbackImage: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop',
     clients: [
       { name: 'Maa Chamunda Shaskiya Devsthan Praband Samiti', logo: '/src/assets/home/industries/logos/industry-authority-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/gov1/200/200' },
@@ -51,7 +52,7 @@ const industries = [
   {
     id: 'corporate',
     name: 'Corporate Firms',
-    image: '/src/assets/home/industries/images/industry-corporate.png',
+    image: '/assets/home/industries/images/industry-corporate.png',
     fallbackImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
     clients: [
       { name: 'Phoenix Mall', logo: '/src/assets/home/industries/logos/industry-corporate-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/corp1/200/200' },
@@ -72,7 +73,7 @@ const industries = [
   {
     id: 'events',
     name: 'Events',
-    image: '/src/assets/home/industries/images/industry-events.png', // Reusing government assets or update as needed
+    image: '/assets/home/industries/images/industry-events.png', // Reusing government assets or update as needed
     fallbackImage: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop',
     clients: [
       { name: 'MPCA', logo: '/src/assets/home/industries/logos/industry-events-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },

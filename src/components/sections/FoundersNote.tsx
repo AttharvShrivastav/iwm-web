@@ -65,7 +65,7 @@ export const FoundersNote: React.FC = () => {
         {/* Image Column */}
         <div ref={imageRef} className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-zinc-100">
           <img 
-            src="/src/assets/about/foundersnote/founders-note.jpeg" 
+            src="/assets/about/foundersnote/founders-note.jpeg" 
             alt="Founder" 
             className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
             referrerPolicy="no-referrer"
