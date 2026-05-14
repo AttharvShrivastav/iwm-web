@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -20,55 +20,55 @@ const leaders: Leader[] = [
     name: "Mr. Mohan Lal Pandey",
     designation: "Director and CEO",
     email: "mohan@iwm-india.com",
-    image: "https://picsum.photos/seed/mohan/800/1000"
+    image: "/assets/people/leadership/mohan.jpeg" 
   },
   {
     name: "Mr. Sandeep Gole",
     designation: "Director",
     email: "sandeep@iwm-india.com",
-    image: "https://picsum.photos/seed/sandeep/800/1000"
+    image: "/assets/people/leadership/sandeep.jpeg"
   },
   {
     name: "Mr. Hardik Pandey",
     designation: "General Manager",
     email: "hardik@iwm-india.com",
-    image: "https://picsum.photos/seed/hardik/800/1000"
+    image: "/assets/people/leadership/hardik.jpeg"
   },
   {
     name: "Ms. Radhika Patidar",
     designation: "Hr & Admin Head",
     email: "radhika@iwm-india.com",
-    image: "https://picsum.photos/seed/radhika/800/1000"
+    image: "/assets/people/leadership/radhika.jpeg"
   },
   {
     name: "Mr. Manoj Batra",
     designation: "Finance Head",
     email: "manojs@iwm-india.com",
-    image: "https://picsum.photos/seed/manoj/800/1000"
+    image: "/assets/people/leadership/manoj.jpeg"
   },
   {
     name: "Dr. Akhilesh Upadhyay",
     designation: "General Manager - Operations",
     email: "akhilesh@iwm-india.com",
-    image: "https://picsum.photos/seed/akhilesh/800/1000"
+    image: "/assets/people/leadership/akhilesh.jpeg"
   },
   {
     name: "Mr. Manas Pandey",
     designation: "Business Development",
     email: "manas@iwm-india.com",
-    image: "https://picsum.photos/seed/manas/800/1000"
+    image: "/assets/people/leadership/manas.jpeg"
   },
   {
     name: "Mr. Nazir Mohammed",
     designation: "QHSE",
     email: "qhseiwm@iwm-india.com",
-    image: "https://picsum.photos/seed/nazir/800/1000"
+    image: "/assets/people/leadership/nazir.jpeg"
   },
   {
     name: "Mr. Ajit Shrivastava",
     designation: "Public Relation Manager",
     email: "ajit@iwm-india.com",
-    image: "https://picsum.photos/seed/ajit/800/1000"
+    image: "/assets/people/leadership/ajit.jpeg"
   }
 ];
 
@@ -123,17 +123,13 @@ export const LeadershipSection: React.FC = () => {
                   <img 
                     src={leader.image} 
                     alt={leader.name}
-                    className="parallax-img w-full h-[110%] object-cover transition-opacity duration-700"
+                    className="parallax-img w-full h-[110%] object-cover grayscale transition duration-700 group-hover:grayscale-0"
                     referrerPolicy="no-referrer"
                   />
                   
                   {/* Maintained Your Original Arrow Box Design */}
                   <div className="absolute bottom-0 right-0 bg-white p-4 rounded-none opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-                    {copiedId === leader.name ? (
-                      <Check size={24} className="text-green-600 animate-in fade-in zoom-in duration-300" />
-                    ) : (
-                      <ArrowUpRight size={24} className="text-black" />
-                    )}
+                    <ArrowUpRight size={24} className="text-black" />
                   </div>
                   
                   {/* Subtle "Email Copied" Overlay */}
