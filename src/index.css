@@ -3,8 +3,7 @@
 
 @font-face {
   font-family: 'Agrandir Regular';
-  src: url('./assets/fonts/Agrandir-Regular.woff2') format('woff2'),
-       url('./assets/fonts/Agrandir-Regular.woff') format('woff');
+  src: url('./assets/fonts/Agrandir-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -12,8 +11,7 @@
 
 @font-face {
   font-family: 'Agrandir Tight';
-  src: url('./assets/fonts/Agrandir-Tight.woff2') format('woff2'),
-       url('./assets/fonts/Agrandir-Tight.woff') format('woff');
+  src: url('./assets/fonts/Agrandir-Tight.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
