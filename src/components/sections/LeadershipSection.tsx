@@ -20,13 +20,13 @@ const leaders: Leader[] = [
     name: "Mr. Mohan Lal Pandey",
     designation: "Director and CEO",
     email: "mohan@iwm-india.com",
-    image: "/assets/people/leadership/mohan.jpeg" 
+    image: "/assets/people/leadership/mohan.png" 
   },
   {
     name: "Mr. Sandeep Gole",
     designation: "Director",
     email: "sandeep@iwm-india.com",
-    image: "/assets/people/leadership/sandeep.jpeg"
+    image: "/assets/people/leadership/sandeep.png"
   },
   {
     name: "Mr. Hardik Pandey",
@@ -50,7 +50,7 @@ const leaders: Leader[] = [
     name: "Dr. Akhilesh Upadhyay",
     designation: "General Manager - Operations",
     email: "akhilesh@iwm-india.com",
-    image: "/assets/people/leadership/akhilesh.jpeg"
+    image: "/assets/people/leadership/akhilesh.png"
   },
   {
     name: "Mr. Manas Pandey",
@@ -62,7 +62,7 @@ const leaders: Leader[] = [
     name: "Mr. Nazir Mohammed",
     designation: "QHSE",
     email: "qhseiwm@iwm-india.com",
-    image: "/assets/people/leadership/nazir.jpeg"
+    image: "/assets/people/leadership/nazir.png"
   },
   {
     name: "Mr. Ajit Shrivastava",
@@ -86,9 +86,9 @@ export const LeadershipSection: React.FC = () => {
     const images = containerRef.current?.querySelectorAll('.parallax-img');
     images?.forEach((img) => {
       gsap.fromTo(img, 
-        { y: '-5%' },
+        { yPercent: 0 }, // Starts at the top-[-10%] we set in CSS
         { 
-          y: '5%',
+          yPercent: 15,  // Slides down 15% as you scroll
           ease: 'none',
           scrollTrigger: {
             trigger: img.parentElement,
@@ -123,7 +123,7 @@ export const LeadershipSection: React.FC = () => {
                   <img 
                     src={leader.image} 
                     alt={leader.name}
-                    className="parallax-img w-full h-[110%] object-cover grayscale transition duration-700 group-hover:grayscale-0"
+                    className="parallax-img absolute top-[-10%] left-0 w-full h-[120%] object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0"
                     referrerPolicy="no-referrer"
                   />
                   
