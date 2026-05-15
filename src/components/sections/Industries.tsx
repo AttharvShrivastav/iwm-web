@@ -55,19 +55,19 @@ const industries = [
     image: '/assets/home/industries/images/industry-corporate.png',
     fallbackImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
     clients: [
-      { name: 'Phoenix Mall', logo: '/src/assets/home/industries/logos/industry-corporate-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/corp1/200/200' },
-      { name: 'Blue Neck', logo: '/src/assets/home/industries/logos/industry-corporate-logo-2.png', fallbackLogo: 'https://picsum.photos/seed/corp2/200/200' },
-      { name: 'Cooper Standard', logo: '/src/assets/home/industries/logos/industry-corporate-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/corp3/200/200' },
-      { name: 'GKN Driveline', logo: '/src/assets/home/industries/logos/industry-corporate-logo-4.png', fallbackLogo: 'https://picsum.photos/seed/corp4/200/200' },
-      { name: 'Hitachi', logo: '/src/assets/home/industries/logos/industry-corporate-logo-5.png', fallbackLogo: 'https://picsum.photos/seed/corp5/200/200' },
-      { name: 'Trivitron', logo: '/src/assets/home/industries/logos/industry-corporate-logo-6.png', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
-      { name: 'Enrich Lab', logo: '/src/assets/home/industries/logos/industry-corporate-logo-7.png', fallbackLogo: 'https://picsum.photos/seed/corp7/200/200' },
-      { name: 'Talent Maximus', logo: '/src/assets/home/industries/logos/industry-corporate-logo-8.png', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
-      { name: 'RKFL', logo: '/src/assets/home/industries/logos/industry-corporate-logo-9.png', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
-      { name: 'Born', logo: '/src/assets/home/industries/logos/industry-corporate-logo-10.png', fallbackLogo: 'https://picsum.photos/seed/corp10/200/200' },
-      { name: 'Saraplast', logo: '/src/assets/home/industries/logos/industry-corporate-logo-11.png', fallbackLogo: 'https://picsum.photos/seed/corp11/200/200' },
-      { name: 'Diesl', logo: '/src/assets/home/industries/logos/industry-corporate-logo-12.png', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
-      { name: 'Zeel Rainwear', logo: '/src/assets/home/industries/logos/industry-corporate-logo-13.png', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
+      { name: 'Phoenix Mall', logo: '/assets/home/industries/logos/industry-corporate-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/corp1/200/200' },
+      { name: 'Blue Neck', logo: '/assets/home/industries/logos/industry-corporate-logo-2.svg', fallbackLogo: 'https://picsum.photos/seed/corp2/200/200' },
+      { name: 'Cooper Standard', logo: '/assets/home/industries/logos/industry-corporate-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/corp3/200/200' },
+      { name: 'GKN Driveline', logo: '/assets/home/industries/logos/industry-corporate-logo-4.png', fallbackLogo: 'https://picsum.photos/seed/corp4/200/200' },
+      { name: 'Hitachi', logo: '/assets/home/industries/logos/industry-corporate-logo-5.png', fallbackLogo: 'https://picsum.photos/seed/corp5/200/200' },
+      { name: 'Trivitron', logo: '/assets/home/industries/logos/industry-corporate-logo-6.png', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
+      { name: 'Enrich Lab', logo: '/assets/home/industries/logos/industry-corporate-logo-7.png', fallbackLogo: 'https://picsum.photos/seed/corp7/200/200' },
+      { name: 'Talent Maximus', logo: '/assets/home/industries/logos/industry-corporate-logo-8.png', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
+      { name: 'RKFL', logo: '/assets/home/industries/logos/industry-corporate-logo-9.svg', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
+      { name: 'Born', logo: '/assets/home/industries/logos/industry-corporate-logo-10.png', fallbackLogo: 'https://picsum.photos/seed/corp10/200/200' },
+      { name: 'Saraplast', logo: '/assets/home/industries/logos/industry-corporate-logo-11.png', fallbackLogo: 'https://picsum.photos/seed/corp11/200/200' },
+      { name: 'Diesl', logo: '/assets/home/industries/logos/industry-corporate-logo-12.png', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
+      { name: 'Zeel Rainwear', logo: '/assets/home/industries/logos/industry-corporate-logo-13.png', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
     ]
   },
   {
@@ -76,9 +76,9 @@ const industries = [
     image: '/assets/home/industries/images/industry-events.png', // Reusing government assets or update as needed
     fallbackImage: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop',
     clients: [
-      { name: 'MPCA', logo: '/src/assets/home/industries/logos/industry-events-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },
-      { name: 'TNCA', logo: '/src/assets/home/industries/logos/industry-events-logo-2.png', fallbackLogo: 'https://picsum.photos/seed/event2/200/200' },
-      { name: 'Aashra Mubarka Al- Husain', logo: '/src/assets/home/industries/logos/industry-events-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/event3/200/200' },
+      { name: 'MPCA', logo: '/assets/home/industries/logos/industry-events-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },
+      { name: 'TNCA', logo: '/assets/home/industries/logos/industry-events-logo-2.png', fallbackLogo: 'https://picsum.photos/seed/event2/200/200' },
+      { name: 'Aashra Mubarka Al- Husain', logo: '/assets/home/industries/logos/industry-events-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/event3/200/200' },
     ]
   }
 ];
