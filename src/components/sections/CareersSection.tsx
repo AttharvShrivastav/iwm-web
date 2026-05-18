@@ -14,7 +14,26 @@ interface Job {
 
 // When this is empty, it shows the "Suitability" text. 
 // When it has items, it shows the "Don't see a fit?" text.
-const jobs: Job[] = [];
+const jobs: Job[] = [
+  // {
+  //   title: "Operations Manager",
+  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
+  //   type: "Full-Time",
+  //   location: "Indore"
+  // },
+  // {
+  //   title: "Environmental Engineer",
+  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
+  //   type: "Full-Time",
+  //   location: "Indore"
+  // },
+  // {
+  //   title: "Sanitation Supervisor",
+  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
+  //   type: "Full-Time",
+  //   location: "Indore"
+  // }
+];
 
 export const CareersSection: React.FC = () => {
   const navigate = useNavigate();
@@ -28,19 +47,54 @@ export const CareersSection: React.FC = () => {
     <section className="w-full bg-[#F9F9F9] py-24 md:py-32 px-8 md:px-16">
       <div className="w-full">
         <div className="flex flex-col gap-24">
-          {/* Header */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start">
+          {/* Header
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:items-end">
             <div className="flex flex-col gap-6">
               <SectionHeader label="CAREERS" className="text-black/60" />
               <h2 className="text-3xl md:text-5xl font-medium text-black font-agrandir tracking-tight leading-tight max-w-xl">
                 Join the movement for a Cleaner Tomorrow
               </h2>
             </div>
-            <div className="pt-12 lg:pt-20">
-              <p className="text-zinc-600 font-sans text-lg md:text-xl leading-relaxed max-w-md">
+            <div>
+              <p className="text-zinc-600 font-sans text-lg md:text-xl leading-relaxed max-w-md lg:pb-2">
                 We are always looking for passionate individuals who are ready to make a tangible impact on the environment and urban infrastructure.
               </p>
             </div>
+          </div> */}
+
+          {/* Header */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 w-full lg:items-end">
+            
+            {/* Left Column */}
+            <div className="flex flex-col gap-6">
+              <SectionHeader label="CAREERS" className="text-black/60" />
+              <h2 className="text-3xl md:text-5xl font-medium text-black font-agrandir tracking-tight leading-tight max-w-xl">
+                Join the movement for a Cleaner Tomorrow
+              </h2>
+            </div>
+            
+            {/* Right Column: Pushed to the bottom and vertically centered within itself */}
+            <div className="flex flex-col justify-center gap-6 lg:pb-2">
+              {hasOpenings ? (
+                <p className="text-zinc-600 font-sans text-lg md:text-xl leading-relaxed max-w-md">
+                  We are always looking for passionate individuals who are ready to make a tangible impact on the environment and urban infrastructure.
+                </p>
+              ) : (
+                <>
+                  <p className="text-zinc-600 font-sans text-lg md:text-md leading-relaxed max-w-[90%]">
+                    While we don't have any immediate openings, we are always interested in meeting exceptional people. If you believe you are suitable for a role and want to reach out, please contact us.
+                  </p>
+                  <a 
+                    href="mailto:info@iwm-india.com" 
+                    className="group flex items-center gap-2 text-lg md:text-xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity uppercase"
+                  >
+                    SEND US YOUR CV
+                    <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </a>
+                </>
+              )}
+            </div>
+            
           </div>
 
           {/* Job List (Only renders if there are jobs) */}
@@ -82,37 +136,21 @@ export const CareersSection: React.FC = () => {
           )}
 
           {/* Conditional Footer */}
-          <div className="flex flex-col items-center gap-6 pt-12 text-center">
-            {hasOpenings ? (
-              // Footer when jobs ARE available
-              <>
-                <p className="text-zinc-500 font-sans text-lg md:text-xl">
-                  Don't see a fit? We're always looking for talent.
-                </p>
-                <a 
-                  href="mailto:info@iwm-india.com" 
-                  className="group flex items-center gap-2 text-xl md:text-2xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity"
-                >
-                  SEND US YOUR CV
-                  <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </a>
-              </>
-            ) : (
-              // Footer when NO jobs are available
-              <>
-                <p className="text-zinc-500 font-sans text-lg md:text-xl max-w-2xl leading-relaxed">
-                  While we don't have any immediate openings, we are always interested in meeting exceptional people. If you believe you are suitable for a role and want to reach out, please contact us.
-                </p>
-                <a 
-                  href="mailto:info@iwm-india.com" 
-                  className="group flex items-center gap-2 text-xl md:text-2xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity"
-                >
-                  INFO@IWM-INDIA.COM
-                  <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </a>
-              </>
-            )}
-          </div>
+          {/* Footer (Only renders if there are jobs) */}
+          {hasOpenings && (
+            <div className="flex flex-col items-center gap-6 pt-12 text-center">
+              <p className="text-zinc-500 font-sans text-lg md:text-xl">
+                Don't see a fit? We're always looking for talent.
+              </p>
+              <a 
+                href="mailto:info@iwm-india.com" 
+                className="group flex items-center gap-2 text-xl md:text-2xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity uppercase"
+              >
+                SEND US YOUR CV
+                <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </section>

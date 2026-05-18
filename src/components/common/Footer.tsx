@@ -27,11 +27,20 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] lg:grid-cols-[3fr_2fr] gap-12 md:gap-16 lg:gap-32 pb-20">
           {/* Left Side (60%) */}
           <div className="flex flex-col justify-between h-full min-h-[250px] md:min-h-[300px]">
-            <div className="flex items-center gap-6 lg:gap-10">
-              <div className="h-[52px] md:h-[7.5vw] lg:h-[122px] shrink-0">
+            <div className="flex items-end gap-4 md:gap-6 lg:gap-10 w-full">
+              {/* Mobile (1 col): 12vw scaling. 
+                Tablet (2 col): Drops to 6vw scaling so it fits in the 60% grid column. 
+                Desktop: 8vw scaling.
+              */}
+              <div className="h-[clamp(55px,12vw,160px)] md:h-[clamp(55px,6vw,160px)] lg:h-[clamp(55px,8vw,160px)] shrink-0">
                 <Logo variant="primary" className="text-white h-full w-auto" />
               </div>
-              <h2 className="text-[32px] md:text-[4.5vw] lg:text-[76px] font-medium font-agrandir leading-[0.8] tracking-tight uppercase whitespace-nowrap md:whitespace-normal">
+              
+              {/* Mobile (1 col): 6vw text scaling. 
+                Tablet (2 col): Drops to 3vw text scaling. 
+                Desktop: 4vw text scaling.
+              */}
+              <h2 className="text-[clamp(24px,6vw,76px)] md:text-[clamp(24px,3vw,76px)] lg:text-[clamp(24px,4vw,76px)] font-medium font-agrandir leading-[0.9] tracking-tight uppercase whitespace-nowrap shrink-0">
                 GET IN TOUCH <br />
                 FOR ASSISTANCE
               </h2>

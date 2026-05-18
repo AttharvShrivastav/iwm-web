@@ -67,18 +67,17 @@ export const SipahiVoices: React.FC = () => {
   };
 
   return (
-    <section className="w-full bg-[#003358] py-24 md:py-32 px-8 md:px-16 overflow-hidden min-h-screen flex flex-col justify-center">
+    <section className="w-full bg-[#1B5FB4] py-24 md:py-32 px-8 md:px-16 overflow-hidden min-h-screen flex flex-col justify-center">
       <div className="w-full max-w-[1440px] mx-auto">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 md:mb-24">
           <div className="flex flex-col gap-6 max-w-2xl">
-            <SectionHeader label="VOICE FROM THE GROUND" className="text-white/60" />
+            <SectionHeader label="VOICE FROM THE GROUND" className="text-white/90" />
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white font-agrandir leading-[1.1]">
-              Radical Dignity in <br /> 
-              <span className="italic font-normal opacity-80">Every Action.</span>
+              Radical Dignity in <br /> Every Action
             </h2>
-            <p className="text-white/60 font-sans text-lg md:text-xl leading-relaxed">
+            <p className="text-white/90 font-sans text-lg md:text-xl leading-relaxed">
               Our Swachhata Sipahis are the backbone of everything we do. Professionalism, discipline, and pride define their journey.
             </p>
           </div>

@@ -147,7 +147,7 @@ export const Impact: React.FC = () => {
                 <img 
                   src={card.image} 
                   alt={card.number} 
-                  className="w-full h-full object-cover grayscale"
+                  className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     e.currentTarget.src = card.fallback;
@@ -157,7 +157,7 @@ export const Impact: React.FC = () => {
 
               {/* Impact Stats */}
               <div className="w-[55%] flex flex-col justify-between py-2">
-                <div className="text-[60px] md:text-[80px] lg:text-[100px] font-normal leading-none tracking-tighter text-black font-agrandir">
+                <div className="text-[60px] md:text-[80px] lg:text-[80px] font-normal leading-none tracking-tighter text-black font-agrandir">
                   {card.number}
                 </div>
                 <div className="flex flex-col gap-2">
