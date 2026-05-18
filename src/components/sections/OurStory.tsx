@@ -219,7 +219,8 @@ export const OurStory: React.FC = () => {
 
           {/* Mobile Timeline Line */}
           <div className="lg:hidden absolute left-[19px] top-[14px] w-[2px] bg-zinc-100 mobile-timeline">
-            <div className="w-full h-0 bg-[#005696] mobile-progress transition-all duration-300" />
+            {/* Removed the transition classes so GSAP can scrub perfectly */}
+            <div className="w-full h-0 bg-[#005696] mobile-progress" />
           </div>
 
           {storyPhases.map((phase, i) => (

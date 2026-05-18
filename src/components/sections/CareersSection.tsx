@@ -81,7 +81,7 @@ export const CareersSection: React.FC = () => {
                 </p>
               ) : (
                 <>
-                  <p className="text-zinc-600 font-sans text-lg md:text-md leading-relaxed max-w-[90%]">
+                  <p className="text-zinc-600 font-sans text-lg md:text-[16px] leading-relaxed max-w-[100%]">
                     While we don't have any immediate openings, we are always interested in meeting exceptional people. If you believe you are suitable for a role and want to reach out, please contact us.
                   </p>
                   <a 

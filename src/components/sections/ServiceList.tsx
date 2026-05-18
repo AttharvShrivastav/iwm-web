@@ -171,27 +171,26 @@ export const ServiceList: React.FC = () => {
                 className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white"
               >
                 <div className="max-w-2xl mx-auto flex flex-col gap-12 lg:gap-16">
-                  {/* Header */}
-                  <div className="flex flex-col gap-6">
+                  {/* Header - Editorial Style */}
+                  <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
                     <div className="flex items-center gap-3">
-                      {/* <div className="w-12 h-[1px] text-black" /> */}
-                      <span className="text-black font-bold tracking-[0.3em] text-[10px] uppercase">Service Specialization</span>
+                      <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">Service Specialization</span>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-medium text-black font-agrandir leading-tight tracking-tight">
+                    {/* Reduced from 6xl to 4xl for a cleaner look */}
+                    <h2 className="text-2xl md:text-4xl font-medium text-black font-agrandir leading-tight">
                       {selectedService.title}
                     </h2>
                   </div>
 
-                  {/* Body Text */}
-                  <div className="flex flex-col gap-8">
-                    <p className="text-xl md:text-2xl text-zinc-800 leading-relaxed font-sans font-normal">
+                  {/* Body Text - Editorial Style */}
+                  <div className="flex flex-col gap-8 pt-4">
+                    {/* Reduced size and lightened color slightly for better reading comfort */}
+                    <p className="text-lg md:text-xl text-zinc-700 leading-relaxed font-sans">
                       {selectedService.fullWriteup}
                     </p>
                     
-                    <div className="w-full h-[1px] bg-zinc-100 my-4" />
-                    
-                    <div className="flex flex-col gap-4">
-                       <p className="text-zinc-500 text-sm leading-relaxed max-w-lg">
+                    <div className="flex flex-col gap-4 pt-4">
+                       <p className="text-zinc-500 text-sm leading-relaxed max-w-lg italic border-l-2 border-zinc-200 pl-4">
                         At IWM, our operational philosophy is built on three pillars: visibility of results, relentless innovation, and radical dignity for our staff. This approach allows us to deliver scale and consistency where others see only complexity.
                       </p>
                     </div>
@@ -199,13 +198,13 @@ export const ServiceList: React.FC = () => {
 
                   {/* Action */}
                   <div className="pt-8">
-                    <Button 
-                      label="CONTACT OUR TEAM"
-                      bgColor="bg-black"
-                      textColor="text-white"
-                      className="w-full md:w-auto py-5 px-10"
-                      onClick={() => setSelectedService(null)} // Or route to a contact section
-                    />
+                    <button 
+                      onClick={() => setSelectedService(null)}
+                      className="relative overflow-hidden w-full md:w-auto bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none"
+                    >
+                      {/* The span + relative z-10 locks the text so it can't duplicate */}
+                      <span className="relative z-10 block">CONTACT OUR TEAM</span>
+                    </button>
                   </div>
                 </div>
               </div>

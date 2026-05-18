@@ -61,13 +61,16 @@ export const Footer: React.FC = () => {
                 For first insight to final result, we're with you at every turn. Reach out to our teams in Indore or Chennai to build cleaner cities together.
               </p>
               
-              <div className="flex w-full">
+              {/* Added flex-col for mobile, md:flex-row for tablet/desktop, 
+                  and gap-2 to separate them when stacked on mobile */}
+              <div className="flex flex-col md:flex-row w-full gap-2 md:gap-0">
                 <input 
                   type="email" 
                   placeholder="Enter your email here" 
                   className="flex-1 bg-[#0d3b75] border-none px-6 py-5 text-[14px] focus:outline-none focus:ring-0 transition-all rounded-none placeholder:text-white/30"
                 />
-                <button className="bg-[#c2d9f0] text-[#1a5fb4] px-8 py-5 text-[12px] font-bold tracking-widest hover:bg-white transition-colors whitespace-nowrap rounded-none">
+                {/* Added w-full md:w-auto so the button stretches full width on mobile */}
+                <button className="w-full md:w-auto bg-[#c2d9f0] text-[#1a5fb4] px-8 py-5 text-[12px] font-bold tracking-widest hover:bg-white transition-colors whitespace-nowrap rounded-none">
                   KNOW MORE
                 </button>
               </div>

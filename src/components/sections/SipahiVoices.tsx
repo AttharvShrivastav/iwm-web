@@ -20,7 +20,7 @@ const sipahiGroups: SipahiQuote[][] = [
       name: "Sourabh Pandey",
       role: "Project Manager",
       statement: "I have been working with the company since 15th December 2019 as a Project Manager in the Operations department. My experience here has been highly rewarding, with continuous learning and growth opportunities. The management is supportive and encourages innovation and responsibility. The work environment is professional, and teamwork is highly valued. I am proud to be associated with an organization that is committed to excellence in its services.",
-      image: "https://images.unsplash.com/photo-1544717297-fa95b8ee4a14?q=80&w=2070&auto=format&fit=crop",
+      image: "assets/people/sipahis/sipahi-1.jpg",
       yearsWithIwm: "Since 2019"
     },
     {
@@ -28,7 +28,7 @@ const sipahiGroups: SipahiQuote[][] = [
       name: "पदम सिंह सोलंकी",
       role: "मैकेनिक (वर्कशॉप)",
       statement: "मैं पिछले 6+ वर्षों से इस कंपनी में मैकेनिक के रूप में कार्य कर रहा हूँ। यहाँ मुझे विभिन्न मशीनों पर काम करने का अवसर मिला है, जिससे मेरी तकनीकी जानकारी और कौशल में काफी सुधार हुआ है। कंपनी समय पर वेतन देती है और काम का वातावरण भी अच्छा है। हमारे वरिष्ठ हमेशा मार्गदर्शन करते हैं और जरूरत पड़ने पर पूरा सहयोग मिलता है। मुझे इस कंपनी का हिस्सा बनकर गर्व महसूस होता है।",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop",
+      image: "assets/people/sipahis/sipahi-2.jpg",
       yearsWithIwm: "6+ Years",
       isHindi: true
     }
@@ -39,7 +39,7 @@ const sipahiGroups: SipahiQuote[][] = [
       name: "अजोध्या बरिया",
       role: "सफाई मित्र",
       statement: "मैं पिछले कई वर्षों से इस कंपनी में कार्य कर रही हूँ। यहाँ काम करने का अनुभव अच्छा है। कंपनी समय पर वेतन देती है और काम भी नियमित मिलता है। हमारे सुपरवाइजर सहयोग करते हैं और काम को सही तरीके से समझाते हैं। मुझे यहाँ काम करके संतोष और सुरक्षा महसूस होती है।",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop",
+      image: "assets/people/sipahis/sipahi-3.jpg",
       yearsWithIwm: "Multiple Years",
       isHindi: true
     },
@@ -48,7 +48,7 @@ const sipahiGroups: SipahiQuote[][] = [
       name: "गंगा बाई साठे",
       role: "सफाई मित्र",
       statement: "मैं पिछले 2 वर्षों से इस कंपनी में सड़क सफाई का कार्य कर रही हूँ। यहाँ का माहौल अच्छा है और सभी एक-दूसरे का सहयोग करते हैं। कंपनी हमें जरूरी उपकरण और सुरक्षा का ध्यान रखती है। समय पर वेतन मिलने से परिवार चलाने में सुविधा होती है। मुझे यहाँ काम करके अच्छा लगता है।",
-      image: "https://images.unsplash.com/photo-1531123897727-8f129e16fd3c?q=80&w=1974&auto=format&fit=crop",
+      image: "assets/people/sipahis/sipahi-4.jpg",
       yearsWithIwm: "2 Years",
       isHindi: true
     }
@@ -128,7 +128,7 @@ export const SipahiVoices: React.FC = () => {
                       <img 
                         src={quote.image} 
                         alt={quote.name}
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100"
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         referrerPolicy="no-referrer"
                       />
                     </div>

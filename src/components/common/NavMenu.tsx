@@ -105,21 +105,21 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
       {/* Animated Background Panels - Stacked to show bottom bars */}
       <div 
         ref={(el) => el && (panelsRef.current[0] = el)}
-        className="absolute inset-x-0 top-0 bg-[#005696] z-10 h-screen md:h-[85vh]"
+        className="absolute inset-x-0 top-0 bg-[#005696] z-10 h-[100dvh] md:h-[85vh]"
       />
       <div 
         ref={(el) => el && (panelsRef.current[1] = el)}
-        className="absolute inset-x-0 top-0 bg-[#729fcf] z-20 h-screen md:h-[81vh]"
+        className="absolute inset-x-0 top-0 bg-[#729fcf] z-20 h-[100dvh] md:h-[81vh]"
       />
       <div 
         ref={(el) => el && (panelsRef.current[2] = el)}
-        className="absolute inset-x-0 top-0 bg-[#f8f7f2] z-30 h-screen md:h-[77vh]"
+        className="absolute inset-x-0 top-0 bg-[#f8f7f2] z-30 h-[100dvh] md:h-[77vh]"
       />
 
       {/* Content Layer - Constrained to the white panel height (77vh) */}
       <div 
         ref={contentRef}
-        className="relative z-40 h-screen md:h-[77vh] w-full flex flex-col p-8 md:px-16 md:py-12 md:pb-16 text-[#005696] pointer-events-auto"
+        className="relative z-40 h-[100dvh] md:h-[77vh] w-full flex flex-col px-6 py-6 pb-12 md:px-16 md:py-12 md:pb-16 text-[#005696] pointer-events-auto"
       >
         {/* Top Bar */}
         <div className="flex items-center w-full relative">
@@ -139,7 +139,7 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Main Grid */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 md:gap-8 items-center mt-6 md:mt-8 overflow-hidden">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-2 md:gap-8 items-center mt-2 md:mt-8 overflow-hidden">
           
           {/* Left Column: Socials & Legal */}
           <div className="flex flex-row md:flex-col gap-6 md:gap-10 h-full justify-between md:justify-center items-end md:items-start order-2 md:order-1">

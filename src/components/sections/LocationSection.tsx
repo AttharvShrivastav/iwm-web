@@ -24,7 +24,7 @@ export const LocationSection: React.FC = () => {
       </div>
 
       {/* Marquee */}
-      <div className="relative flex overflow-x-hidden py-0 border-y border-white/10 group z-20 bg-[#003358]">
+      <div className="relative flex overflow-x-hidden pt-12 group z-20 bg-[#003358]">
         <div className="animate-marquee whitespace-nowrap flex items-center group-hover:[animation-play-state:paused] py-4 lg:py-6">
           {Array(4).fill(0).map((_, groupIndex) => (
             <React.Fragment key={groupIndex}>

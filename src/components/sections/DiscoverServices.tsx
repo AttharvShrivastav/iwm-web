@@ -104,6 +104,7 @@ export const DiscoverServices = () => {
     if (!initialized) return;
 
     const titlesContainer = titlesContainerRef.current!;
+    const imagesContainer = imagesContainerRef.current!; // Added reference to get container width
     const spotlightHeader = spotlightHeaderRef.current!;
     const titlesContainerElement = titlesContainerElementRef.current!;
     const imageElements = imageElementsRef.current;
@@ -112,10 +113,31 @@ export const DiscoverServices = () => {
     const isMobile = window.innerWidth < 1000;
     const containerWidth = isMobile ? window.innerWidth * 0.4 : window.innerWidth * 0.3;
     const containerHeight = window.innerHeight;
-    const arcStartX = isMobile ? containerWidth - 40 : containerWidth - 100;
+    const imgWidth = isMobile ? 70 : 100;
+
+    let arcStartX = isMobile ? containerWidth - 40 : containerWidth - 100;
     const arcStartY = -200;
     const arcEndY = containerHeight + 200;
-    const arcControlPointX = arcStartX + (isMobile ? 250 : 600);
+
+    // --- OVERFLOW FIX ---
+    // Calculate the physical max boundary within the right-aligned container
+    const imagesContainerRect = imagesContainer.getBoundingClientRect();
+    const maxSafeX = imagesContainerRect.width - imgWidth - 20; // 20px safety buffer from the edge
+
+    // 1. Clamp the starting coordinate so images don't spawn off-screen
+    arcStartX = Math.min(arcStartX, maxSafeX - 50);
+
+    // 2. Calculate the original intended curve bulge
+    let arcControlPointX = arcStartX + (isMobile ? 250 : 600);
+    
+    // 3. The furthest right point (peak) of this curve is exactly between Start and Control
+    const currentPeakX = (arcStartX + arcControlPointX) / 2;
+
+    // 4. If the curve's peak overflows the safe edge, algebraically pull the control point back
+    if (currentPeakX > maxSafeX) {
+      arcControlPointX = (maxSafeX * 2) - arcStartX;
+    }
+
     const arcControlPointY = containerHeight / 2;
 
     function getBezierPosition(t: number) {

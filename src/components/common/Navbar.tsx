@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Logo } from './Logo';
 import { MenuButton } from './MenuButton';
 
@@ -45,12 +46,12 @@ export const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
       </div>
 
       <div className="hidden md:block flex-1 text-right">
-        <a 
-          href="#story" 
+        <Link 
+          to="/about" 
           className="text-[10px] md:text-[12px] font-medium tracking-[0.2em] uppercase hover:text-[#729fcf] transition-colors duration-300"
         >
           Read Our Story
-        </a>
+        </Link>
       </div>
     </nav>
   );
