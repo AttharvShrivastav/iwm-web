@@ -11,7 +11,6 @@ const topRowLogos = [
 
 const bottomRowLogos = [
   "/assets/home/industries/logos/industry-corporate-logo-6.png", // Trivitron
-  "/assets/home/industries/logos/industry-corporate-logo-11.png", // Saraplast
   "/assets/home/industries/logos/industry-municipal-logo-1.png", // Indore
   "/assets/home/industries/logos/industry-municipal-logo-3.png", // Ujjain
   "/assets/home/industries/logos/industry-municipal-logo-6.png", // Greater Chennai
