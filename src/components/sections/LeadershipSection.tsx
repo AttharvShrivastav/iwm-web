@@ -20,61 +20,61 @@ const leaders: Leader[] = [
     name: "Mr. Mohan Lal Pandey",
     designation: "Director and CEO",
     email: "mohan@iwm-india.com",
-    image: "/assets/people/leadership/mohan.png" 
+    image: "/assets/people/leadership/mohan.webp" 
   },
   {
     name: "Mr. Sandeep Gole",
     designation: "Director",
     email: "sandeep@iwm-india.com",
-    image: "/assets/people/leadership/sandeep.png"
+    image: "/assets/people/leadership/sandeep.webp"
   },
   {
     name: "Mr. Hardik Pandey",
     designation: "General Manager",
     email: "hardik@iwm-india.com",
-    image: "/assets/people/leadership/hardik.jpeg"
+    image: "/assets/people/leadership/hardik.webp"
   },
   {
     name: "Mrs. Varsha Pandey",
     designation: "Director",
     email: "varsha@iwm-india.com",
-    image: "/assets/people/leadership/varsha.jpeg"
+    image: "/assets/people/leadership/varsha.webp"
   },
   {
     name: "Ms. Radhika Patidar",
     designation: "Hr & Admin Head",
     email: "radhika@iwm-india.com",
-    image: "/assets/people/leadership/radhika.jpeg"
+    image: "/assets/people/leadership/radhika.webp"
   },
   {
     name: "Mr. Manoj Batra",
     designation: "Finance Head",
     email: "manojs@iwm-india.com",
-    image: "/assets/people/leadership/manoj.jpeg"
+    image: "/assets/people/leadership/manoj.webp"
   },
   {
     name: "Dr. Akhilesh Upadhyay",
     designation: "General Manager - Operations",
     email: "akhilesh@iwm-india.com",
-    image: "/assets/people/leadership/akhilesh.png"
+    image: "/assets/people/leadership/akhilesh.webp"
   },
   {
     name: "Mr. Manas Pandey",
     designation: "Business Development",
     email: "manas@iwm-india.com",
-    image: "/assets/people/leadership/manas.jpeg"
+    image: "/assets/people/leadership/manas.webp"
   },
   {
     name: "Mr. Nazir Mohammed",
     designation: "QHSE",
     email: "qhseiwm@iwm-india.com",
-    image: "/assets/people/leadership/nazir.png"
+    image: "/assets/people/leadership/nazir.webp"
   },
   {
     name: "Mr. Ajit Shrivastava",
     designation: "Public Relation Manager",
     email: "ajit@iwm-india.com",
-    image: "/assets/people/leadership/ajit.jpeg"
+    image: "/assets/people/leadership/ajit.webp"
   }
 ];
 

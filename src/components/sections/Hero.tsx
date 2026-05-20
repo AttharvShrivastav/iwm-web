@@ -63,7 +63,7 @@ export const Hero: React.FC = () => {
       {/* Background Image - Fleet of Trucks */}
       <div className="absolute inset-0 z-0 bg-black">
         <img 
-          src="/assets/heroes/home-hero.png" 
+          src="/assets/heroes/home-hero.webp" 
           alt="IWM Truck Fleet" 
           className="hero-bg h-[120%] w-full object-cover brightness-[0.45] contrast-[1.1]"
           referrerPolicy="no-referrer"

@@ -2,7 +2,25 @@ import React, { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
-import { Settings, Weight, Shield, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  BadgeCheck,
+  Clock3,
+  Droplets,
+  Fuel,
+  Gauge,
+  Globe,
+  MapPin,
+  Recycle,
+  ChevronLeft,
+  ChevronRight,
+  Settings,
+  Shield,
+  Trash2,
+  Truck,
+  Waves,
+  Weight,
+  Zap
+} from 'lucide-react';
 
 interface Machine {
   id: string;
@@ -20,55 +38,120 @@ interface Machine {
 
 const machines: Machine[] = [
   {
-    id: 'sweeper',
-    name: 'Mechanical Road Sweeper',
-    category: 'URBAN CLEANLINESS',
-    description: 'High-performance vacuum sweeping technology designed for precision cleaning of urban thoroughfares. Features PM10 filtration to ensure air quality.',
+    id: 'elgin-pelican-sweeper',
+    name: 'Elgin Pelican Sweeper',
+    category: 'ROAD SWEEPING',
+    description: 'Three-wheel mechanical sweeper built for congested streets, heavy debris pickup, and reliable cleaning across challenging urban road conditions.',
     specs: [
-      { label: 'Capacity', value: '150k m²/d', icon: <Weight size={14} /> },
-      { label: 'Filtration', value: 'PM10 Cert.', icon: <Shield size={14} /> },
-      { label: 'Efficiency', value: '98% Rate', icon: <Zap size={14} /> }
+      { label: 'ORIGIN', value: 'USA', icon: <Globe size={14} /> },
+      { label: 'CAPACITY', value: '30 km', icon: <Gauge size={14} /> },
+      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
     ],
-    image: '/src/assets/machinery/road-sweeper.png',
+    image: '/src/assets/machinery/elgin-pelican-sweeper.png',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
-    id: 'compactor',
-    name: 'Refuse Compactor',
-    category: 'WASTE LOGISTICS',
-    description: 'Advanced hydraulic compression systems that maximize transport efficiency. Built to handle high-volume urban waste with minimal leakage.',
+    id: 'dulevo-6000-sweeper',
+    name: 'Dulevo 6000 Sweeper',
+    category: 'ROAD SWEEPING',
+    description: 'High-performance suction sweeper designed for dust control, cleaner air, and dependable municipal cleaning across major urban corridors.',
     specs: [
-      { label: 'Volume', value: '14-22 Cu.m', icon: <Settings size={14} /> },
-      { label: 'Ratio', value: '6:1 Comp.', icon: <Weight size={14} /> },
-      { label: 'Payload', value: 'Heavy Duty', icon: <Shield size={14} /> }
+      { label: 'ORIGIN', value: 'Italy', icon: <Globe size={14} /> },
+      { label: 'FUEL', value: 'CNG/Diesel', icon: <Fuel size={14} /> },
+      { label: 'CAPACITY', value: '30–40 km', icon: <Gauge size={14} /> }
     ],
-    image: '/src/assets/machinery/refuse-compactor.png',
+    image: '/src/assets/machinery/dulevo-6000-sweeper.png',
+    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
+  },
+  {
+    id: 'citynet-road-sweeper',
+    name: 'Citynet Road Sweeper',
+    category: 'ROAD SWEEPING',
+    description: 'Compact road sweeping machine designed for narrow streets, markets, industrial zones, parks, and public cleaning applications.',
+    specs: [
+      { label: 'ORIGIN', value: 'Europe', icon: <Globe size={14} /> },
+      { label: 'CAPACITY', value: '50 km', icon: <Gauge size={14} /> },
+      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
+    ],
+    image: '/src/assets/machinery/citynet-road-sweeper.png',
+    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
+  },
+  {
+    id: 'ravo-compact-sweeper',
+    name: 'Ravo Compact Sweeper',
+    category: 'ROAD SWEEPING',
+    description: 'Highly manoeuvrable compact sweeper built for urban centres, narrow lanes, crowded markets, and noise-sensitive public areas.',
+    specs: [
+      { label: 'ORIGIN', value: 'Netherlands', icon: <Globe size={14} /> },
+      { label: 'CAPACITY', value: '15 km', icon: <Gauge size={14} /> },
+      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
+    ],
+    image: '/src/assets/machinery/ravo-compact-sweeper.png',
+    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
+  },
+  {
+    id: 'organic-waste-composter',
+    name: 'Organic Waste Composter',
+    category: 'WASTE PROCESSING',
+    description: 'Fully automated composting machine that converts organic waste into nutrient-rich compost through controlled aerobic processing and deodorization.',
+    specs: [
+      { label: 'CAPACITY', value: '100–300 kg/day', icon: <Weight size={14} /> },
+      { label: 'TIME', value: '24–48 Hours', icon: <Clock3 size={14} /> },
+      { label: 'SYSTEM', value: 'PLC Automated', icon: <Settings size={14} /> }
+    ],
+    image: '/src/assets/machinery/organic-waste-composter.png',
     fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
   },
   {
-    id: 'jetting',
-    name: 'Sewer Jetting Unit',
-    category: 'INFRASTRUCTURE',
-    description: 'High-pressure water propulsion systems for deep-cleansing municipal drainage lines. Essential for preventing urban flooding incidents.',
+    id: 'jet-cleaning-machine',
+    name: 'Jet Cleaning Machine',
+    category: 'SURFACE CLEANING',
+    description: 'High-pressure water jet system for deep cleaning stains, grime, oil spills, bird droppings, footpaths, signage, and public assets.',
     specs: [
-      { label: 'Pressure', value: '4000 PSI', icon: <Zap size={14} /> },
-      { label: 'Reach', value: '300m Hose', icon: <Settings size={14} /> },
-      { label: 'Safety', value: 'Auto Ctrl', icon: <Shield size={14} /> }
+      { label: 'ACTION', value: 'Deep Cleaning', icon: <Zap size={14} /> },
+      { label: 'USE', value: 'Public Assets', icon: <Shield size={14} /> },
+      { label: 'BRAND', value: 'Kärcher', icon: <BadgeCheck size={14} /> }
     ],
-    image: '/src/assets/machinery/jetting-machine.png',
+    image: '/src/assets/machinery/jet-cleaning-machine.png',
     fallback: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop'
   },
   {
-    id: 'hookloader',
-    name: 'Advanced Hook Loader',
-    category: 'WASTE LOGISTICS',
-    description: 'Versatile loading systems for heavy container transport. Designed for rapid deployment and collection across industrial and urban zones.',
+    id: 'sdox-oxygen-system',
+    name: 'SDOX Oxygen System',
+    category: 'WATER REMEDIATION',
+    description: 'Supersaturated dissolved oxygen technology for polluted water treatment, odour control, biological remediation, and lake or reservoir restoration.',
     specs: [
-      { label: 'Lift', value: '25 Tons', icon: <Weight size={14} /> },
-      { label: 'Cycle', value: '45 Secs', icon: <Zap size={14} /> },
-      { label: 'Lock', value: 'Hydraulic', icon: <Shield size={14} /> }
+      { label: 'OXYGEN', value: '350 mg/l', icon: <Droplets size={14} /> },
+      { label: 'CONTROL', value: 'Odour Control', icon: <Shield size={14} /> },
+      { label: 'USE', value: 'River Cleanup', icon: <Waves size={14} /> }
     ],
-    image: '/src/assets/machinery/hook-loader.png',
+    image: '/src/assets/machinery/sdox-oxygen-system.png',
+    fallback: 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?q=80&w=2070&auto=format&fit=crop'
+  },
+  {
+    id: 'legacy-waste-disposal',
+    name: 'Legacy Waste Disposal',
+    category: 'WASTE REMEDIATION',
+    description: 'Scientific legacy waste processing using bioremediation and bio-mining to recover soil, recyclables, and reclaim impacted land areas.',
+    specs: [
+      { label: 'PROCESS', value: 'Bio-Mining', icon: <Settings size={14} /> },
+      { label: 'SITE', value: 'Ujjain', icon: <MapPin size={14} /> },
+      { label: 'OUTPUT', value: 'Land Recovery', icon: <Recycle size={14} /> }
+    ],
+    image: '/src/assets/machinery/legacy-waste-disposal.png',
+    fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
+  },
+  {
+    id: 'door-collection-vehicle',
+    name: 'Door Collection Vehicle',
+    category: 'WASTE COLLECTION',
+    description: 'Door-to-door wet and dry waste collection system supporting source segregation, safe transport, community participation, and sustainable disposal.',
+    specs: [
+      { label: 'WASTE', value: 'Wet/Dry', icon: <Trash2 size={14} /> },
+      { label: 'COVERAGE', value: 'Door-to-Door', icon: <Truck size={14} /> },
+      { label: 'USE', value: 'Source Segregation', icon: <Recycle size={14} /> }
+    ],
+    image: '/src/assets/machinery/door-collection-vehicle.png',
     fallback: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop'
   }
 ];
