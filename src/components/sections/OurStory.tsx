@@ -11,25 +11,25 @@ const storyPhases = [
     year: "2014",
     title: "India Market Entry",
     description: "IWM enters India, bringing its global expertise in serving MENA. Starting operations in Chennai, and establishing its Indian footprint in facility management and waste collection.",
-    image: "assets/about/ourstory/story-1.png"
+    image: "assets/about/ourstory/story-1.webp"
   },
   {
     year: "2016",
     title: "Record-Breaking Mobilization",
     description: "At the Ujjain Kumbh Mela, IWM breaks the world record for 'Most People Sweeping Simultaneously' with 5,595 people. IWM achieves its largest mobilization and single order project.",
-    image: "assets/about/ourstory/story-2.png"
+    image: "assets/about/ourstory/story-2.webp"
   },
   {
     year: "2020",
     title: "National Leadership in Mechanized Sweeping",
     description: "After having contributed in making Indore the cleanest city in India for the 4th time in a row, IWM is awarded the single largest work order for mechanized sweeping in the nation.",
-    image: "assets/about/ourstory/story-3.png"
+    image: "assets/about/ourstory/story-3.webp"
   },
   {
     year: "2025",
     title: "Leading the Nation",
     description: "After having contributed in making Indore the cleanest city in India for the 4th time in a row, IWM is awarded the single largest work order for mechanized sweeping in the nation.",
-    image: "assets/about/ourstory/story-4.png"
+    image: "assets/about/ourstory/story-4.webp"
   }
 ];
 
