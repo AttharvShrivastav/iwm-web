@@ -29,10 +29,10 @@ const industries = [
       { name: 'Surat Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-11.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Gwalior Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-12.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Mandsaur Nagar Palika', logo: '/assets/home/industries/logos/industry-municipal-logo-13.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Nagar Parishad Orchha', logo: '/assets/home/industries/logos/industry-municipal-logo-14.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Omkareshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-15.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Badnwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-16.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Maheshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-17.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
+      // { name: 'Nagar Parishad Orchha', logo: '/assets/home/industries/logos/industry-municipal-logo-14.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
+      // { name: 'Omkareshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-15.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
+      // { name: 'Badnwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-16.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
+      // { name: 'Maheshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-17.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Rewa Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-18.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
     ]
   },
@@ -61,11 +61,11 @@ const industries = [
       { name: 'GKN Driveline', logo: '/assets/home/industries/logos/industry-corporate-logo-4.png', fallbackLogo: 'https://picsum.photos/seed/corp4/200/200' },
       { name: 'Hitachi', logo: '/assets/home/industries/logos/industry-corporate-logo-5.png', fallbackLogo: 'https://picsum.photos/seed/corp5/200/200' },
       { name: 'Trivitron', logo: '/assets/home/industries/logos/industry-corporate-logo-6.png', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
-      { name: 'Enrich Lab', logo: '/assets/home/industries/logos/industry-corporate-logo-7.png', fallbackLogo: 'https://picsum.photos/seed/corp7/200/200' },
+      // { name: 'Enrich Lab', logo: '/assets/home/industries/logos/industry-corporate-logo-7.png', fallbackLogo: 'https://picsum.photos/seed/corp7/200/200' },
       { name: 'Talent Maximus', logo: '/assets/home/industries/logos/industry-corporate-logo-8.png', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
       { name: 'RKFL', logo: '/assets/home/industries/logos/industry-corporate-logo-9.svg', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
-      { name: 'Born', logo: '/assets/home/industries/logos/industry-corporate-logo-10.png', fallbackLogo: 'https://picsum.photos/seed/corp10/200/200' },
-      { name: 'Saraplast', logo: '/assets/home/industries/logos/industry-corporate-logo-11.png', fallbackLogo: 'https://picsum.photos/seed/corp11/200/200' },
+      // { name: 'Born', logo: '/assets/home/industries/logos/industry-corporate-logo-10.png', fallbackLogo: 'https://picsum.photos/seed/corp10/200/200' },
+      // { name: 'Saraplast', logo: '/assets/home/industries/logos/industry-corporate-logo-11.png', fallbackLogo: 'https://picsum.photos/seed/corp11/200/200' },
       { name: 'Diesl', logo: '/assets/home/industries/logos/industry-corporate-logo-12.png', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
       { name: 'Zeel Rainwear', logo: '/assets/home/industries/logos/industry-corporate-logo-13.png', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
     ]
@@ -78,7 +78,7 @@ const industries = [
     clients: [
       { name: 'MPCA', logo: '/assets/home/industries/logos/industry-events-logo-1.png', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },
       { name: 'TNCA', logo: '/assets/home/industries/logos/industry-events-logo-2.png', fallbackLogo: 'https://picsum.photos/seed/event2/200/200' },
-      { name: 'Aashra Mubarka Al- Husain', logo: '/assets/home/industries/logos/industry-events-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/event3/200/200' },
+      // { name: 'Aashra Mubarka Al- Husain', logo: '/assets/home/industries/logos/industry-events-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/event3/200/200' },
     ]
   }
 ];

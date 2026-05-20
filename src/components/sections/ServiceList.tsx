@@ -112,7 +112,6 @@ export const ServiceList: React.FC = () => {
                       {/* Kept your original hover effect here! */}
                       <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all duration-500">
                         <span className="text-xs font-bold text-black tracking-widest uppercase">Explore Service</span>
-                        <div className="w-8 h-[1px] bg-black" />
                       </div>
                     </div>
                   </motion.div>

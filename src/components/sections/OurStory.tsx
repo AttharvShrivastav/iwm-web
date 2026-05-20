@@ -11,25 +11,25 @@ const storyPhases = [
     year: "2014",
     title: "India Market Entry",
     description: "IWM enters India, bringing its global expertise in serving MENA. Starting operations in Chennai, and establishing its Indian footprint in facility management and waste collection.",
-    image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop"
+    image: "assets/about/ourstory/story-1.png"
   },
   {
     year: "2016",
     title: "Record-Breaking Mobilization",
     description: "At the Ujjain Kumbh Mela, IWM breaks the world record for 'Most People Sweeping Simultaneously' with 5,595 people. IWM achieves its largest mobilization and single order project.",
-    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop"
+    image: "assets/about/ourstory/story-2.png"
   },
   {
     year: "2020",
     title: "National Leadership in Mechanized Sweeping",
     description: "After having contributed in making Indore the cleanest city in India for the 4th time in a row, IWM is awarded the single largest work order for mechanized sweeping in the nation.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop"
+    image: "assets/about/ourstory/story-3.png"
   },
   {
     year: "2025",
     title: "Leading the Nation",
     description: "After having contributed in making Indore the cleanest city in India for the 4th time in a row, IWM is awarded the single largest work order for mechanized sweeping in the nation.",
-    image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop"
+    image: "assets/about/ourstory/story-4.png"
   }
 ];
 
@@ -206,7 +206,7 @@ export const OurStory: React.FC = () => {
           <div className="hidden lg:block absolute right-0 top-0 h-full w-[45%] pointer-events-none">
             <div 
               ref={imageWrapperRef}
-              className="relative aspect-[4/3] w-full overflow-hidden rounded-sm bg-zinc-100 shadow-2xl pointer-events-auto"
+              className="relative w-full overflow-hidden rounded-sm bg-zinc-100 shadow-2xl pointer-events-auto"
             >
               <img 
                 src={activeImage} 
