@@ -329,10 +329,11 @@ export const OurStory: React.FC = () => {
           start: "top 40%",
           end: "bottom 60%",
           scrub: true,
-          invalidateOnRefresh: true, // Recalculate runtime functional values safely
+          invalidateOnRefresh: true, // Recalculates dynamically on window geometry shifts
         }
       });
 
+      // Phase triggers for image change, text highlight, and dot color
       storyPhases.forEach((phase, i) => {
         ScrollTrigger.create({
           trigger: `.story-phase-${i}`,
@@ -353,6 +354,7 @@ export const OurStory: React.FC = () => {
           }
         });
 
+        // Text reveal animation
         gsap.from(`.story-phase-${i} .content`, {
           opacity: 0.3,
           y: 30,
@@ -429,6 +431,7 @@ export const OurStory: React.FC = () => {
     <section ref={containerRef} className="relative w-full bg-white py-24 md:py-32 px-8 md:px-16 overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-[0.3fr_0.1fr_0.6fr] gap-12 lg:gap-0 max-w-7xl mx-auto">
         
+        {/* Left Column: Header */}
         <div className="flex flex-col gap-8 lg:sticky lg:top-48 h-fit pb-0">
           <SectionHeader label="OUR STORY" className="text-black" />
           <h2 className="text-[32px] md:text-[48px] font-medium leading-[1.1] tracking-tight text-black font-agrandir">
@@ -436,6 +439,7 @@ export const OurStory: React.FC = () => {
           </h2>
         </div>
 
+        {/* Center Column: Timeline */}
         <div ref={timelineRef} className="hidden lg:flex flex-col items-center relative min-h-[200vh]">
           <div className="w-[2px] h-full bg-zinc-100 absolute top-0 left-1/2 -translate-x-1/2" />
           <div 
@@ -452,29 +456,34 @@ export const OurStory: React.FC = () => {
           ))}
         </div>
 
+        {/* Right Column: Content & Moving Image */}
         <div className="relative flex flex-col gap-32 lg:gap-64 pl-10 lg:pl-0 mt-20 lg:mt-0">
-          {/* Fixed aspect ratio setup prevents zero-height container failures before browser loading cycles */}
-          <div className="hidden lg:block absolute right-0 top-0 h-full w-[45%] pointer-events-none">
+          
+          {/* Moving Image Container (Desktop) */}
+          {/* Changed w-[45%] to w-[50%] to match your wider landscape orientation goals beautifully */}
+          <div className="hidden lg:block absolute right-0 top-0 h-full w-[50%] pointer-events-none">
             <div 
               ref={imageWrapperRef}
-              className="relative w-full aspect-[3/4] overflow-hidden rounded-sm bg-zinc-100 shadow-2xl pointer-events-auto"
+              className="relative w-full aspect-[16/10] overflow-hidden rounded-sm bg-zinc-100 shadow-2xl pointer-events-auto"
             >
               <img 
                 src={activeImage} 
                 alt="Story Phase" 
                 className="w-full h-full object-cover transition-all duration-700 ease-in-out"
                 referrerPolicy="no-referrer"
-                onLoad={() => ScrollTrigger.refresh()} // Absolute safety shield recalculating metrics on load completion
+                onLoad={() => ScrollTrigger.refresh()} // Safety shield: Refreshes boundaries as soon as image arrives!
               />
             </div>
           </div>
 
+          {/* Mobile Timeline Line */}
           <div className="lg:hidden absolute left-[19px] top-[14px] w-[2px] bg-zinc-100 mobile-timeline">
             <div className="w-full h-0 bg-[#005696] mobile-progress" />
           </div>
 
           {storyPhases.map((phase, i) => (
-            <div key={i} className={`story-phase-${i} relative flex flex-col gap-12 items-start lg:w-[50%]`}>
+            <div key={i} className={`story-phase-${i} relative flex flex-col gap-12 items-start lg:w-[45%]`}>
+              {/* Mobile Dot */}
               <div 
                 className={`mobile-dot-${i} lg:hidden absolute left-[-29px] top-[6px] w-4 h-4 rounded-full border-2 border-zinc-200 bg-zinc-100 z-10 transition-colors duration-300`}
               />
@@ -484,11 +493,12 @@ export const OurStory: React.FC = () => {
                 <h3 className="text-2xl md:text-3xl font-medium text-black font-agrandir leading-tight">
                   {phase.title}
                 </h3>
-                <p className="text-zinc-600 leading-relaxed font-sans">
+                <p className="text-zinc-600 leading-relaxed font-sans text-sm md:text-base">
                   {phase.description}
                 </p>
                 
-                <div className="lg:hidden aspect-[4/3] w-full overflow-hidden rounded-sm bg-zinc-100 mt-4 md:max-w-[400px]">
+                {/* Mobile Image */}
+                <div className="lg:hidden aspect-[16/10] w-full overflow-hidden rounded-sm bg-zinc-100 mt-4 md:max-w-[400px]">
                   <img 
                     src={phase.image} 
                     alt={phase.title} 
