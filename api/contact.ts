@@ -78,7 +78,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const payload = {
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date().toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    }),
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: '',
