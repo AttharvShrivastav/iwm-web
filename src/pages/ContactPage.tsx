@@ -157,7 +157,7 @@ export const ContactPage: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Call Us</p>
                     <a href="tel:+91731491717" className="text-lg text-black font-sans hover:text-[#005696] transition-colors">
-                      0731-491717
+                      0731-4971717
                     </a>
                   </div>
                 </div>
