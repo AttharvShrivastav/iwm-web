@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'; // Added X icon here
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
-
-
 import { Button } from '../common/Button';
 
 const industries = [
@@ -29,10 +27,6 @@ const industries = [
       { name: 'Surat Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-11.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Gwalior Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-12.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Mandsaur Nagar Palika', logo: '/assets/home/industries/logos/industry-municipal-logo-13.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      // { name: 'Nagar Parishad Orchha', logo: '/assets/home/industries/logos/industry-municipal-logo-14.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      // { name: 'Omkareshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-15.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      // { name: 'Badnwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-16.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      // { name: 'Maheshwar Nagar Parishad', logo: '/assets/home/industries/logos/industry-municipal-logo-17.png', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
       { name: 'Rewa Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-18.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
     ]
   },
@@ -61,11 +55,8 @@ const industries = [
       { name: 'GKN Driveline', logo: '/assets/home/industries/logos/industry-corporate-logo-4.webp', fallbackLogo: 'https://picsum.photos/seed/corp4/200/200' },
       { name: 'Hitachi', logo: '/assets/home/industries/logos/industry-corporate-logo-5.webp', fallbackLogo: 'https://picsum.photos/seed/corp5/200/200' },
       { name: 'Trivitron', logo: '/assets/home/industries/logos/industry-corporate-logo-6.webp', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
-      // { name: 'Enrich Lab', logo: '/assets/home/industries/logos/industry-corporate-logo-7.png', fallbackLogo: 'https://picsum.photos/seed/corp7/200/200' },
       { name: 'Talent Maximus', logo: '/assets/home/industries/logos/industry-corporate-logo-8.webp', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
       { name: 'RKFL', logo: '/assets/home/industries/logos/industry-corporate-logo-9.svg', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
-      // { name: 'Born', logo: '/assets/home/industries/logos/industry-corporate-logo-10.png', fallbackLogo: 'https://picsum.photos/seed/corp10/200/200' },
-      // { name: 'Saraplast', logo: '/assets/home/industries/logos/industry-corporate-logo-11.png', fallbackLogo: 'https://picsum.photos/seed/corp11/200/200' },
       { name: 'Diesl', logo: '/assets/home/industries/logos/industry-corporate-logo-12.webp', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
       { name: 'Zeel Rainwear', logo: '/assets/home/industries/logos/industry-corporate-logo-13.webp', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
     ]
@@ -73,12 +64,11 @@ const industries = [
   {
     id: 'events',
     name: 'Events',
-    image: '/assets/home/industries/images/industry-events.webp', // Reusing government assets or update as needed
+    image: '/assets/home/industries/images/industry-events.webp',
     fallbackImage: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop',
     clients: [
       { name: 'MPCA', logo: '/assets/home/industries/logos/industry-events-logo-1.webp', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },
       { name: 'TNCA', logo: '/assets/home/industries/logos/industry-events-logo-2.webp', fallbackLogo: 'https://picsum.photos/seed/event2/200/200' },
-      // { name: 'Aashra Mubarka Al- Husain', logo: '/assets/home/industries/logos/industry-events-logo-3.png', fallbackLogo: 'https://picsum.photos/seed/event3/200/200' },
     ]
   }
 ];
@@ -87,6 +77,9 @@ export const Industries: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [clientPage, setClientPage] = useState(0);
+  // Track the client currently active in the modal view
+  const [selectedClient, setSelectedClient] = useState<typeof industries[0]['clients'][0] | null>(null);
+  
   const sectionRef = useRef<HTMLDivElement>(null);
   const clientsPerPage = 9;
 
@@ -156,7 +149,7 @@ export const Industries: React.FC = () => {
         {/* Layout Container */}
         <div className="flex flex-col lg:grid lg:grid-cols-[1.1fr_1fr_1.1fr] gap-10 lg:gap-20 w-full items-stretch">
           
-          {/* Categories: Vertical list on desktop, Grid on mobile */}
+          {/* Categories */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col gap-2 md:gap-4 lg:justify-between h-auto lg:h-[clamp(280px,50vh,500px)] -ml-2 lg:-ml-6">
             {industries.map((industry, index) => (
               <button
@@ -183,7 +176,7 @@ export const Industries: React.FC = () => {
             ))}
           </div>
 
-          {/* Image Section: Hidden or smaller on mobile to prioritize logos */}
+          {/* Image Section */}
           <div className="relative h-[200px] md:h-[300px] lg:h-[clamp(280px,50vh,500px)] w-full overflow-hidden shadow-lg rounded-sm bg-zinc-100 hidden md:block">
             <AnimatePresence initial={false}>
               <motion.div
@@ -207,7 +200,7 @@ export const Industries: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          {/* Clients Grid: No pagination on mobile */}
+          {/* Clients Grid */}
           <div className="flex flex-col h-auto lg:h-[clamp(280px,50vh,500px)] lg:pl-12">
             <div className="w-full">
               <AnimatePresence mode="wait">
@@ -219,16 +212,16 @@ export const Industries: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2 lg:gap-3 w-full"
                 >
-                  {/* On mobile, we show all clients, on desktop we use pagination if needed (though here we handle 9) */}
                   {(window.innerWidth < 1024 ? activeIndustry.clients : currentClients).map((client, idx) => (
                     <div 
                       key={idx} 
-                      className="aspect-square bg-white p-2 lg:p-4 flex items-center justify-center shadow-[0_2px_10px_rgba(0,0,0,0.01)] grayscale hover:grayscale-0 transition-all duration-500 rounded-sm border border-black/[0.02]"
+                      onClick={() => setSelectedClient(client)}
+                      className="aspect-square bg-white p-2 lg:p-4 flex items-center justify-center shadow-[0_2px_10px_rgba(0,0,0,0.01)] grayscale hover:grayscale-0 transition-all duration-500 rounded-sm border border-black/[0.02] cursor-pointer hover:border-black/20 hover:scale-[1.02]"
                     >
                       <img 
                         src={client.logo} 
                         alt={client.name} 
-                        className="max-w-[85%] max-h-[85%] object-contain opacity-50 hover:opacity-100 transition-opacity"
+                        className="max-w-[100%] max-h-[100%] object-contain opacity-50 hover:opacity-100 transition-opacity"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
                           e.currentTarget.src = client.fallbackLogo;
@@ -240,7 +233,7 @@ export const Industries: React.FC = () => {
               </AnimatePresence>
             </div>
 
-            {/* Pagination Controls: Only visible on desktop if multiple pages exist */}
+            {/* Pagination Controls */}
             <div className="hidden lg:flex items-center justify-between w-full pt-8">
               <div className="flex items-center gap-3">
                 <Button
@@ -272,6 +265,54 @@ export const Industries: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* --- POPUP LOGO MODAL CONTAINER --- */}
+      <AnimatePresence>
+        {selectedClient && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedClient(null)}
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 cursor-zoom-out"
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+              onClick={(e) => e.stopPropagation()} // Prevents closing modal when clicking card body
+              className="bg-white p-6 md:p-10 rounded-sm shadow-2xl max-w-md w-full flex flex-col items-center justify-center relative cursor-default border border-black/5"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedClient(null)}
+                className="absolute top-4 right-4 text-zinc-400 hover:text-black transition-colors p-1 rounded-full hover:bg-zinc-100"
+              >
+                <X size={18} />
+              </button>
+              
+              {/* Zoomed Logo View */}
+              <div className="w-full aspect-square max-h-[240px] flex items-center justify-center mb-6 p-2 bg-zinc-50/50 rounded-sm border border-zinc-100">
+                <img
+                  src={selectedClient.logo}
+                  alt={selectedClient.name}
+                  className="max-w-[90%] max-h-[90%] object-contain"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = selectedClient.fallbackLogo;
+                  }}
+                />
+              </div>
+              
+              {/* Client Info Text */}
+              <h3 className="text-[18px] font-medium text-black font-agrandir text-center px-2 leading-snug">
+                {selectedClient.name}
+              </h3>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
