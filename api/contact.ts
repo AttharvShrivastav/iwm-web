@@ -6,10 +6,20 @@ type ContactPayload = {
   subject?: string;
   message?: string;
   pageUrl?: string;
-  website?: string;
+  website?: string; // honeypot field
+};
+
+type N8nResponse = {
+  success?: boolean;
+  message?: string;
+};
+
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -27,24 +37,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       website,
     } = req.body as ContactPayload;
 
-    // Honeypot spam protection
+    /**
+     * Honeypot spam protection.
+     * Real users will not fill this hidden field.
+     * Bots often do.
+     */
     if (website) {
       return res.status(200).json({
         success: true,
-        message: 'Thank you for your message.',
+        message: 'Thank you for your message. We will get back to you soon!',
       });
     }
 
-    if (!name || !email || !subject || !message) {
+    // Basic required field validation
+    if (!name?.trim() || !email?.trim() || !subject?.trim() || !message?.trim()) {
       return res.status(400).json({
         success: false,
         message: 'Please fill all required fields.',
       });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
+    // Email validation
+    if (!isValidEmail(email.trim())) {
       return res.status(400).json({
         success: false,
         message: 'Please enter a valid email address.',
@@ -55,11 +69,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const secret = process.env.N8N_CONTACT_SECRET;
 
     if (!webhookUrl || !secret) {
+      console.error('Missing N8N_CONTACT_WEBHOOK_URL or N8N_CONTACT_SECRET');
+
       return res.status(500).json({
         success: false,
         message: 'Server is not configured correctly.',
       });
     }
+
+    const payload = {
+      submittedAt: new Date().toISOString(),
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: '',
+      company: '',
+      subject: subject.trim(),
+      message: message.trim(),
+      pageUrl: pageUrl || '',
+      source: 'Website Contact Form',
+      status: 'New',
+    };
 
     const n8nResponse = await fetch(webhookUrl, {
       method: 'POST',
@@ -67,32 +96,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
         'x-contact-secret': secret,
       },
-      body: JSON.stringify({
-        submittedAt: new Date().toISOString(),
-        name: name.trim(),
-        email: email.trim(),
-        phone: '',
-        company: '',
-        subject: subject.trim(),
-        message: message.trim(),
-        pageUrl: pageUrl || '',
-        source: 'Website Contact Form',
-        status: 'New',
-      }),
+      body: JSON.stringify(payload),
     });
 
+    const result = (await n8nResponse.json().catch(() => null)) as N8nResponse | null;
+
     if (!n8nResponse.ok) {
-      return res.status(502).json({
+      console.error('n8n webhook failed:', {
+        status: n8nResponse.status,
+        result,
+      });
+
+      return res.status(n8nResponse.status).json({
         success: false,
-        message: 'Could not submit the form. Please try again.',
+        message: result?.message || 'Could not submit the form. Please try again.',
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Thank you for your message. We will get back to you soon!',
+      message: result?.message || 'Thank you for your message. We will get back to you soon!',
     });
   } catch (error) {
+    console.error('Contact form error:', error);
+
     return res.status(500).json({
       success: false,
       message: 'Something went wrong. Please try again.',
