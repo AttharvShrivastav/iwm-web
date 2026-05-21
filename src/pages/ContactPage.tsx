@@ -235,22 +235,24 @@ export const ContactPage: React.FC = () => {
                 </div>
 
                 <div className="pt-4">
-                  <Button 
-                    label={isSubmitting ? "SENDING..." : "SEND MESSAGE"} 
-                    bgColor="bg-black" 
-                    textColor="text-white" 
-                    className="w-full md:w-auto px-12 py-4 text-xs tracking-widest"
-                  />
+                   <Button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      label={isSubmitting ? "SENDING..." : "SEND MESSAGE"} 
+                      bgColor="bg-black" 
+                      textColor="text-white" 
+                      className="w-full md:w-auto px-12 py-4 text-xs tracking-widest disabled:opacity-60 disabled:cursor-not-allowed"
+                    />
 
-                  {submitStatus.message && (
-                    <p
-                      className={`text-sm font-sans ${
-                        submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'
-                      }`}
-                    >
-                      {submitStatus.message}
-                    </p>
-                  )}
+                    {submitStatus.message && (
+                      <p
+                        className={`text-sm font-sans ${
+                          submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'
+                        }`}
+                      >
+                        {submitStatus.message}
+                      </p>
+                    )}
                 </div>
               </form>
             </div>

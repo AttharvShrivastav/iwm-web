@@ -2,6 +2,7 @@ import React, { useRef, useMemo } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
+
 interface ButtonProps {
   label: string;
   onClick?: () => void;
@@ -10,6 +11,7 @@ interface ButtonProps {
   textColor?: string;
   borderColor?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({ 
