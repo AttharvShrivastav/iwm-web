@@ -57,7 +57,7 @@ const industries = [
       { name: 'Trivitron', logo: '/assets/home/industries/logos/industry-corporate-logo-6.webp', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
       { name: 'Talent Maximus', logo: '/assets/home/industries/logos/industry-corporate-logo-8.webp', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
       { name: 'RKFL', logo: '/assets/home/industries/logos/industry-corporate-logo-9.svg', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
-      { name: 'Diesl', logo: '/assets/home/industries/logos/industry-corporate-logo-12.webp', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
+      { name: 'Diesel', logo: '/assets/home/industries/logos/industry-corporate-logo-12.webp', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
       { name: 'Zeel Rainwear', logo: '/assets/home/industries/logos/industry-corporate-logo-13.webp', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
     ]
   },

@@ -2,19 +2,19 @@ import React from 'react';
 import { SectionHeader } from '../common/SectionHeader';
 
 const topRowLogos = [
-  "/assets/home/industries/logos/industry-authority-logo-3.png", // NHAI
-  "/assets/home/industries/logos/industry-authority-logo-5.png", // IIM
-  "/assets/home/industries/logos/industry-corporate-logo-1.png", // Phoenix Mall
-  "/assets/home/industries/logos/industry-corporate-logo-3.png", // Cooper Standard
-  "/assets/home/industries/logos/industry-corporate-logo-5.png", // Hitachi
+  "/assets/home/industries/logos/industry-authority-logo-3.webp", // NHAI
+  "/assets/home/industries/logos/industry-authority-logo-5.webp", // IIM
+  "/assets/home/industries/logos/industry-corporate-logo-1.webp", // Phoenix Mall
+  "/assets/home/industries/logos/industry-corporate-logo-3.webp", // Cooper Standard
+  "/assets/home/industries/logos/industry-corporate-logo-5.webp", // Hitachi
 ];
 
 const bottomRowLogos = [
-  "/assets/home/industries/logos/industry-corporate-logo-6.png", // Trivitron
-  "/assets/home/industries/logos/industry-municipal-logo-1.png", // Indore
-  "/assets/home/industries/logos/industry-municipal-logo-3.png", // Ujjain
-  "/assets/home/industries/logos/industry-municipal-logo-6.png", // Greater Chennai
-  "/assets/home/industries/logos/industry-municipal-logo-7.png", // Jabalpur
+  "/assets/home/industries/logos/industry-corporate-logo-6.webp", // Trivitron
+  "/assets/home/industries/logos/industry-municipal-logo-1.webp", // Indore
+  "/assets/home/industries/logos/industry-municipal-logo-3.webp", // Ujjain
+  "/assets/home/industries/logos/industry-municipal-logo-6.webp", // Greater Chennai
+  "/assets/home/industries/logos/industry-municipal-logo-7.webp", // Jabalpur
 ];
 
 export const ClientsSection: React.FC = () => {
