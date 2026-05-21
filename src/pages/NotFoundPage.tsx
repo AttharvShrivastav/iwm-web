@@ -54,9 +54,9 @@ export const NotFoundPage: React.FC = () => {
         <div className="flex flex-col gap-6">
           <h1 
             ref={textRef}
-            className="not-found-title text-5xl md:text-7xl lg:text-9xl font-medium font-agrandir text-black tracking-tighter leading-tight"
+            className="not-found-title text-5xl md:text-7xl lg:text-7xl font-medium font-agrandir text-black tracking-tighter leading-tight"
           >
-            Lost in the <br /> Urban Maze?
+            This page missed the collection route.
           </h1>
           <p className="not-found-desc text-zinc-500 font-sans text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             The page you are looking for has been cleared or moved. Let's get you back to the right track.
