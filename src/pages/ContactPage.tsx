@@ -11,18 +11,71 @@ export const ContactPage: React.FC = () => {
   }, []);
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
+  website: ''
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | '';
+    message: string;
+  }>({
+    type: '',
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message. We will get back to you soon!');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  setIsSubmitting(true);
+  setSubmitStatus({
+    type: '',
+    message: ''
+  });
+
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formData,
+        pageUrl: window.location.href,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Something went wrong.');
+    }
+
+    setSubmitStatus({
+      type: 'success',
+      message: result.message || 'Thank you for your message. We will get back to you soon!',
+    });
+
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+      website: ''
+    });
+  } catch (error) {
+    setSubmitStatus({
+      type: 'error',
+      message: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -114,6 +167,16 @@ export const ContactPage: React.FC = () => {
             {/* Right Column: Contact Form */}
             <div className="bg-zinc-50 p-8 md:p-16 rounded-none">
               <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  aria-hidden="true"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="name" className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Full Name</label>
@@ -173,11 +236,21 @@ export const ContactPage: React.FC = () => {
 
                 <div className="pt-4">
                   <Button 
-                    label="SEND MESSAGE" 
+                    label={isSubmitting ? "SENDING..." : "SEND MESSAGE"} 
                     bgColor="bg-black" 
                     textColor="text-white" 
                     className="w-full md:w-auto px-12 py-4 text-xs tracking-widest"
                   />
+
+                  {submitStatus.message && (
+                    <p
+                      className={`text-sm font-sans ${
+                        submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'
+                      }`}
+                    >
+                      {submitStatus.message}
+                    </p>
+                  )}
                 </div>
               </form>
             </div>
