@@ -29,16 +29,16 @@ const leaders: Leader[] = [
     image: "/assets/people/leadership/sandeep.webp"
   },
   {
-    name: "Mr. Hardik Pandey",
-    designation: "General Manager",
-    email: "hardik@iwm-india.com",
-    image: "/assets/people/leadership/hardik.webp"
-  },
-  {
     name: "Mrs. Varsha Pandey",
     designation: "Director",
     email: "varsha@iwm-india.com",
     image: "/assets/people/leadership/varsha.webp"
+  },
+  {
+    name: "Mr. Hardik Pandey",
+    designation: "General Manager",
+    email: "hardik@iwm-india.com",
+    image: "/assets/people/leadership/hardik.webp"
   },
   {
     name: "Ms. Radhika Patidar",
