@@ -4,6 +4,44 @@ type UseContentOptions = {
   enabled?: boolean;
 };
 
+function isObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function mergeWithFallback<T>(fallback: T, cmsData: Partial<T> | null | undefined): T {
+  if (!cmsData) {
+    return fallback;
+  }
+
+  if (!isObject(fallback) || !isObject(cmsData)) {
+    return cmsData as T;
+  }
+
+  const merged: Record<string, unknown> = { ...fallback };
+
+  Object.keys(cmsData).forEach((key) => {
+    const cmsValue = cmsData[key];
+    const fallbackValue = (fallback as Record<string, unknown>)[key];
+
+    if (
+      cmsValue === undefined ||
+      cmsValue === null ||
+      cmsValue === ''
+    ) {
+      return;
+    }
+
+    if (isObject(fallbackValue) && isObject(cmsValue)) {
+      merged[key] = mergeWithFallback(fallbackValue, cmsValue);
+      return;
+    }
+
+    merged[key] = cmsValue;
+  });
+
+  return merged as T;
+}
+
 export function useContent<T>(
   resourceId: string,
   fallbackContent: T,
@@ -41,18 +79,11 @@ export function useContent<T>(
         }
 
         const result = await response.json();
-
         const cmsContent = result?.data;
 
-        if (!cmsContent) {
-          setContent(fallbackContent);
-          return;
-        }
+        const resolvedContent = mergeWithFallback(fallbackContent, cmsContent);
 
-        setContent({
-          ...fallbackContent,
-          ...cmsContent,
-        });
+        setContent(resolvedContent);
       } catch (error) {
         if (!controller.signal.aborted) {
           setContent(fallbackContent);
