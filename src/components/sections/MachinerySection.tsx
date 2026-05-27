@@ -38,7 +38,7 @@ const machines: Machine[] = [
       { label: 'CAPACITY', value: '30 km', icon: <Gauge size={14} /> },
       { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
     ],
-    image: '/src/assets/machinery/elgin-pelican-sweeper.png',
+    image: '/public/assets/machinery/machine-1.webp',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
@@ -51,7 +51,7 @@ const machines: Machine[] = [
       { label: 'FUEL', value: 'CNG/Diesel', icon: <Fuel size={14} /> },
       { label: 'CAPACITY', value: '30-40 km', icon: <Gauge size={14} /> }
     ],
-    image: '/src/assets/machinery/dulevo-6000-sweeper.png',
+    image: '/public/assets/machinery/machine-2.webp',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
@@ -64,7 +64,7 @@ const machines: Machine[] = [
       { label: 'CAPACITY', value: '50 km', icon: <Gauge size={14} /> },
       { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
     ],
-    image: '/src/assets/machinery/citynet-road-sweeper.png',
+    image: '/public/assets/machinery/machine-3.webp',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
@@ -77,7 +77,7 @@ const machines: Machine[] = [
       { label: 'CAPACITY', value: '15 km', icon: <Gauge size={14} /> },
       { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
     ],
-    image: '/src/assets/machinery/ravo-compact-sweeper.png',
+    image: '/public/assets/machinery/machine-4.webp',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
@@ -90,7 +90,7 @@ const machines: Machine[] = [
       { label: 'TIME', value: '24–48 Hours', icon: <Clock3 size={14} /> },
       { label: 'SYSTEM', value: 'PLC Automated', icon: <Settings size={14} /> }
     ],
-    image: '/src/assets/machinery/organic-waste-composter.png',
+    image: '/public/assets/machinery/machine-5.webp',
     fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
   },
   {
@@ -103,7 +103,7 @@ const machines: Machine[] = [
       { label: 'USE', value: 'Public Assets', icon: <Shield size={14} /> },
       { label: 'BRAND', value: 'Kärcher', icon: <BadgeCheck size={14} /> }
     ],
-    image: '/src/assets/machinery/jet-cleaning-machine.png',
+    image: '/public/assets/machinery/machine-6.webp',
     fallback: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop'
   },
   {
@@ -129,7 +129,7 @@ const machines: Machine[] = [
       { label: 'SITE', value: 'Ujjain', icon: <MapPin size={14} /> },
       { label: 'OUTPUT', value: 'Land Recovery', icon: <Recycle size={14} /> }
     ],
-    image: '/src/assets/machinery/legacy-waste-disposal.png',
+    image: '/public/assets/machinery/machine-8.webp',
     fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
   },
   {
@@ -142,7 +142,7 @@ const machines: Machine[] = [
       { label: 'COVERAGE', value: 'Door-to-Door', icon: <Truck size={14} /> },
       { label: 'USE', value: 'Source Segregation', icon: <Recycle size={14} /> }
     ],
-    image: '/src/assets/machinery/door-collection-vehicle.png',
+    image: '/public/assets/machinery/machine-9.webp',
     fallback: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop'
   }
 ];
