@@ -1,12 +1,17 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Button } from '../common/Button';
+import type { HeroContent } from '../../content/homeContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const Hero: React.FC = () => {
+type HeroProps = {
+  content: HeroContent;
+};
+
+export const Hero: React.FC<HeroProps> = ({ content }) => {
   const container = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
@@ -63,15 +68,15 @@ export const Hero: React.FC = () => {
       {/* Background Image - Fleet of Trucks */}
       <div className="absolute inset-0 z-0 bg-black">
         <img 
-          src="/assets/heroes/home-hero.webp" 
-          alt="IWM Truck Fleet" 
+          src={content.backgroundImage.src}
+          alt={content.backgroundImage.alt}
           className="hero-bg h-[120%] w-full object-cover brightness-[0.45] contrast-[1.1]"
           referrerPolicy="no-referrer"
           loading="eager"
           {...({ fetchPriority: "high" } as any)}
           onError={(e) => {
             // Fallback to Unsplash if local image is not found
-            e.currentTarget.src = "https://images.unsplash.com/photo-1586864387917-f53bc464e81c?q=80&w=2070&auto=format&fit=crop";
+            e.currentTarget.src = content.backgroundImage.fallbackSrc;
           }}
         />
       </div>
@@ -79,7 +84,7 @@ export const Hero: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 w-full">
         <div ref={homeRef} className="text-sm font-bold tracking-[0.2em] mb-4 opacity-100 uppercase font-agrandir">
-          + Home
+          {content.eyebrow}
         </div>
         
         <div 
@@ -92,18 +97,18 @@ export const Hero: React.FC = () => {
             ref={headingRef}
             className="text-[40px] md:text-[60px] lg:text-[72px] font-medium leading-[1.05] tracking-tight font-agrandir"
           >
-            Built on global standards <br />
-            Driven by local impact
+            {content.heading.line1} <br />
+            {content.heading.line2}
           </h1>
 
           <div ref={subtextRef} className="flex flex-col gap-10">
             <p className="text-[18px] md:text-[20px] font-light leading-snug opacity-90 max-w-md font-sans">
               <span className="inline-block mr-3 text-2xl">↳</span>
-              We Understand how a clean living affects living in a city which is moving faster than ever
+              {content.subtext}
             </p>
             
             <Button 
-              label="Contact Us" 
+              label={content.button.label}
               bgColor="bg-white/20" 
               textColor="text-white" 
               borderColor="border-white/30"

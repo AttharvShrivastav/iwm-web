@@ -7,13 +7,13 @@ import { Industries } from '../components/sections/Industries';
 import { MeetTheTeam } from '../components/sections/MeetTheTeam';
 import { AnimatedScrollText } from '../components/sections/AnimatedScrollText';
 import { useNavigate } from 'react-router-dom';
-useNavigate
+import { homeHeroFallback } from '../content/homeContent';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate()
   return (
     <>
-      <Hero />
+      <Hero content={homeHeroFallback} />
       <About />
       <Impact />
       <AnimatedScrollText 
