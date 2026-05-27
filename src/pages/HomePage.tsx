@@ -12,10 +12,11 @@ import { useContent } from '../hooks/useContent';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate()
-  const homeHeroContent = useContent('home.hero', homeHeroFallback);
+  const heroContent = useContent('home.hero', homeHeroFallback);
+
   return (
     <>
-      <Hero content={homeHeroContent} />
+      <Hero content={heroContent} />
       <About />
       <Impact />
       <AnimatedScrollText 

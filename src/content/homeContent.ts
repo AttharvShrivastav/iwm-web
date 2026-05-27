@@ -1,14 +1,10 @@
 export type HeroContent = {
   eyebrow: string;
-  heading: {
-    line1: string;
-    line2: string;
-  };
-  subtext: string;
-  button: {
-    label: string;
-  };
-  backgroundImage: {
+  headline: string;
+  description: string;
+  ctaLabel: string;
+  ctaLink: string;
+  image: {
     src: string;
     alt: string;
     fallbackSrc: string;
@@ -17,16 +13,12 @@ export type HeroContent = {
 
 export const homeHeroFallback: HeroContent = {
   eyebrow: '+ Home',
-  heading: {
-    line1: 'Built on global standards',
-    line2: 'Driven by local impact',
-  },
-  subtext:
+  headline: 'Built on global standards || Driven by local impact',
+  description:
     'We Understand how a clean living affects living in a city which is moving faster than ever',
-  button: {
-    label: 'Contact Us',
-  },
-  backgroundImage: {
+  ctaLabel: 'Contact Us',
+  ctaLink: '/contact',
+  image: {
     src: '/assets/heroes/home-hero.webp',
     alt: 'IWM Truck Fleet',
     fallbackSrc:

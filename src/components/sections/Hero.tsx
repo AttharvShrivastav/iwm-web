@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Button } from '../common/Button';
 import type { HeroContent } from '../../content/homeContent';
+import { CMSHeading } from '../cms/CMSHeading';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,15 +69,15 @@ export const Hero: React.FC<HeroProps> = ({ content }) => {
       {/* Background Image - Fleet of Trucks */}
       <div className="absolute inset-0 z-0 bg-black">
         <img 
-          src={content.backgroundImage.src}
-          alt={content.backgroundImage.alt}
+          src={content.image.src}
+          alt={content.image.alt}
           className="hero-bg h-[120%] w-full object-cover brightness-[0.45] contrast-[1.1]"
           referrerPolicy="no-referrer"
           loading="eager"
           {...({ fetchPriority: "high" } as any)}
           onError={(e) => {
             // Fallback to Unsplash if local image is not found
-            e.currentTarget.src = content.backgroundImage.fallbackSrc;
+            e.currentTarget.src = content.image.fallbackSrc;
           }}
         />
       </div>
@@ -93,22 +94,22 @@ export const Hero: React.FC<HeroProps> = ({ content }) => {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-16 items-end">
-          <h1 
-            ref={headingRef}
-            className="text-[40px] md:text-[60px] lg:text-[72px] font-medium leading-[1.05] tracking-tight font-agrandir"
-          >
-            {content.heading.line1} <br />
-            {content.heading.line2}
-          </h1>
+          <div ref={headingRef}>
+            <CMSHeading
+              as="h1"
+              text={content.headline}
+              className="text-[40px] md:text-[60px] lg:text-[72px] font-medium leading-[1.05] tracking-tight font-agrandir"
+            />
+          </div>
 
           <div ref={subtextRef} className="flex flex-col gap-10">
             <p className="text-[18px] md:text-[20px] font-light leading-snug opacity-90 max-w-md font-sans">
               <span className="inline-block mr-3 text-2xl">↳</span>
-              {content.subtext}
+              {content.description}
             </p>
             
             <Button 
-              label={content.button.label}
+              label={content.ctaLabel}
               bgColor="bg-white/20" 
               textColor="text-white" 
               borderColor="border-white/30"
