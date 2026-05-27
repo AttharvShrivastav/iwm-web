@@ -3,23 +3,14 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
 import {
-  BadgeCheck,
-  Clock3,
-  Droplets,
-  Fuel,
-  Gauge,
-  Globe,
-  MapPin,
-  Recycle,
-  ChevronLeft,
-  ChevronRight,
-  Settings,
-  Shield,
-  Trash2,
-  Truck,
-  Waves,
-  Weight,
-  Zap
+  BadgeCheck, Clock3, Droplets,
+  Fuel, Gauge,
+  Globe, MapPin,
+  Recycle,ChevronLeft,
+  ChevronRight, Settings,
+  Shield, Trash2,
+  Truck, Waves,
+  Weight, Zap
 } from 'lucide-react';
 
 interface Machine {
@@ -58,7 +49,7 @@ const machines: Machine[] = [
     specs: [
       { label: 'ORIGIN', value: 'Italy', icon: <Globe size={14} /> },
       { label: 'FUEL', value: 'CNG/Diesel', icon: <Fuel size={14} /> },
-      { label: 'CAPACITY', value: '30–40 km', icon: <Gauge size={14} /> }
+      { label: 'CAPACITY', value: '30-40 km', icon: <Gauge size={14} /> }
     ],
     image: '/src/assets/machinery/dulevo-6000-sweeper.png',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'

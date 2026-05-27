@@ -1,9 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from './Logo';
 
+
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+
+
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+const [newsletterWebsite, setNewsletterWebsite] = useState('');
+const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false);
+const [newsletterStatus, setNewsletterStatus] = useState<{
+  type: 'success' | 'error' | '';
+  message: string;
+}>({
+  type: '',
+  message: '',
+});
+
+const handleNewsletterSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  setIsNewsletterSubmitting(true);
+  setNewsletterStatus({
+    type: '',
+    message: '',
+  });
+
+  const cleanEmail = newsletterEmail.trim();
+
+  if (!cleanEmail) {
+    setNewsletterStatus({
+      type: 'error',
+      message: 'Please enter your email address.',
+    });
+    setIsNewsletterSubmitting(false);
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(cleanEmail)) {
+    setNewsletterStatus({
+      type: 'error',
+      message: 'Please enter a valid email address.',
+    });
+    setIsNewsletterSubmitting(false);
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: cleanEmail,
+        pageUrl: window.location.href,
+        website: newsletterWebsite,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Something went wrong.');
+    }
+
+    setNewsletterStatus({
+      type: 'success',
+      message: result.message || 'Thank you for subscribing.',
+    });
+
+    setNewsletterEmail('');
+    setNewsletterWebsite('');
+  } catch (error) {
+    setNewsletterStatus({
+      type: 'error',
+      message: error instanceof Error ? error.message : 'Could not subscribe. Please try again.',
+    });
+  } finally {
+    setIsNewsletterSubmitting(false);
+  }
+};
 
   const navLinks = [
     { label: 'Home', href: '/' },
@@ -63,17 +143,48 @@ export const Footer: React.FC = () => {
               
               {/* Added flex-col for mobile, md:flex-row for tablet/desktop, 
                   and gap-2 to separate them when stacked on mobile */}
-              <div className="flex flex-col md:flex-row w-full gap-2 md:gap-0">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email here" 
-                  className="flex-1 bg-[#0d3b75] border-none px-6 py-5 text-[14px] focus:outline-none focus:ring-0 transition-all rounded-none placeholder:text-white/30"
-                />
-                {/* Added w-full md:w-auto so the button stretches full width on mobile */}
-                <button className="w-full md:w-auto bg-[#c2d9f0] text-[#1a5fb4] px-8 py-5 text-[12px] font-bold tracking-widest hover:bg-white transition-colors whitespace-nowrap rounded-none">
-                  KNOW MORE
-                </button>
-              </div>
+              <form onSubmit={handleNewsletterSubmit} noValidate className="flex flex-col gap-3">
+  <input
+    type="text"
+    name="website"
+    value={newsletterWebsite}
+    onChange={(e) => setNewsletterWebsite(e.target.value)}
+    tabIndex={-1}
+    autoComplete="off"
+    className="hidden"
+    aria-hidden="true"
+  />
+
+  <div className="flex flex-col md:flex-row w-full gap-2 md:gap-0">
+    <input 
+      type="text"
+      inputMode="email"
+      name="email"
+      value={newsletterEmail}
+      onChange={(e) => setNewsletterEmail(e.target.value)}
+      placeholder="Enter your email here" 
+      className="flex-1 bg-[#0d3b75] border-none px-6 py-5 text-[14px] focus:outline-none focus:ring-0 transition-all rounded-none placeholder:text-white/30"
+    />
+
+    <button
+      type="submit"
+      disabled={isNewsletterSubmitting}
+      className="w-full md:w-auto bg-[#c2d9f0] text-[#1a5fb4] px-8 py-5 text-[12px] font-bold tracking-widest hover:bg-white transition-colors whitespace-nowrap rounded-none disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {isNewsletterSubmitting ? 'SENDING...' : 'KNOW MORE'}
+    </button>
+  </div>
+
+  {newsletterStatus.message && (
+    <p
+      className={`text-[13px] font-sans ${
+        newsletterStatus.type === 'success' ? 'text-white' : 'text-red-100'
+      }`}
+    >
+      {newsletterStatus.message}
+    </p>
+  )}
+</form>
             </div>
 
             {/* Bottom: 3 Columns Grid */}
