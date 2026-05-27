@@ -1,89 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'; // Added X icon here
+import { X } from 'lucide-react'; // Added X icon here
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
 import { Button } from '../common/Button';
+import type { IndustriesContent, IndustryClientContent } from '../../content/homeContent';
 
-const industries = [
-  {
-    id: 'municipal',
-    name: 'Municipal Corporations',
-    image: '/assets/home/industries/images/industry-municipal.webp',
-    fallbackImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop',
-    clients: [
-      { name: 'Indore Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-1.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Dewas Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-2.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Ujjain Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-3.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Ratlam Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-4.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Satna Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-5.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Greater Chennai Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-6.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Jabalpur Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-7.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Tirupati Smart City', logo: '/assets/home/industries/logos/industry-municipal-logo-8.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Jabalpur Smart City', logo: '/assets/home/industries/logos/industry-municipal-logo-9.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Pithampur (MPIDC)', logo: '/assets/home/industries/logos/industry-municipal-logo-10.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Surat Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-11.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Gwalior Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-12.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Mandsaur Nagar Palika', logo: '/assets/home/industries/logos/industry-municipal-logo-13.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-      { name: 'Rewa Municipal Corporation', logo: '/assets/home/industries/logos/industry-municipal-logo-18.webp', fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Seal_of_Madhya_Pradesh.svg/1200px-Seal_of_Madhya_Pradesh.svg.png' },
-    ]
-  },
-  {
-    id: 'authority',
-    name: 'Government Authority',
-    image: '/assets/home/industries/images/industry-authority.webp',
-    fallbackImage: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop',
-    clients: [
-      { name: 'Maa Chamunda Shaskiya Devsthan Praband Samiti', logo: '/assets/home/industries/logos/industry-authority-logo-1.webp', fallbackLogo: 'https://picsum.photos/seed/gov1/200/200' },
-      { name: 'Pollution Control Board', logo: '/assets/home/industries/logos/industry-authority-logo-2.webp', fallbackLogo: 'https://picsum.photos/seed/gov2/200/200' },
-      { name: 'NHAI', logo: '/assets/home/industries/logos/industry-authority-logo-3.webp', fallbackLogo: 'https://picsum.photos/seed/gov3/200/200' },
-      { name: 'IIT', logo: '/assets/home/industries/logos/industry-authority-logo-4.webp', fallbackLogo: 'https://picsum.photos/seed/gov4/200/200' },
-      { name: 'IIM', logo: '/assets/home/industries/logos/industry-authority-logo-5.webp', fallbackLogo: 'https://picsum.photos/seed/gov5/200/200' },
-    ]
-  },
-  {
-    id: 'corporate',
-    name: 'Corporate Firms',
-    image: '/assets/home/industries/images/industry-corporate.webp',
-    fallbackImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
-    clients: [
-      { name: 'Phoenix Mall', logo: '/assets/home/industries/logos/industry-corporate-logo-1.webp', fallbackLogo: 'https://picsum.photos/seed/corp1/200/200' },
-      { name: 'Blue Neck', logo: '/assets/home/industries/logos/industry-corporate-logo-2.svg', fallbackLogo: 'https://picsum.photos/seed/corp2/200/200' },
-      { name: 'Cooper Standard', logo: '/assets/home/industries/logos/industry-corporate-logo-3.webp', fallbackLogo: 'https://picsum.photos/seed/corp3/200/200' },
-      { name: 'GKN Driveline', logo: '/assets/home/industries/logos/industry-corporate-logo-4.webp', fallbackLogo: 'https://picsum.photos/seed/corp4/200/200' },
-      { name: 'Hitachi', logo: '/assets/home/industries/logos/industry-corporate-logo-5.webp', fallbackLogo: 'https://picsum.photos/seed/corp5/200/200' },
-      { name: 'Trivitron', logo: '/assets/home/industries/logos/industry-corporate-logo-6.webp', fallbackLogo: 'https://picsum.photos/seed/corp6/200/200' },
-      { name: 'Talent Maximus', logo: '/assets/home/industries/logos/industry-corporate-logo-8.webp', fallbackLogo: 'https://picsum.photos/seed/corp8/200/200' },
-      { name: 'RKFL', logo: '/assets/home/industries/logos/industry-corporate-logo-9.svg', fallbackLogo: 'https://picsum.photos/seed/corp9/200/200' },
-      { name: 'Diesel', logo: '/assets/home/industries/logos/industry-corporate-logo-12.webp', fallbackLogo: 'https://picsum.photos/seed/corp12/200/200' },
-      { name: 'Zeel Rainwear', logo: '/assets/home/industries/logos/industry-corporate-logo-13.webp', fallbackLogo: 'https://picsum.photos/seed/corp13/200/200' },
-    ]
-  },
-  {
-    id: 'events',
-    name: 'Events',
-    image: '/assets/home/industries/images/industry-events.webp',
-    fallbackImage: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop',
-    clients: [
-      { name: 'MPCA', logo: '/assets/home/industries/logos/industry-events-logo-1.webp', fallbackLogo: 'https://picsum.photos/seed/event1/200/200' },
-      { name: 'TNCA', logo: '/assets/home/industries/logos/industry-events-logo-2.webp', fallbackLogo: 'https://picsum.photos/seed/event2/200/200' },
-    ]
-  }
-];
 
-export const Industries: React.FC = () => {
+type IndustriesProps = {
+  content: IndustriesContent;
+};
+
+export const Industries: React.FC<IndustriesProps> = ({ content }) => {
+  const industries = content.items;
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [clientPage, setClientPage] = useState(0);
-  // Track the client currently active in the modal view
-  const [selectedClient, setSelectedClient] = useState<typeof industries[0]['clients'][0] | null>(null);
-  
+  const [selectedClient, setSelectedClient] =
+    useState<IndustryClientContent | null>(null);
+
   const sectionRef = useRef<HTMLDivElement>(null);
   const clientsPerPage = 9;
 
-  const activeIndustry = industries[activeIndex];
+  if (!industries.length) {
+    return null;
+  }
+
+  const safeActiveIndex = Math.min(activeIndex, industries.length - 1);
+  const activeIndustry = industries[safeActiveIndex];
+
   const totalPages = Math.ceil(activeIndustry.clients.length / clientsPerPage);
   const currentClients = activeIndustry.clients.slice(
     clientPage * clientsPerPage,
@@ -140,9 +88,9 @@ export const Industries: React.FC = () => {
       <div className="flex-1 flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 max-w-[1400px] mx-auto w-full">
         {/* Heading */}
         <div className="w-full mb-10 lg:mb-12 text-center">
-          <SectionHeader label="WHO WE WORK WITH" className="text-zinc-400 mb-4" />
+          <SectionHeader label={content.sectionLabel} className="text-zinc-400 mb-4" />
           <h2 className="text-[32px] md:text-[42px] lg:text-[48px] font-medium text-black font-agrandir leading-tight tracking-tight max-w-2xl mx-auto">
-            Industries we serve
+            {content.heading}
           </h2>
         </div>
 
@@ -237,7 +185,7 @@ export const Industries: React.FC = () => {
             <div className="hidden lg:flex items-center justify-between w-full pt-8">
               <div className="flex items-center gap-3">
                 <Button
-                  label="PREV"
+                  label={content.prevLabel}
                   onClick={prevPage}
                   bgColor="bg-black"
                   textColor="text-white"
@@ -245,7 +193,7 @@ export const Industries: React.FC = () => {
                   className="px-6 py-2.5 text-[10px]"
                 />
                 <Button
-                  label="NEXT"
+                  label={content.nextLabel}
                   onClick={nextPage}
                   bgColor="bg-black"
                   textColor="text-white"
@@ -255,7 +203,9 @@ export const Industries: React.FC = () => {
               </div>
               {totalPages > 1 && (
                 <div className="flex flex-col items-end">
-                  <span className="text-[8px] font-bold tracking-[0.2em] text-zinc-400 uppercase mb-0.5 text-right">PAGE</span>
+                  <span className="text-[8px] font-bold tracking-[0.2em] text-zinc-400 uppercase mb-0.5 text-right">
+                      {content.pageLabel}
+                  </span>
                   <span className="text-[11px] font-medium text-black font-mono">
                     {String(clientPage + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
                   </span>

@@ -3,41 +3,28 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
+import type { ImpactContent } from '../../content/homeContent';
+import { CMSHeading } from '../cms/CMSHeading';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const IMPACT_CARDS = [
-  {
-    number: "150+",
-    text: "Highly specialized machines cleaning cities across the nation everyday",
-    image: "/assets/home/impact/impact-1.png",
-    fallback: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop"
-  },
-  {
-    number: "35+",
-    text: "Projects delivering excellence in every corner",
-    image: "/assets/home/impact/impact-2.png",
-    fallback: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2048&auto=format&fit=crop"
-  },
-  {
-    number: "15M",
-    text: "Lives touched through our sustainable infrastructure initiatives",
-    image: "/assets/home/impact/impact-3.png",
-    fallback: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop"
-  }
-];
+type ImpactProps = {
+  content: ImpactContent;
+};
 
-export const Impact: React.FC = () => {
+export const Impact: React.FC<ImpactProps> = ({ content }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  const angle = 360 / IMPACT_CARDS.length;
+  const impactCards = content.cards;
+
+  const angle = 360 / impactCards.length;
   const cardHeight = 320;
-  const radius = Math.round((cardHeight / 2) / Math.tan(Math.PI / IMPACT_CARDS.length));
-  const totalRotation = (IMPACT_CARDS.length - 1) * angle;
+  const radius = Math.round((cardHeight / 2) / Math.tan(Math.PI / impactCards.length));
+  const totalRotation = (impactCards.length - 1) * angle;
 
   useGSAP(() => {
     if (!sectionRef.current || !containerRef.current || !wrapperRef.current) return;
@@ -59,14 +46,14 @@ export const Impact: React.FC = () => {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: 'top top',
-        end: () => window.innerWidth < 1024 ? `+=${IMPACT_CARDS.length * 30}%` : `+=${IMPACT_CARDS.length * 50}%`,
+        end: () => window.innerWidth < 1024 ? `+=${impactCards.length * 30}%` : `+=${impactCards.length * 50}%`,
         pin: true,
         scrub: 1,
         onUpdate: (self) => {
           const progress = self.progress;
           const rotation = progress * totalRotation;
 
-          IMPACT_CARDS.forEach((_, index) => {
+          impactCards.forEach((_, index) => {
             const cardAngle = index * -angle;
             const relativeAngle = (cardAngle + rotation) % 360;
             
@@ -106,14 +93,15 @@ export const Impact: React.FC = () => {
     >
       {/* Row 1: Heading on the left (60%) */}
       <div className="lg:col-start-1 lg:row-start-1 flex flex-col gap-4">
-        <SectionHeader label="OUR IMPACT" className="text-black" />
+        <SectionHeader label={content.sectionLabel} className="text-black" />
         
-        <h2 
-          ref={headingRef}
-          className="text-[32px] md:text-[40px] lg:text-[56px] font-medium leading-[1.1] tracking-tight text-black font-agrandir"
-        >
-          The Numbers <br /> Behind Our Impact
-        </h2>
+        <div ref={headingRef}>
+          <CMSHeading
+            as="h2"
+            text={content.heading}
+            className="text-[32px] md:text-[40px] lg:text-[56px] font-medium leading-[1.1] tracking-tight text-black font-agrandir"
+          />
+        </div>
       </div>
 
       {/* Row 2: Card Container on the right (40%) */}
@@ -127,7 +115,7 @@ export const Impact: React.FC = () => {
           className="relative w-full max-w-[600px] h-[320px]"
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {IMPACT_CARDS.map((card, index) => (
+          {impactCards.map((card, index) => (
             <div 
               key={index}
               ref={el => cardsRef.current[index] = el}

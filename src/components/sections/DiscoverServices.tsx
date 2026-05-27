@@ -3,9 +3,20 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ArrowDown } from "lucide-react";
+import type { DiscoverServicesContent } from "../../content/homeContent";
 import "./Spotlight.css";
 
-export const DiscoverServices = () => {
+type DiscoverServicesProps = {
+  content: DiscoverServicesContent;
+};
+
+export const DiscoverServices = ({ content }: DiscoverServicesProps) => {
+  const spotlightItems = content.items;
+
+  if (!spotlightItems.length) {
+  return null;
+  }
+
   const spotlightRef = useRef<HTMLDivElement>(null);
   const titlesContainerRef = useRef<HTMLDivElement>(null);
   const imagesContainerRef = useRef<HTMLDivElement>(null);
@@ -27,20 +38,8 @@ export const DiscoverServices = () => {
   const currentActiveIndexRef = useRef<number>(0);
   const bgImgRef = useRef<HTMLImageElement>(null);
 
-  const spotlightItems = [
-    { name: "Integrated Facility Management", img: "assets/home/services/service-1.webp", fallback: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Mechanized Road Sweeping", img: "assets/home/services/service-2.webp", fallback: "https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Manual Road Sweeping", img: "assets/home/services/service-3.webp", fallback: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop" },
-    { name: "High Pressure Jet Cleaning", img: "assets/home/services/service-4.webp", fallback: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Door to Door Collection", img: "assets/home/services/service-5.webp", fallback: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop" },
-    { name: "Maintenance of Landscapes", img: "assets/home/services/service-6.webp", fallback: "https://images.unsplash.com/photo-1591193516411-ac56d827aa2d?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Bio Remidation", img: "assets/home/services/service-7.webp", fallback: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop" },
-    { name: "Water Rejuvenation", img: "assets/home/services/service-8.webp", fallback: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Sewage System Inspection", img: "assets/home/services/service-9.webp", fallback: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop" },
-  ];
-
   useGSAP(() => {
-    if (!spotlightRef.current) return;
+    if (!spotlightRef.current || !spotlightItems.length) return;
     
     const introTextElements = [introText1Ref.current, introText2Ref.current];
     gsap.registerPlugin(ScrollTrigger);
@@ -305,14 +304,14 @@ export const DiscoverServices = () => {
     return () => {
       if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
     };
-  }, []);
+    }, { dependencies: [content] });
 
   return (
     <section className="spotlight" ref={spotlightRef}>
       {/* Custom Scroll Cursor */}
       <div ref={cursorRef} className="spotlight-cursor">
         <ArrowDown />
-        <span>Scroll</span>
+        <span>{content.cursorLabel}</span>
       </div>
 
       <div className="spotlight-inner">
@@ -321,13 +320,13 @@ export const DiscoverServices = () => {
             className="spotlight-intro-text"
             ref={introText1Ref}
           >
-            <p>DISCOVER</p>
+            <p>{content.introLine1}</p>
           </div>
           <div
             className="spotlight-intro-text"
             ref={introText2Ref}
           >
-            <p>Services</p>
+            <p>{content.introLine2}</p>
           </div>
         </div>
         <div className="spotlight-bg-img">
