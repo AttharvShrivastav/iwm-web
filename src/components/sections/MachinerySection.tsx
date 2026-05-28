@@ -38,7 +38,7 @@ const machines: Machine[] = [
       { label: 'CAPACITY', value: '30 km', icon: <Gauge size={14} /> },
       { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
     ],
-    image: '/public/assets/machinery/machine-1.webp',
+    image: 'public/assets/machinery/machine-1.webp',
     fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
   },
   {
