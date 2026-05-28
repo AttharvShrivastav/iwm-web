@@ -33,7 +33,7 @@ const offices = [
   {
     city: 'INDORE OFFICE',
     lines: [
-      '663, East, Ring Rd, Near Bombay Hospital,',
+      '663, East Ring Rd, Near Bombay Hospital,',
       'Indore, Madhya Pradesh 452018',
     ]
   },
