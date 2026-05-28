@@ -94,18 +94,41 @@ export function normalizeHomePageResponse(
     },
 
     discoverServices: {
-      introLine1: homePageFallback.discoverServices.introLine1,
-      introLine2: homePageFallback.discoverServices.introLine2,
-      headerLabel: homePageFallback.discoverServices.headerLabel,
-      cursorLabel: homePageFallback.discoverServices.cursorLabel,
-      items: Array.isArray(data.services)
-        ? data.services.map((service: any) => ({
-            name: service.title,
-            img: toAssetUrl(service.image),
-            fallback: homePageFallback.discoverServices.items[0]?.fallback,
-          }))
-        : undefined,
-    },
+  introLine1: homePageFallback.discoverServices.introLine1,
+  introLine2: homePageFallback.discoverServices.introLine2,
+  headerLabel: homePageFallback.discoverServices.headerLabel,
+
+  items: Array.isArray(data.services)
+    ? data.services.map((service: any, index: number) => {
+        const fallbackItem =
+          homePageFallback.discoverServices.items[index] ||
+          homePageFallback.discoverServices.items[0];
+
+        const apiImage = service.image ? toAssetUrl(service.image) : '';
+
+        return {
+          name: service.title || fallbackItem?.name,
+          img: apiImage || fallbackItem?.img,
+          fallback: fallbackItem?.fallback,
+
+          modalTitle:
+            service.title ||
+            fallbackItem?.modalTitle ||
+            fallbackItem?.name,
+
+          modalEyebrow:
+            fallbackItem?.modalEyebrow || 'Service Specialization',
+
+          modalDescription:
+            service.description ||
+            fallbackItem?.modalDescription ||
+            'More details about this service will be available soon.',
+
+          modalDetails: fallbackItem?.modalDetails,
+        };
+      })
+    : undefined,
+},
 
     industries: {
       sectionLabel: homePageFallback.industries.sectionLabel,
