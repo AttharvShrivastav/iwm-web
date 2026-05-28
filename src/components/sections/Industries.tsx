@@ -11,9 +11,13 @@ import type { IndustriesContent, IndustryClientContent } from '../../content/hom
 
 type IndustriesProps = {
   content: IndustriesContent;
+  canAnimate?: boolean;
 };
 
-export const Industries: React.FC<IndustriesProps> = ({ content }) => {
+export const Industries: React.FC<IndustriesProps> = ({
+  content,
+  canAnimate = true,
+}) => {
   const industries = content.items;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -39,6 +43,7 @@ export const Industries: React.FC<IndustriesProps> = ({ content }) => {
   );
 
   useGSAP(() => {
+    if (!canAnimate) return;
     gsap.registerPlugin(ScrollTrigger);
 
     const mm = gsap.matchMedia();
@@ -70,7 +75,7 @@ export const Industries: React.FC<IndustriesProps> = ({ content }) => {
     });
 
     return () => mm.revert();
-  }, { scope: sectionRef });
+  }, { scope: sectionRef, dependencies: [canAnimate, industries.length]  });
 
   const nextPage = () => {
     setClientPage((prev) => (prev + 1) % totalPages);

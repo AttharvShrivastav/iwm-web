@@ -116,31 +116,30 @@ function AppContent({ onLoaded }: { onLoaded: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (!onLoaded) return;
+  if (!onLoaded) return;
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+  const updateLenis = (time: number) => {
+    lenis.raf(time * 1000);
+  };
 
-    requestAnimationFrame(raf);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(updateLenis);
+  gsap.ticker.lagSmoothing(0);
 
-    // Sync Lenis scrolling with GSAP ScrollTrigger updates
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
 
-    return () => {
-      lenis.destroy();
-    };
-  }, [onLoaded]);
+  return () => {
+    gsap.ticker.remove(updateLenis);
+    lenis.destroy();
+  };
+}, [onLoaded]);
 
   return (
     <main className="relative min-h-screen bg-[#f8f7f2] overflow-x-hidden">
@@ -156,7 +155,7 @@ function AppContent({ onLoaded }: { onLoaded: boolean }) {
       />
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage appReady={onLoaded} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/services/:serviceId" element={<ServiceDetailPage />} />
@@ -174,10 +173,22 @@ function AppContent({ onLoaded }: { onLoaded: boolean }) {
 export default function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
 
+  useEffect(() => {
+  document.documentElement.style.overflow = loadingComplete ? '' : 'hidden';
+  document.body.style.overflow = loadingComplete ? '' : 'hidden';
+
+  return () => {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  };
+}, [loadingComplete]);
+
   return (
     <Router>
-      <Preloader onComplete={() => setLoadingComplete(true)} />
-      {loadingComplete && <AppContent onLoaded={loadingComplete} />}
+      <AppContent onLoaded={loadingComplete} />
+      {!loadingComplete && (
+        <Preloader onComplete={() => setLoadingComplete(true)} />
+      )}
     </Router>
   );
 }

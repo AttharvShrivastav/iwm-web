@@ -8,9 +8,13 @@ import "./Spotlight.css";
 
 type DiscoverServicesProps = {
   content: DiscoverServicesContent;
+  canAnimate?: boolean;
 };
 
-export const DiscoverServices = ({ content }: DiscoverServicesProps) => {
+export const DiscoverServices = ({
+  content,
+  canAnimate = true,
+}: DiscoverServicesProps) => {
   const spotlightItems = content.items;
 
   if (!spotlightItems.length) {
@@ -39,6 +43,7 @@ export const DiscoverServices = ({ content }: DiscoverServicesProps) => {
   const bgImgRef = useRef<HTMLImageElement>(null);
 
   useGSAP(() => {
+    if (!canAnimate) return;
     if (!spotlightRef.current || !spotlightItems.length) return;
     
     const introTextElements = [introText1Ref.current, introText2Ref.current];
@@ -304,7 +309,7 @@ export const DiscoverServices = ({ content }: DiscoverServicesProps) => {
     return () => {
       if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
     };
-    }, { dependencies: [content] });
+}, { dependencies: [canAnimate, content] });
 
   return (
     <section className="spotlight" ref={spotlightRef}>

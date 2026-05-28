@@ -12,20 +12,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 type AboutProps = {
   content: AboutContent;
+  canAnimate?: boolean;
 };
 
-export const About: React.FC<AboutProps> = ({ content }) => {
+export const About: React.FC<AboutProps> = ({ content, canAnimate = true }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
 
-const mainText = content.mainText;
-const highlightText = content.highlightText;
+const mainText = content.mainText?.trim() || '';
+const highlightText = content.highlightText?.trim() || '';
+const fullText = [mainText, highlightText].filter(Boolean).join(' ');
 
   useGSAP(() => {
+      if (!canAnimate) return;
     if (!textRef.current) return;
 
     // 1. Reconstruct text inner elements safely
-    const fullText = mainText + highlightText;
     const mainTextLength = mainText.length;
 
     textRef.current.innerHTML = fullText
@@ -122,7 +124,11 @@ const highlightText = content.highlightText;
     });
 
     return () => mm.revert();
-  }, { scope: containerRef, dependencies: [mainText, highlightText] });
+    }, {
+  scope: containerRef,
+  dependencies: [fullText],
+  revertOnUpdate: true,
+});
 
   return (
     <section ref={containerRef} className="relative min-h-screen w-full bg-white flex flex-col justify-start lg:justify-between gap-16 lg:gap-24 pt-24 pb-32 px-8 md:px-16 lg:overflow-hidden">
@@ -136,7 +142,7 @@ const highlightText = content.highlightText;
               ref={textRef}
               className="text-2xl md:text-3xl lg:text-[42px] font-medium leading-[1.2] tracking-tight font-agrandir"
             >
-              {mainText} {highlightText}
+              {fullText}
             </p>
           </div>
         </div>

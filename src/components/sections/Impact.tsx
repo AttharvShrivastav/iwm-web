@@ -10,9 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 type ImpactProps = {
   content: ImpactContent;
+  canAnimate?: boolean;
 };
 
-export const Impact: React.FC<ImpactProps> = ({ content }) => {
+export const Impact: React.FC<ImpactProps> = ({ content, canAnimate = true }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -27,6 +28,9 @@ export const Impact: React.FC<ImpactProps> = ({ content }) => {
   const totalRotation = (impactCards.length - 1) * angle;
 
   useGSAP(() => {
+
+    if (!canAnimate) return;
+    
     if (!sectionRef.current || !containerRef.current || !wrapperRef.current) return;
 
     // Initial entrance animation for the heading

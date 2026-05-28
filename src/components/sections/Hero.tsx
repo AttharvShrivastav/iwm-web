@@ -10,9 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 type HeroProps = {
   content: HeroContent;
+  canAnimate?: boolean;
 };
 
-export const Hero: React.FC<HeroProps> = ({ content }) => {
+export const Hero: React.FC<HeroProps> = ({ content, canAnimate = true }) => {
   const container = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
@@ -20,6 +21,7 @@ export const Hero: React.FC<HeroProps> = ({ content }) => {
   const homeRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (!canAnimate) return;
     const tl = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 } });
 
     tl.from(homeRef.current, {

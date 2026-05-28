@@ -295,3 +295,22 @@ export const homeDiscoverServicesFallback: DiscoverServicesContent = {
     },
   ],
 };
+
+
+export type HomePageContent = {
+  hero: HeroContent;
+  about: AboutContent;
+  impact: ImpactContent;
+  animatedText: HomeAnimatedTextContent;
+  discoverServices: DiscoverServicesContent;
+  industries: IndustriesContent;
+};
+
+export const homePageFallback: HomePageContent = {
+  hero: homeHeroFallback,
+  about: homeAboutFallback,
+  impact: homeImpactFallback,
+  animatedText: homeAnimatedTextFallback,
+  discoverServices: homeDiscoverServicesFallback,
+  industries: homeIndustriesFallback,
+};
