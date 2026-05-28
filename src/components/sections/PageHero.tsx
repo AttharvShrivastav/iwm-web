@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { CMSHeading } from '../../cms/CMSHeading';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,7 +25,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
   topRightLink 
 }) => {
   const container = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -75,7 +76,11 @@ export const PageHero: React.FC<PageHeroProps> = ({
         scrub: true
       }
     });
-  }, { scope: container });
+    }, {
+      scope: container,
+      dependencies: [label, title, subtitle, image],
+      revertOnUpdate: true,
+    });
 
   return (
     <section 
@@ -124,12 +129,13 @@ export const PageHero: React.FC<PageHeroProps> = ({
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-12 lg:gap-16 items-end">
-          <h1 
-            ref={headingRef}
-            className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[72px] font-medium leading-[1.05] tracking-tight font-agrandir"
-          >
-            {title}
-          </h1>
+          <div ref={headingRef}>
+            <CMSHeading
+              as="h1"
+              text={title}
+              className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[72px] font-medium leading-[1.05] tracking-tight font-agrandir"
+            />
+          </div>
 
           <div ref={subtextRef} className="flex flex-col gap-10">
             <p className="text-[16px] md:text-[18px] lg:text-[20px] font-light leading-snug opacity-90 max-w-md font-sans">

@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
 import type { ImpactContent } from '../../content/homeContent';
-import { CMSHeading } from '../cms/CMSHeading';
+import { CMSHeading } from '../../cms/CMSHeading';
 
 gsap.registerPlugin(ScrollTrigger);
 

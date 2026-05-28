@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { HomePageContent } from '../content/homeContent';
 import { homePageFallback } from '../content/homeContent';
-import { normalizeHomePageResponse } from '../components/cms/homePageNormalizer';
-import { mergeWithFallback } from '../components/cms/mergeWithFallback';
+import { normalizeHomePageResponse } from '../cms/homePageNormalizer';
+import { mergeWithFallback } from '../cms/mergeWithFallback';
 
 type ContentStatus = 'loading' | 'success' | 'fallback';
 

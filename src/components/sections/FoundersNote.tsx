@@ -3,10 +3,15 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
+import type { FoundersNoteContent } from '../../content/aboutContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const FoundersNote: React.FC = () => {
+type FoundersNoteProps = {
+  content: FoundersNoteContent;
+};
+
+export const FoundersNote: React.FC<FoundersNoteProps> = ({ content }) => {
   const container = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -54,7 +59,11 @@ export const FoundersNote: React.FC = () => {
     });
 
     return () => mm.revert();
-  }, { scope: container });
+    }, {
+  scope: container,
+  dependencies: [content.image.src, content.quote, content.founderName],
+  revertOnUpdate: true,
+});
 
   return (
     <section 
@@ -65,8 +74,11 @@ export const FoundersNote: React.FC = () => {
         {/* Image Column */}
         <div ref={imageRef} className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-zinc-100">
           <img 
-            src="/assets/about/foundersnote/founders-note.jpeg" 
-            alt="Founder" 
+            src={content.image.src}
+            alt={content.image.alt}
+            onError={(e) => {
+              e.currentTarget.src = content.image.fallbackSrc;
+            }}
             className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
             referrerPolicy="no-referrer"
           />
@@ -74,28 +86,26 @@ export const FoundersNote: React.FC = () => {
 
         {/* Content Column */}
         <div ref={contentRef} className="flex flex-col gap-8 md:gap-12">
-          <SectionHeader label="FOUNDER'S NOTE" className="text-black" />
+            <SectionHeader label={content.sectionLabel} className="text-black" />
           
           <div className="flex flex-col gap-6 md:gap-8">
             <h2 className="text-[32px] md:text-[48px] font-medium leading-[1.1] tracking-tight text-black font-agrandir">
-              "We don't just manage waste; we manage the future of our cities."
+              "{content.quote}"
             </h2>
             
             <div className="flex flex-col gap-6 text-[16px] md:text-[18px] text-zinc-600 leading-relaxed font-sans">
-              <p>
-                When we started IWM, the goal was simple yet ambitious: to bring industrial-grade efficiency to the most fundamental aspect of urban living—sanitation. We saw cities growing at a pace that traditional systems couldn't match.
-              </p>
-              <p>
-                Our approach has always been centered on two pillars: radical dignity for our workers and relentless innovation in our processes. Every Sipahi on the ground is a testament to our commitment to excellence.
-              </p>
-              <p>
-                Today, as we serve multiple cities across India, our mission remains unchanged. We are here to build infrastructure that lasts and impact that matters.
-              </p>
+              {content.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
 
             <div className="mt-4">
-              <p className="text-xl font-medium text-black font-agrandir">Mohan Pandey</p>
-              <p className="text-sm text-zinc-400 tracking-widest uppercase mt-1">Founder and CEO, IWM</p>
+              <p className="text-xl font-medium text-black font-agrandir">
+                {content.founderName}
+              </p>
+              <p className="text-sm text-zinc-400 tracking-widest uppercase mt-1">
+                {content.founderRole}
+              </p>
             </div>
           </div>
         </div>

@@ -1,26 +1,24 @@
 import React from 'react';
 import { Globe } from './Globe';
 import { SectionHeader } from '../common/SectionHeader';
+import type { LocationSectionContent } from '../../content/aboutContent';
+import { CMSHeading } from '../../cms/CMSHeading';
 
-const locations = [
-  { state: "MADHYA PRADESH", city: "INDORE" },
-  { state: "TAMIL NADU", city: "CHENNAI" },
-  { state: "MADHYA PRADESH", city: "UJJAIN" },
-  { state: "GUJRAT", city: "SURAT" },
-  { state: "MADHYA PRADESH", city: "INDORE" },
-  { state: "TAMIL NADU", city: "CHENNAI" },
-  { state: "MADHYA PRADESH", city: "UJJAIN" },
-];
 
-export const LocationSection: React.FC = () => {
+type LocationSectionProps = {
+  content: LocationSectionContent;
+};
+
+export const LocationSection: React.FC<LocationSectionProps> = ({ content }) => {
   return (
     <section className="relative w-full h-[100dvh] bg-[#003358] text-white flex flex-col pt-10 pb-0 overflow-hidden">
       <div className="flex flex-col items-center text-center px-8 mb-6 z-20">
-        <SectionHeader label="OUR LOCATION" className="text-white/80 mb-4 md:mb-6" />
-        <h2 className="text-[26px] md:text-[36px] lg:text-[44px] font-medium leading-[1.1] tracking-tight font-agrandir max-w-3xl">
-          Based in Indore, India <br />
-          Serving the whole Nation
-        </h2>
+        <SectionHeader label={content.sectionLabel} className="text-white/80 mb-4 md:mb-6" />
+        <CMSHeading
+          as="h2"
+          text={content.heading}
+          className="text-[26px] md:text-[36px] lg:text-[44px] font-medium leading-[1.1] tracking-tight font-agrandir max-w-3xl"
+        />
       </div>
 
       {/* Marquee */}
@@ -28,7 +26,7 @@ export const LocationSection: React.FC = () => {
         <div className="animate-marquee whitespace-nowrap flex items-center group-hover:[animation-play-state:paused] py-4 lg:py-6">
           {Array(4).fill(0).map((_, groupIndex) => (
             <React.Fragment key={groupIndex}>
-              {locations.map((loc, i) => (
+                {content.locations.map((loc, i) => (
                 <div key={`${groupIndex}-${i}`} className="flex flex-col items-center mx-12 md:mx-24">
                   <span className="text-[9px] md:text-[11px] font-bold tracking-[0.2em] text-white/40 mb-1 lg:mb-2 uppercase">
                     {loc.state}

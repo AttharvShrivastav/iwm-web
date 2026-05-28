@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Button } from '../common/Button';
 import type { HeroContent } from '../../content/homeContent';
-import { CMSHeading } from '../cms/CMSHeading';
+import { CMSHeading } from '../../cms/CMSHeading';
 
 gsap.registerPlugin(ScrollTrigger);
 

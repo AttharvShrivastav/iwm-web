@@ -1,8 +1,8 @@
 import { Plug, Bridge, Handshake } from '@phosphor-icons/react';
 import type {
   HomePageContent
-} from '../../content/homeContent';
-import { homePageFallback } from '../../content/homeContent';
+} from '../content/homeContent';
+import { homePageFallback } from '../content/homeContent';
 
 const ASSET_BASE_URL = import.meta.env.VITE_CMS_ASSET_URL || '';
 
