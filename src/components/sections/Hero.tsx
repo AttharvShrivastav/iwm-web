@@ -99,7 +99,7 @@ export const Hero: React.FC = () => {
           <div ref={subtextRef} className="flex flex-col gap-10">
             <p className="text-[18px] md:text-[20px] font-light leading-snug opacity-90 max-w-md font-sans">
               <span className="inline-block mr-3 text-2xl">↳</span>
-              We Understand how a clean living affects living in a city which is moving faster than ever
+              We Understand how clean living affects living in a city which is moving faster than ever
             </p>
             
             <Button 

@@ -225,7 +225,7 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                   <div className="flex flex-col gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">Indore Office</span>
                     <p className="text-[14px] font-light opacity-80 leading-relaxed font-sans">
-                      663, East, Ring Rd, <br />
+                      663, East Ring Rd, <br />
                       Near Bombay Hospital, <br />
                       Indore, MP 452018
                     </p>
