@@ -288,7 +288,7 @@ const storyPhases = [
   {
     year: "2025",
     title: "Leading the Nation",
-    description: "After having contributed in making Indore the cleanest city in India for the 4th time in a row, IWM is awarded the single largest work order for mechanized sweeping in the nation.",
+    description: "As IWM enters a new phase, we branch into several new verticals, namely in water and organic composting, bringing our quintessential people plus technology approach.",
     image: "assets/about/ourstory/story-4.webp"
   }
 ];
