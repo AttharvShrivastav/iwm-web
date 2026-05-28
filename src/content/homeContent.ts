@@ -76,7 +76,6 @@ export type ImpactCardContent = {
   number: string;
   text: string;
   image: string;
-  fallback: string;
 };
 
 export type ImpactContent = {
@@ -93,22 +92,16 @@ export const homeImpactFallback: ImpactContent = {
       number: '150+',
       text: 'Highly specialized machines cleaning cities across the nation everyday',
       image: '/assets/home/impact/impact-1.png',
-      fallback:
-        'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop',
     },
     {
       number: '35+',
       text: 'Projects delivering excellence in every corner',
       image: '/assets/home/impact/impact-2.png',
-      fallback:
-        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2048&auto=format&fit=crop',
     },
     {
       number: '15M',
       text: 'Lives touched through our sustainable infrastructure initiatives',
       image: '/assets/home/impact/impact-3.png',
-      fallback:
-        'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
     },
   ],
 };
