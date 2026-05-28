@@ -1,11 +1,18 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, X } from "lucide-react";
 import "./Spotlight.css";
 
+import { servicesData, Service } from "../../pages/ServicesPage";
+
 export const DiscoverServices = () => {
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [cursorLabel, setCursorLabel] = useState("Scroll");
+
+
   const spotlightRef = useRef<HTMLDivElement>(null);
   const titlesContainerRef = useRef<HTMLDivElement>(null);
   const imagesContainerRef = useRef<HTMLDivElement>(null);
@@ -24,20 +31,95 @@ export const DiscoverServices = () => {
     arcRadius: 500,
   };
 
+  useEffect(() => {
+  if (selectedService) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "unset";
+  }
+
+  return () => {
+    document.body.style.overflow = "unset";
+  };
+}, [selectedService]);
+
   const currentActiveIndexRef = useRef<number>(0);
   const bgImgRef = useRef<HTMLImageElement>(null);
 
   const spotlightItems = [
-    { name: "Integrated Facility Management", img: "assets/home/services/service-1.webp", fallback: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Mechanized Road Sweeping", img: "assets/home/services/service-2.webp", fallback: "https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Manual Road Sweeping", img: "assets/home/services/service-3.webp", fallback: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop" },
-    { name: "High Pressure Jet Cleaning", img: "assets/home/services/service-4.webp", fallback: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Door to Door Collection", img: "assets/home/services/service-5.webp", fallback: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop" },
-    { name: "Maintenance of Landscapes", img: "assets/home/services/service-6.webp", fallback: "https://images.unsplash.com/photo-1591193516411-ac56d827aa2d?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Bio Remidation", img: "assets/home/services/service-7.webp", fallback: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop" },
-    { name: "Water Rejuvenation", img: "assets/home/services/service-8.webp", fallback: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop" },
-    { name: "Sewage System Inspection", img: "assets/home/services/service-9.webp", fallback: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop" },
-  ];
+  {
+    name: "Integrated Facility Management",
+    img: "/assets/home/services/service-1.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "Mechanized Road Sweeping",
+    img: "/assets/home/services/service-2.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "Manual Road Sweeping",
+    img: "/assets/home/services/service-3.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "High Pressure Jet Cleaning",
+    img: "/assets/home/services/service-4.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "Door to Door Collection",
+    img: "/assets/home/services/service-5.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop",
+  },
+  {
+    name: "Maintenance of Landscapes",
+    img: "/assets/home/services/service-6.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1591193516411-ac56d827aa2d?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "Bio Remidation",
+    img: "/assets/home/services/service-7.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop",
+  },
+  {
+    name: "Water Rejuvenation",
+    img: "/assets/home/services/service-8.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    name: "Sewage System Inspection",
+    img: "/assets/home/services/service-9.webp",
+    fallback:
+      "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop",
+  },
+];
+
+
+const normalizeText = (value: string) => {
+  return value
+    .toLowerCase()
+    .replace("remidation", "remediation")
+    .replace(/[^a-z0-9]/g, "");
+};
+
+const openServiceModal = (serviceName: string) => {
+  const matchedService = servicesData.find(
+    (service) => normalizeText(service.title) === normalizeText(serviceName)
+  );
+
+  if (matchedService) {
+    setSelectedService(matchedService);
+  }
+};
 
   useGSAP(() => {
     if (!spotlightRef.current) return;
@@ -66,9 +148,18 @@ export const DiscoverServices = () => {
       imageElements.length = 0;
 
       spotlightItems.forEach((item, index) => {
-        const titleElement = document.createElement("h1");
+       const titleElement = document.createElement("h1");
         titleElement.textContent = item.name;
         titleElement.style.opacity = index === 0 ? "1" : "0.35";
+        titleElement.style.cursor = "pointer";
+
+        titleElement.addEventListener("click", () => {
+          if (index === currentActiveIndexRef.current) {
+            openServiceModal(item.name);
+          }
+        });
+
+titlesContainer.appendChild(titleElement);
         titlesContainer.appendChild(titleElement);
 
         const imgWrapper = document.createElement("div");
@@ -108,6 +199,32 @@ export const DiscoverServices = () => {
     const titlesContainerElement = titlesContainerElementRef.current!;
     const imageElements = imageElementsRef.current;
     const titleElements = titleElementsRef.current!;
+
+    const isCursorNearActiveTitle = (e: MouseEvent) => {
+      const activeTitle = titleElements[currentActiveIndexRef.current] as HTMLElement;
+
+      if (!activeTitle) return false;
+
+      const rect = activeTitle.getBoundingClientRect();
+
+      // Bigger invisible hover zone around the active title
+      const horizontalPadding = window.innerWidth < 768 ? 40 : 90;
+      const verticalPadding = window.innerWidth < 768 ? 28 : 45;
+
+      const expandedRect = {
+        left: rect.left - horizontalPadding,
+        right: rect.right + horizontalPadding,
+        top: rect.top - verticalPadding,
+        bottom: rect.bottom + verticalPadding,
+      };
+
+      return (
+        e.clientX >= expandedRect.left &&
+        e.clientX <= expandedRect.right &&
+        e.clientY >= expandedRect.top &&
+        e.clientY <= expandedRect.bottom
+      );
+    };
 
     const isMobile = window.innerWidth < 1000;
     const containerWidth = isMobile ? window.innerWidth * 0.4 : window.innerWidth * 0.3;
@@ -273,8 +390,14 @@ export const DiscoverServices = () => {
       const yTo = gsap.quickTo(cursor, "y", { duration: 0.6, ease: "power3" });
 
       const handleMouseMove = (e: MouseEvent) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
+          xTo(e.clientX);
+          yTo(e.clientY);
+
+          if (isCursorNearActiveTitle(e)) {
+            setCursorLabel("View");
+          } else {
+            setCursorLabel("Scroll");
+          }
       };
 
       const handleMouseEnter = () => {
@@ -284,7 +407,7 @@ export const DiscoverServices = () => {
       const handleMouseLeave = () => {
         gsap.to(cursor, { opacity: 0, scale: 0, duration: 0.3 });
       };
-
+      
       const spotlight = spotlightRef.current;
       if (spotlight) {
         spotlight.addEventListener("mousemove", handleMouseMove);
@@ -312,8 +435,8 @@ export const DiscoverServices = () => {
       {/* Custom Scroll Cursor */}
       <div ref={cursorRef} className="spotlight-cursor">
         <ArrowDown />
-        <span>Scroll</span>
-      </div>
+        <span>{cursorLabel}</span>
+      </div>  
 
       <div className="spotlight-inner">
         <div className="spotlight-intro-text-wrapper">
@@ -358,6 +481,81 @@ export const DiscoverServices = () => {
         <p>Discover</p>
       </div>
       <div className="spotlight-outline"></div>
+
+      <AnimatePresence>
+  {selectedService && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => setSelectedService(null)}
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+      />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative w-full max-w-4xl max-h-[85vh] bg-white rounded-sm overflow-hidden flex flex-col shadow-2xl z-10"
+      >
+        <button
+          onClick={() => setSelectedService(null)}
+          className="absolute top-6 right-6 z-20 text-zinc-400 hover:text-black transition-colors p-2 bg-white/50 rounded-full backdrop-blur-md"
+          aria-label="Close service popup"
+        >
+          <X size={24} />
+        </button>
+
+        <div
+          data-lenis-prevent
+          className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white"
+        >
+          <div className="max-w-2xl mx-auto flex flex-col gap-12 lg:gap-16">
+            <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
+              <div className="flex items-center gap-3">
+                <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">
+                  Service Specialization
+                </span>
+              </div>
+
+              <h2 className="text-2xl md:text-4xl font-medium text-black font-agrandir leading-tight">
+                {selectedService.title}
+              </h2>
+            </div>
+
+            <div className="flex flex-col gap-8 pt-4">
+              <p className="text-lg md:text-xl text-zinc-700 leading-relaxed font-sans">
+                {selectedService.fullWriteup}
+              </p>
+
+              <div className="flex flex-col gap-4 pt-4">
+                <p className="text-zinc-500 text-sm leading-relaxed max-w-lg italic border-l-2 border-zinc-200 pl-4">
+                  At IWM, our operational philosophy is built on three pillars:
+                  visibility of results, relentless innovation, and radical
+                  dignity for our staff. This approach allows us to deliver
+                  scale and consistency where others see only complexity.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-8">
+              <button
+                onClick={() => setSelectedService(null)}
+                className="relative overflow-hidden w-full md:w-auto bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none"
+              >
+                <span className="relative z-10 block">CONTACT OUR TEAM</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-1.5 w-full bg-zinc-100" />
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
     </section>
   );
 };
