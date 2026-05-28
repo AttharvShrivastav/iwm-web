@@ -18,7 +18,9 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
   const {
     content: homeContent,
+    status,
     isLoading,
+    isFallback,
     error,
   } = useHomePageContent();
 
@@ -27,20 +29,32 @@ export const HomePage: React.FC<HomePageProps> = () => {
   useEffect(() => {
     if (!pageReady) return;
 
-    const timeout = window.setTimeout(() => {
+    const refreshOne = window.setTimeout(() => {
       ScrollTrigger.refresh(true);
-    }, 500);
+    }, 300);
 
-    return () => window.clearTimeout(timeout);
-  }, [pageReady]);
+    const refreshTwo = window.setTimeout(() => {
+      ScrollTrigger.refresh(true);
+    }, 900);
+
+    return () => {
+      window.clearTimeout(refreshOne);
+      window.clearTimeout(refreshTwo);
+    };
+  }, [pageReady, status]);
 
   if (import.meta.env.DEV && error) {
-    console.warn('HomePage API failed.', error);
+    console.warn('HomePage content error:', error);
+  }
+
+  if (import.meta.env.DEV && isFallback) {
+    console.info('HomePage is rendering fallback content.');
   }
 
   /**
-   * Bypass fallback state for now:
-   * Do not render homepage sections until API content arrives.
+   * Important:
+   * While API is loading, do not render fallback and do not render sections.
+   * This prevents GSAP from initializing on temporary content.
    */
   if (!pageReady || !homeContent) {
     return (
@@ -49,7 +63,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
   }
 
   return (
-    <>
+    <div key={`home-${status}`}>
       <Hero content={homeContent.hero} />
       <About content={homeContent.about} />
       <Impact content={homeContent.impact} />
@@ -61,6 +75,6 @@ export const HomePage: React.FC<HomePageProps> = () => {
       />
       <DiscoverServices content={homeContent.discoverServices} />
       <Industries content={homeContent.industries} />
-    </>
+    </div>
   );
 };
