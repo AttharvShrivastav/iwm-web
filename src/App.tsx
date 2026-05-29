@@ -99,7 +99,7 @@ import { PeoplePage } from './pages/PeoplePage';
 import { ContactPage } from './pages/ContactPage';
 import { ApplyPage } from './pages/ApplyPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { ServiceDetailPage } from './pages/ServiceDetailPage';
+
 import { Preloader } from './components/common/Preloader'; // Ensure path matches where you save it
 
 function ScrollToTop() {
@@ -158,7 +158,7 @@ function AppContent({ onLoaded }: { onLoaded: boolean }) {
         <Route path="/" element={<HomePage appReady={onLoaded} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
-        <Route path="/services/:serviceId" element={<ServiceDetailPage />} />
+        {/* <Route path="/services/:serviceId" element={<ServiceDetailPage />} /> */}
         <Route path="/people" element={<PeoplePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/apply" element={<ApplyPage />} />

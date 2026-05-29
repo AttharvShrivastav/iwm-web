@@ -6,17 +6,22 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Button } from '../common/Button';
 import { Copy } from '../common/Copy';
-import { X } from 'lucide-react'; // 2. Added X icon for closing the modal
-
-// Ensure 'Service' type is exported from this file along with servicesData
-import { servicesData, Service } from '../../pages/ServicesPage';
+import { X } from 'lucide-react';
+import type {
+  ServiceItemContent,
+  ServiceListContent,
+} from '../../content/servicesContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const ServiceList: React.FC = () => {
+type ServiceListProps = {
+  content: ServiceListContent;
+};
+
+export const ServiceList: React.FC<ServiceListProps> = ({ content }) => {
   const [visibleCount, setVisibleCount] = useState(4);
-  // 3. Added state to track the clicked service
-  const [selectedService, setSelectedService] = useState<Service | null>(null); 
+  const [selectedService, setSelectedService] =
+  useState<ServiceItemContent | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,7 +59,7 @@ export const ServiceList: React.FC = () => {
   }, { scope: containerRef, dependencies: [visibleCount] });
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 4, servicesData.length));
+    setVisibleCount(prev => Math.min(prev + 4, content.services.length));
   };
 
   return (
@@ -63,13 +68,13 @@ export const ServiceList: React.FC = () => {
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4 pb-8">
             <h2 className="text-3xl md:text-4xl font-medium text-black font-agrandir">
-              Our Services
+              {content.heading}
             </h2>
           </div>
 
           <div className="flex flex-col">
             <AnimatePresence mode="popLayout">
-              {servicesData.slice(0, visibleCount).map((service, index) => (
+              {content.services.slice(0, visibleCount).map((service, index) => (
                 <div key={service.id} className="relative">
                   <div className="draw-line absolute top-0 left-0 w-full h-[1px] bg-zinc-300" />
                   
@@ -83,11 +88,16 @@ export const ServiceList: React.FC = () => {
                   >
                     {/* Column 1: Image */}
                     <div className="aspect-[16/10] w-full overflow-hidden rounded-sm bg-zinc-100 shadow-sm group-hover:shadow-xl transition-all duration-500">
-                      <img 
-                        src={service.image} 
-                        alt={service.title} 
+                      <img
+                        src={service.image}
+                        alt={service.title}
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          if (service.fallbackImage) {
+                            e.currentTarget.src = service.fallbackImage;
+                          }
+                        }}
                       />
                     </div>
 
@@ -111,7 +121,7 @@ export const ServiceList: React.FC = () => {
                       
                       {/* Kept your original hover effect here! */}
                       <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all duration-500">
-                        <span className="text-xs font-bold text-black tracking-widest uppercase">Explore Service</span>
+                        <span className="text-xs font-bold text-black tracking-widest uppercase">{content.exploreLabel}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -121,10 +131,10 @@ export const ServiceList: React.FC = () => {
             <div className="draw-line w-full h-[1px] bg-zinc-300" />
           </div>
 
-          {visibleCount < servicesData.length && (
+          {visibleCount < content.services.length && (
             <div className="flex justify-center mt-12">
               <Button 
-                label="LOAD MORE"
+                label={content.loadMoreLabel}
                 onClick={handleLoadMore}
                 bgColor="bg-black"
                 textColor="text-white"
@@ -173,7 +183,7 @@ export const ServiceList: React.FC = () => {
                   {/* Header - Editorial Style */}
                   <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
                     <div className="flex items-center gap-3">
-                      <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">Service Specialization</span>
+                      <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">{content.modalEyebrow}</span>
                     </div>
                     {/* Reduced from 6xl to 4xl for a cleaner look */}
                     <h2 className="text-2xl md:text-4xl font-medium text-black font-agrandir leading-tight">
@@ -202,7 +212,7 @@ export const ServiceList: React.FC = () => {
                       className="relative overflow-hidden w-full md:w-auto bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none"
                     >
                       {/* The span + relative z-10 locks the text so it can't duplicate */}
-                      <span className="relative z-10 block">CONTACT OUR TEAM</span>
+                      <span className="relative z-10 block">{content.modalButtonLabel}</span>
                     </button>
                   </div>
                 </div>

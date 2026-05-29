@@ -2,152 +2,15 @@ import React, { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
-import {
-  BadgeCheck, Clock3, Droplets,
-  Fuel, Gauge,
-  Globe, MapPin,
-  Recycle,ChevronLeft,
-  ChevronRight, Settings,
-  Shield, Trash2,
-  Truck, Waves,
-  Weight, Zap
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type { MachinerySectionContent } from '../../content/servicesContent';
+import { CMSHeading } from '../../cms/CMSHeading';
 
-interface Machine {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  specs: {
-    label: string;
-    value: string;
-    icon: React.ReactNode;
-  }[];
-  image: string;
-  fallback: string;
-}
+type MachinerySectionProps = {
+  content: MachinerySectionContent;
+};
 
-const machines: Machine[] = [
-  {
-    id: 'elgin-pelican-sweeper',
-    name: 'Elgin Pelican Sweeper',
-    category: 'ROAD SWEEPING',
-    description: 'Three-wheel mechanical sweeper built for congested streets, heavy debris pickup, and reliable cleaning across challenging urban road conditions.',
-    specs: [
-      { label: 'ORIGIN', value: 'USA', icon: <Globe size={14} /> },
-      { label: 'CAPACITY', value: '30 km', icon: <Gauge size={14} /> },
-      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-1.webp',
-    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'dulevo-6000-sweeper',
-    name: 'Dulevo 6000 Sweeper',
-    category: 'ROAD SWEEPING',
-    description: 'High-performance suction sweeper designed for dust control, cleaner air, and dependable municipal cleaning across major urban corridors.',
-    specs: [
-      { label: 'ORIGIN', value: 'Italy', icon: <Globe size={14} /> },
-      { label: 'FUEL', value: 'CNG/Diesel', icon: <Fuel size={14} /> },
-      { label: 'CAPACITY', value: '30-40 km', icon: <Gauge size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-2.webp',
-    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'citynet-road-sweeper',
-    name: 'Citynet Road Sweeper',
-    category: 'ROAD SWEEPING',
-    description: 'Compact road sweeping machine designed for narrow streets, markets, industrial zones, parks, and public cleaning applications.',
-    specs: [
-      { label: 'ORIGIN', value: 'Europe', icon: <Globe size={14} /> },
-      { label: 'CAPACITY', value: '50 km', icon: <Gauge size={14} /> },
-      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-3.webp',
-    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'ravo-compact-sweeper',
-    name: 'Ravo Compact Sweeper',
-    category: 'ROAD SWEEPING',
-    description: 'Highly manoeuvrable compact sweeper built for urban centres, narrow lanes, crowded markets, and noise-sensitive public areas.',
-    specs: [
-      { label: 'ORIGIN', value: 'Netherlands', icon: <Globe size={14} /> },
-      { label: 'CAPACITY', value: '15 km', icon: <Gauge size={14} /> },
-      { label: 'SHIFT', value: '8 Hours', icon: <Clock3 size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-4.webp',
-    fallback: 'https://images.unsplash.com/photo-1617112848923-9223a4334b92?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'organic-waste-composter',
-    name: 'Organic Waste Composter',
-    category: 'WASTE PROCESSING',
-    description: 'Fully automated composting machine that converts organic waste into nutrient-rich compost through controlled aerobic processing and deodorization.',
-    specs: [
-      { label: 'CAPACITY', value: '100–300 kg/day', icon: <Weight size={14} /> },
-      { label: 'TIME', value: '24–48 Hours', icon: <Clock3 size={14} /> },
-      { label: 'SYSTEM', value: 'PLC Automated', icon: <Settings size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-5.webp',
-    fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
-  },
-  {
-    id: 'jet-cleaning-machine',
-    name: 'Jet Cleaning Machine',
-    category: 'SURFACE CLEANING',
-    description: 'High-pressure water jet system for deep cleaning stains, grime, oil spills, bird droppings, footpaths, signage, and public assets.',
-    specs: [
-      { label: 'ACTION', value: 'Deep Cleaning', icon: <Zap size={14} /> },
-      { label: 'USE', value: 'Public Assets', icon: <Shield size={14} /> },
-      { label: 'BRAND', value: 'Kärcher', icon: <BadgeCheck size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-6.webp',
-    fallback: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'sdox-oxygen-system',
-    name: 'SDOX Oxygen System',
-    category: 'WATER REMEDIATION',
-    description: 'Supersaturated dissolved oxygen technology for polluted water treatment, odour control, biological remediation, and lake or reservoir restoration.',
-    specs: [
-      { label: 'OXYGEN', value: '350 mg/l', icon: <Droplets size={14} /> },
-      { label: 'CONTROL', value: 'Odour Control', icon: <Shield size={14} /> },
-      { label: 'USE', value: 'River Cleanup', icon: <Waves size={14} /> }
-    ],
-    image: '/src/assets/machinery/sdox-oxygen-system.png',
-    fallback: 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    id: 'legacy-waste-disposal',
-    name: 'Legacy Waste Disposal',
-    category: 'WASTE REMEDIATION',
-    description: 'Scientific legacy waste processing using bioremediation and bio-mining to recover soil, recyclables, and reclaim impacted land areas.',
-    specs: [
-      { label: 'PROCESS', value: 'Bio-Mining', icon: <Settings size={14} /> },
-      { label: 'SITE', value: 'Ujjain', icon: <MapPin size={14} /> },
-      { label: 'OUTPUT', value: 'Land Recovery', icon: <Recycle size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-8.webp',
-    fallback: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=2074&auto=format&fit=crop'
-  },
-  {
-    id: 'door-collection-vehicle',
-    name: 'Door Collection Vehicle',
-    category: 'WASTE COLLECTION',
-    description: 'Door-to-door wet and dry waste collection system supporting source segregation, safe transport, community participation, and sustainable disposal.',
-    specs: [
-      { label: 'WASTE', value: 'Wet/Dry', icon: <Trash2 size={14} /> },
-      { label: 'COVERAGE', value: 'Door-to-Door', icon: <Truck size={14} /> },
-      { label: 'USE', value: 'Source Segregation', icon: <Recycle size={14} /> }
-    ],
-    image: '/public/assets/machinery/machine-9.webp',
-    fallback: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop'
-  }
-];
-
-export const MachinerySection: React.FC = () => {
+export const MachinerySection: React.FC<MachinerySectionProps> = ({ content }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -156,8 +19,9 @@ export const MachinerySection: React.FC = () => {
 
   const slide = contextSafe((direction: 'next' | 'prev') => {
     if (!trackRef.current) return;
+    if (!content.machines.length) return;
 
-    const totalMachines = machines.length;
+    const totalMachines = content.machines.length;
     const isMobile = window.innerWidth < 1024;
     const step = isMobile ? 1 : 2;
     
@@ -184,7 +48,6 @@ export const MachinerySection: React.FC = () => {
       overwrite: true
     });
 
-    // Sub-elements animation for "mark" quality
     const activeCards = Array.from(trackRef.current.children).slice(nextIndex, nextIndex + step);
     gsap.fromTo(activeCards, 
       { opacity: 0.5, scale: 0.98, x: direction === 'next' ? 50 : -50 },
@@ -199,10 +62,12 @@ export const MachinerySection: React.FC = () => {
           {/* Header & Controls */}
           <div className="flex flex-row justify-between items-end gap-12">
             <div className="flex flex-col gap-4">
-              <SectionHeader label="ADVANCED MACHINERY" className="text-black/60" />
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tighter text-black font-agrandir leading-[1.1]">
-                The Engine Behind <br /> Our Efficiency.
-              </h2>
+              <SectionHeader label={content.sectionLabel} className="text-black/60" />
+              <CMSHeading
+                as="h2"
+                text={content.heading}
+                className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tighter text-black font-agrandir leading-[1.1]"
+              />
             </div>
             
             <div className="flex items-center gap-3">
@@ -227,7 +92,7 @@ export const MachinerySection: React.FC = () => {
               ref={trackRef}
               className="flex gap-6 lg:gap-10 w-full"
             >
-              {machines.map((machine) => (
+              {content.machines.map((machine) => (
                 <div 
                   key={machine.id}
                   className="flex-shrink-0 w-full lg:w-[calc(50%-20px)] flex flex-col gap-6 bg-zinc-50 p-6 lg:p-10 rounded-sm"
