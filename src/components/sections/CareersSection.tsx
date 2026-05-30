@@ -4,40 +4,16 @@ import { ArrowUpRight } from 'lucide-react';
 import { SectionHeader } from '../common/SectionHeader';
 import { Button } from '../common/Button';
 import { Copy } from '../common/Copy';
+import type { CareersSectionContent } from '../../content/peopleContent';
 
-interface Job {
-  title: string;
-  description: string;
-  type: string;
-  location: string;
-}
 
-// When this is empty, it shows the "Suitability" text. 
-// When it has items, it shows the "Don't see a fit?" text.
-const jobs: Job[] = [
-  // {
-  //   title: "Operations Manager",
-  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
-  //   type: "Full-Time",
-  //   location: "Indore"
-  // },
-  // {
-  //   title: "Environmental Engineer",
-  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
-  //   type: "Full-Time",
-  //   location: "Indore"
-  // },
-  // {
-  //   title: "Sanitation Supervisor",
-  //   description: "est irure dolore Lorem culpa nisi exercitation consequat minim culpa consequat velit fugiat culpa cillum velit veniam cillum nulla commodo aute commodo quis",
-  //   type: "Full-Time",
-  //   location: "Indore"
-  // }
-];
+type CareersSectionProps = {
+  content: CareersSectionContent;
+};
 
-export const CareersSection: React.FC = () => {
+export const CareersSection: React.FC<CareersSectionProps> = ({ content }) => {
   const navigate = useNavigate();
-  const hasOpenings = jobs.length > 0;
+  const hasOpenings = content.jobs.length > 0;
 
   const handleApply = (position: string) => {
     navigate(`/apply?position=${encodeURIComponent(position)}`);
@@ -67,9 +43,9 @@ export const CareersSection: React.FC = () => {
             
             {/* Left Column */}
             <div className="flex flex-col gap-6">
-              <SectionHeader label="CAREERS" className="text-black/60" />
+              <SectionHeader label={content.sectionLabel} className="text-black/60" />
               <h2 className="text-3xl md:text-5xl font-medium text-black font-agrandir tracking-tight leading-tight max-w-xl">
-                Join the movement for a Cleaner Tomorrow
+                {content.heading}
               </h2>
             </div>
             
@@ -77,18 +53,18 @@ export const CareersSection: React.FC = () => {
             <div className="flex flex-col justify-center gap-6 lg:pb-2">
               {hasOpenings ? (
                 <p className="text-zinc-600 font-sans text-lg md:text-xl leading-relaxed max-w-md">
-                  We are always looking for passionate individuals who are ready to make a tangible impact on the environment and urban infrastructure.
+                  {content.descriptionWithOpenings}
                 </p>
               ) : (
                 <>
                   <p className="text-zinc-600 font-sans text-lg md:text-[16px] leading-relaxed max-w-[100%]">
-                    While we don't have any immediate openings, we are always interested in meeting exceptional people. If you believe you are suitable for a role and want to reach out, please contact us.
+                    {content.descriptionWithoutOpenings}
                   </p>
                   <a 
-                    href="mailto:info@iwm-india.com" 
+                    href={`mailto:${content.cvEmail}`}
                     className="group flex items-center gap-2 text-lg md:text-xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity uppercase"
                   >
-                    SEND US YOUR CV
+                    {content.cvLabel}
                     <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </a>
                 </>
@@ -100,7 +76,7 @@ export const CareersSection: React.FC = () => {
           {/* Job List (Only renders if there are jobs) */}
           {hasOpenings && (
             <div className="flex flex-col border-t border-zinc-200">
-              {jobs.map((job, index) => (
+              {content.jobs.map((job, index) => (
                 <div key={index} className="group border-b border-zinc-200 py-12 md:py-16">
                   <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr_0.5fr] gap-8 items-center">
                     <div className="flex flex-col gap-4">
@@ -122,7 +98,7 @@ export const CareersSection: React.FC = () => {
                     </div>
                     <div className="flex justify-start lg:justify-end">
                       <Button 
-                        label="APPLY NOW"
+                        label={content.applyButtonLabel}
                         bgColor="bg-black"
                         textColor="text-white"
                         onClick={() => handleApply(job.title)}
@@ -140,13 +116,13 @@ export const CareersSection: React.FC = () => {
           {hasOpenings && (
             <div className="flex flex-col items-center gap-6 pt-12 text-center">
               <p className="text-zinc-500 font-sans text-lg md:text-xl">
-                Don't see a fit? We're always looking for talent.
+                {content.emptyFooterText}
               </p>
               <a 
-                href="mailto:info@iwm-india.com" 
+                href={`mailto:${content.cvEmail}`}
                 className="group flex items-center gap-2 text-xl md:text-2xl font-medium text-[#005696] font-agrandir hover:opacity-80 transition-opacity uppercase"
               >
-                SEND US YOUR CV
+                {content.cvLabel}
                 <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </a>
             </div>

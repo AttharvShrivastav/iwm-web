@@ -3,62 +3,16 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { SectionHeader } from '../components/common/SectionHeader';
 import { Button } from '../components/common/Button';
 import { Upload, CheckCircle, ArrowLeft, MapPin, Clock, Briefcase } from 'lucide-react';
+import { peoplePageFallback } from '../content/peopleContent';
 
-interface Job {
-  title: string;
-  description: string;
-  type: string;
-  location: string;
-  details?: string[];
-}
-
-const jobs: Job[] = [
-  {
-    title: "Operations Manager",
-    description: "We are looking for an experienced Operations Manager to oversee our daily waste management activities and ensure efficiency across all urban systems.",
-    type: "Full-Time",
-    location: "Indore",
-    details: [
-      "Oversee daily collection and disposal operations.",
-      "Manage a team of supervisors and ground staff.",
-      "Optimize routes and resource allocation.",
-      "Ensure compliance with environmental and safety standards.",
-      "Prepare operational reports and budgets."
-    ]
-  },
-  {
-    title: "Environmental Engineer",
-    description: "Join our engineering team to design and implement sustainable waste processing solutions and environmental impact assessments.",
-    type: "Full-Time",
-    location: "Indore",
-    details: [
-      "Design waste-to-energy and recycling systems.",
-      "Conduct environmental impact studies.",
-      "Monitor air and water quality at processing sites.",
-      "Develop sustainable waste management strategies.",
-      "Collaborate with municipal authorities on technical projects."
-    ]
-  },
-  {
-    title: "Sanitation Supervisor",
-    description: "Lead our ground force (Sipahis) in maintaining urban cleanliness and ensuring radical dignity in every operation.",
-    type: "Full-Time",
-    location: "Indore",
-    details: [
-      "Supervise waste collection teams in assigned zones.",
-      "Ensure timely and thorough cleaning of urban areas.",
-      "Manage equipment and vehicle maintenance schedules.",
-      "Train staff on safety and operational protocols.",
-      "Address community feedback and operational issues."
-    ]
-  }
-];
 
 export const ApplyPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const initialPosition = queryParams.get('position') || '';
+  const applyContent = peoplePageFallback.apply;
+  const jobs = peoplePageFallback.careers.jobs;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -72,7 +26,7 @@ export const ApplyPage: React.FC = () => {
   const [resume, setResume] = useState<File | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const selectedJob = jobs.find(j => j.title === formData.position);
+  const selectedJob = jobs.find((j) => j.title === formData.position);
 
   useEffect(() => {
     if (initialPosition) {
@@ -196,11 +150,11 @@ export const ApplyPage: React.FC = () => {
                     required
                     className="w-full bg-transparent border-b border-zinc-300 py-3 text-black font-sans focus:outline-none focus:border-black transition-colors appearance-none"
                   >
-                    <option value="" disabled>Select a position</option>
-                    {jobs.map(j => (
+                    <option value="" disabled>{applyContent.selectPlaceholder}</option>
+                    {jobs.map((j) => (
                       <option key={j.title} value={j.title}>{j.title}</option>
                     ))}
-                    <option value="Other">Other / General Application</option>
+                    <option value="Other">{applyContent.generalApplicationLabel}</option>
                   </select>
                 </div>
               </div>

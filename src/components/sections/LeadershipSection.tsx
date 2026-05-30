@@ -5,80 +5,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { SectionHeader } from '../common/SectionHeader';
 import { Copy } from '../common/Copy';
+import type { LeadershipSectionContent } from '../../content/peopleContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Leader {
-  name: string;
-  designation: string;
-  email: string;
-  image: string;
-}
 
-const leaders: Leader[] = [
-  {
-    name: "Mr. Mohan Lal Pandey",
-    designation: "Director and CEO",
-    email: "mohan@iwm-india.com",
-    image: "/assets/people/leadership/mohan.webp" 
-  },
-  {
-    name: "Mr. Sandeep Gole",
-    designation: "Director",
-    email: "sandeep@iwm-india.com",
-    image: "/assets/people/leadership/sandeep.webp"
-  },
-  {
-    name: "Mrs. Varsha Pandey",
-    designation: "Director",
-    email: "varsha@iwm-india.com",
-    image: "/assets/people/leadership/varsha.webp"
-  },
-  {
-    name: "Mr. Hardik Pandey",
-    designation: "General Manager",
-    email: "hardik@iwm-india.com",
-    image: "/assets/people/leadership/hardik.webp"
-  },
-  {
-    name: "Ms. Radhika Patidar",
-    designation: "Hr & Admin Head",
-    email: "radhika@iwm-india.com",
-    image: "/assets/people/leadership/radhika.webp"
-  },
-  {
-    name: "Mr. Manoj Batra",
-    designation: "Finance Head",
-    email: "manojs@iwm-india.com",
-    image: "/assets/people/leadership/manoj.webp"
-  },
-  {
-    name: "Dr. Akhilesh Upadhyay",
-    designation: "General Manager - Operations",
-    email: "akhilesh@iwm-india.com",
-    image: "/assets/people/leadership/akhilesh.webp"
-  },
-  {
-    name: "Mr. Manas Pandey",
-    designation: "Business Development",
-    email: "manas@iwm-india.com",
-    image: "/assets/people/leadership/manas.webp"
-  },
-  {
-    name: "Mr. Nazir Mohammed",
-    designation: "QHSE",
-    email: "qhseiwm@iwm-india.com",
-    image: "/assets/people/leadership/nazir.webp"
-  },
-  {
-    name: "Mr. Ajit Shrivastava",
-    designation: "Public Relation Manager",
-    email: "ajit@iwm-india.com",
-    image: "/assets/people/leadership/ajit.webp"
-  }
-];
+type LeadershipSectionProps = {
+  content: LeadershipSectionContent;
+};
 
-export const LeadershipSection: React.FC = () => {
+export const LeadershipSection: React.FC<LeadershipSectionProps> = ({ content }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -112,14 +48,14 @@ export const LeadershipSection: React.FC = () => {
       <div className="w-full">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4">
-            <SectionHeader label="PEOPLE" className="text-black/60" />
+          <SectionHeader label={content.sectionLabel} className="text-black/60" />
             <h2 className="text-3xl md:text-5xl font-medium text-black font-agrandir tracking-tight">
-              Our Leadership
+              {content.heading}
             </h2>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12 md:gap-y-24">
-            {leaders.map((leader, index) => (
+              {content.leaders.map((leader, index) => (
               <div 
                 key={index} 
                 className="group flex flex-col gap-6 cursor-pointer"
@@ -142,7 +78,7 @@ export const LeadershipSection: React.FC = () => {
                   {copiedId === leader.name && (
                     <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px] flex items-center justify-center z-20">
                       <span className="bg-black text-white text-[10px] tracking-[0.2em] font-bold px-4 py-2">
-                        EMAIL COPIED
+                        {content.copiedLabel}
                       </span>
                     </div>
                   )}

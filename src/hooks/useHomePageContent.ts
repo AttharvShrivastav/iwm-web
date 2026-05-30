@@ -60,15 +60,46 @@ export function useHomePageContent(): UseHomePageContentResult {
 
         const normalizedContent = normalizeHomePageResponse(apiResponse);
 
-        /**
-         * API succeeded.
-         * We merge with fallback only to fill missing fields.
-         * This does NOT render fallback first.
-         */
         const safeContent = mergeWithFallback(
           homePageFallback,
           normalizedContent
         );
+
+        /**
+         * Important:
+         * Preserve API-driven Home About text exactly.
+         *
+         * Why:
+         * mergeWithFallback may treat an empty string as "missing".
+         * But for Home About, highlightText is intentionally empty
+         * when the API sends the full description in one field.
+         *
+         * Without this lock, fallback highlightText gets appended,
+         * causing the paragraph to appear duplicated.
+         */
+        if (normalizedContent.about) {
+          safeContent.about = {
+            ...safeContent.about,
+            ...normalizedContent.about,
+          };
+        }
+
+        /**
+         * Preserve CMS-driven service count/items exactly.
+         * Useful for DiscoverServices so fallback items do not sneak back in.
+         */
+        if (normalizedContent.discoverServices?.items) {
+          safeContent.discoverServices.items =
+            normalizedContent.discoverServices.items;
+        }
+
+        /**
+         * Preserve CMS-driven industries exactly when API sends them.
+         * This keeps shared Industries consistent across Home and Services page.
+         */
+        if (normalizedContent.industries?.items) {
+          safeContent.industries.items = normalizedContent.industries.items;
+        }
 
         if (!controller.signal.aborted) {
           setContent(safeContent);
@@ -78,14 +109,11 @@ export function useHomePageContent(): UseHomePageContentResult {
         const finalError =
           err instanceof Error ? err : new Error('Home API failed');
 
-        /**
-         * API failed.
-         * Now, and only now, fallback is allowed to render.
-         * This means GSAP still mounts only once.
-         */
-        setError(finalError);
-        setContent(homePageFallback);
-        setStatus('fallback');
+        if (!controller.signal.aborted) {
+          setError(finalError);
+          setContent(homePageFallback);
+          setStatus('fallback');
+        }
       } finally {
         window.clearTimeout(timeoutId);
       }

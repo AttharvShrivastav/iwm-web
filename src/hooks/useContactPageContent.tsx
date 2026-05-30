@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import type { AboutPageContent } from '../content/aboutContent';
-import { aboutPageFallback } from '../content/aboutContent';
-import { normalizeAboutPageResponse } from '../cms/aboutPageNormalizer';
+import type { ContactPageContent } from '../content/contactContent';
+import { contactPageFallback } from '../content/contactContent';
+import { normalizeContactPageResponse } from '../cms/contactPageNormalizer';
 import { mergeWithFallback } from '../cms/mergeWithFallback';
 
 type ContentStatus = 'loading' | 'success' | 'fallback';
 
-type UseAboutPageContentResult = {
-  content: AboutPageContent | null;
+type UseContactPageContentResult = {
+  content: ContactPageContent | null;
   status: ContentStatus;
   isLoading: boolean;
   isFallback: boolean;
@@ -16,8 +16,8 @@ type UseAboutPageContentResult = {
 
 const API_TIMEOUT_MS = 8000;
 
-export function useAboutPageContent(): UseAboutPageContentResult {
-  const [content, setContent] = useState<AboutPageContent | null>(null);
+export function useContactPageContent(): UseContactPageContentResult {
+  const [content, setContent] = useState<ContactPageContent | null>(null);
   const [status, setStatus] = useState<ContentStatus>('loading');
   const [error, setError] = useState<Error | null>(null);
 
@@ -28,16 +28,16 @@ export function useAboutPageContent(): UseAboutPageContentResult {
       controller.abort();
     }, API_TIMEOUT_MS);
 
-    async function loadAboutPage() {
+    async function loadContactPage() {
       try {
-        const apiUrl = import.meta.env.VITE_ABOUT_API_URL;
+        const apiUrl = import.meta.env.VITE_CONTACT_PAGE_API_URL;
 
         setStatus('loading');
         setError(null);
         setContent(null);
 
         if (!apiUrl) {
-          throw new Error('VITE_ABOUT_API_URL is missing');
+          throw new Error('VITE_CONTACT_PAGE_API_URL is missing');
         }
 
         const response = await fetch(apiUrl, {
@@ -49,30 +49,21 @@ export function useAboutPageContent(): UseAboutPageContentResult {
         });
 
         if (!response.ok) {
-          throw new Error(`About API failed with status ${response.status}`);
+          throw new Error(`Contact page API failed with status ${response.status}`);
         }
 
         const apiResponse = await response.json();
 
         if (!apiResponse?.status || !apiResponse?.data) {
-          throw new Error('About API returned invalid data');
+          throw new Error('Contact page API returned invalid data');
         }
 
-        const normalizedContent = normalizeAboutPageResponse(apiResponse);
+        const normalizedContent = normalizeContactPageResponse(apiResponse);
 
-const safeContent = mergeWithFallback(
-  aboutPageFallback,
-  normalizedContent
-);
-
-/**
- * Important:
- * Preserve API-driven About value cards exactly.
- * This prevents mergeWithFallback from restoring fallback cards.
- */
-if (normalizedContent.values?.values) {
-  safeContent.values.values = normalizedContent.values.values;
-}
+        const safeContent = mergeWithFallback(
+          contactPageFallback,
+          normalizedContent
+        );
 
         if (!controller.signal.aborted) {
           setContent(safeContent);
@@ -80,27 +71,27 @@ if (normalizedContent.values?.values) {
         }
       } catch (err) {
         const finalError =
-          err instanceof Error ? err : new Error('About API failed');
+          err instanceof Error ? err : new Error('Contact page API failed');
 
         if (!controller.signal.aborted) {
           console.warn(
-            'About API failed. Rendering fallback content.',
+            'Contact page API failed. Rendering fallback content.',
             finalError
           );
 
           setError(finalError);
-          setContent(aboutPageFallback);
+          setContent(contactPageFallback);
           setStatus('fallback');
         } else {
-          const timeoutError = new Error('About API request timed out');
+          const timeoutError = new Error('Contact page API request timed out');
 
           console.warn(
-            'About API timed out. Rendering fallback content.',
+            'Contact page API timed out. Rendering fallback content.',
             timeoutError
           );
 
           setError(timeoutError);
-          setContent(aboutPageFallback);
+          setContent(contactPageFallback);
           setStatus('fallback');
         }
       } finally {
@@ -108,7 +99,7 @@ if (normalizedContent.values?.values) {
       }
     }
 
-    loadAboutPage();
+    loadContactPage();
 
     return () => {
       window.clearTimeout(timeoutId);

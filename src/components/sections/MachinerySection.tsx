@@ -17,9 +17,19 @@ export const MachinerySection: React.FC<MachinerySectionProps> = ({ content }) =
 
   const { contextSafe } = useGSAP({ scope: containerRef });
 
+
+  const getVisibleMachineCount = () => {
+  if (typeof window === 'undefined') return 2;
+  return window.innerWidth < 1024 ? 1 : 2;
+};
+
+  const visibleMachineCount = getVisibleMachineCount();
+  const canSlide = content.machines.length > visibleMachineCount;
+
   const slide = contextSafe((direction: 'next' | 'prev') => {
     if (!trackRef.current) return;
     if (!content.machines.length) return;
+    if (!canSlide) return;
 
     const totalMachines = content.machines.length;
     const isMobile = window.innerWidth < 1024;
@@ -71,17 +81,29 @@ export const MachinerySection: React.FC<MachinerySectionProps> = ({ content }) =
             </div>
             
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={() => slide('prev')}
-                className="w-12 h-12 flex items-center justify-center bg-zinc-100 text-black hover:bg-black hover:text-white transition-all rounded-full group"
+                disabled={!canSlide}
+                className={`w-12 h-12 flex items-center justify-center transition-all rounded-full group ${
+                  canSlide
+                    ? 'bg-zinc-100 text-black hover:bg-black hover:text-white'
+                    : 'bg-zinc-100 text-zinc-300 cursor-not-allowed opacity-40'
+                }`}
+                aria-label="Previous machine"
               >
-                <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+                <ChevronLeft size={20} className={canSlide ? 'group-hover:-translate-x-1 transition-transform' : ''} />
               </button>
-              <button 
+              <button
                 onClick={() => slide('next')}
-                className="w-12 h-12 flex items-center justify-center bg-zinc-100 text-black hover:bg-black hover:text-white transition-all rounded-full group"
+                disabled={!canSlide}
+                className={`w-12 h-12 flex items-center justify-center transition-all rounded-full group ${
+                  canSlide
+                    ? 'bg-zinc-100 text-black hover:bg-black hover:text-white'
+                    : 'bg-zinc-100 text-zinc-300 cursor-not-allowed opacity-40'
+                }`}
+                aria-label="Next machine"
               >
-                <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                <ChevronRight size={20} className={canSlide ? 'group-hover:translate-x-1 transition-transform' : ''} />
               </button>
             </div>
           </div>

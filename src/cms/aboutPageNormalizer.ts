@@ -73,6 +73,36 @@ type ApiAboutResponse = {
   data?: any;
 };
 
+function normalizeValueCards(data: any) {
+  const possibleCards =
+    data.about?.cards ||
+    data.values ||
+    data.value_cards ||
+    data.valueCards ||
+    [];
+
+  if (!Array.isArray(possibleCards)) return [];
+
+  return possibleCards
+    .map((card: any) => ({
+      title: cleanText(card.title) || undefined,
+      description: cleanText(card.description),
+
+      /**
+       * Important:
+       * In the shared DB table, HomePage uses `icon` for actual icons.
+       * AboutPage uses the same `icon` field to store Hindi supporting text.
+       */
+      hindiText:
+        cleanText(card.hindiText) ||
+        cleanText(card.hindi_text) ||
+        cleanText(card.hindi) ||
+        cleanText(card.icon) ||
+        undefined,
+    }))
+    .filter((card) => card.description);
+}
+
 export function normalizeAboutPageResponse(
   apiResponse: ApiAboutResponse
 ): Partial<AboutPageContent> {
@@ -92,17 +122,17 @@ export function normalizeAboutPageResponse(
     },
 
     values: {
-      label: cleanText(data.about?.heading) || aboutPageFallback.values.label,
-      mainText: valuesText.mainText || aboutPageFallback.values.mainText,
-      highlightText:
-        valuesText.highlightText || aboutPageFallback.values.highlightText,
+        label: cleanText(data.about?.heading) || aboutPageFallback.values.label,
+        mainText: valuesText.mainText || aboutPageFallback.values.mainText,
+        highlightText:
+          valuesText.highlightText || aboutPageFallback.values.highlightText,
 
-      /**
-       * API currently does not send value cards.
-       * Keep fallback cards so the ValuesSection animation and layout stay stable.
-       */
-      values: aboutPageFallback.values.values,
-    },
+        /**
+         * About API sends cards under data.about.cards.
+         * The card.icon field is treated as hindiText on About page.
+         */
+        values: normalizeValueCards(data),
+      },
 
     location: {
       sectionLabel: aboutPageFallback.location.sectionLabel,

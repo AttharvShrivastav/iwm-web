@@ -2,69 +2,27 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SectionHeader } from '../common/SectionHeader';
 import { Quote, ChevronRight, ChevronLeft } from 'lucide-react';
+import type { SipahiVoicesContent } from '../../content/peopleContent';
+import { CMSHeading } from '../../cms/CMSHeading';
 
-interface SipahiQuote {
-  id: number;
-  name: string;
-  role: string;
-  statement: string;
-  image: string;
-  yearsWithIwm?: string;
-  isHindi?: boolean;
-}
 
-const sipahiGroups: SipahiQuote[][] = [
-  [
-    {
-      id: 1,
-      name: "Sourabh Pandey",
-      role: "Project Manager",
-      statement: "I have been working with the company since 15th December 2019 as a Project Manager in the Operations department. My experience here has been highly rewarding, with continuous learning and growth opportunities. The management is supportive and encourages innovation and responsibility. The work environment is professional, and teamwork is highly valued. I am proud to be associated with an organization that is committed to excellence in its services.",
-      image: "assets/people/sipahis/sipahi-1.jpg",
-      yearsWithIwm: "Since 2019"
-    },
-    {
-      id: 2,
-      name: "पदम सिंह सोलंकी",
-      role: "मैकेनिक (वर्कशॉप)",
-      statement: "मैं पिछले 6+ वर्षों से इस कंपनी में मैकेनिक के रूप में कार्य कर रहा हूँ। यहाँ मुझे विभिन्न मशीनों पर काम करने का अवसर मिला है, जिससे मेरी तकनीकी जानकारी और कौशल में काफी सुधार हुआ है। कंपनी समय पर वेतन देती है और काम का वातावरण भी अच्छा है। हमारे वरिष्ठ हमेशा मार्गदर्शन करते हैं और जरूरत पड़ने पर पूरा सहयोग मिलता है। मुझे इस कंपनी का हिस्सा बनकर गर्व महसूस होता है।",
-      image: "assets/people/sipahis/sipahi-2.jpg",
-      yearsWithIwm: "6+ Years",
-      isHindi: true
-    }
-  ],
-  [
-    {
-      id: 3,
-      name: "अजोध्या बरिया",
-      role: "सफाई मित्र",
-      statement: "मैं पिछले कई वर्षों से इस कंपनी में कार्य कर रही हूँ। यहाँ काम करने का अनुभव अच्छा है। कंपनी समय पर वेतन देती है और काम भी नियमित मिलता है। हमारे सुपरवाइजर सहयोग करते हैं और काम को सही तरीके से समझाते हैं। मुझे यहाँ काम करके संतोष और सुरक्षा महसूस होती है।",
-      image: "assets/people/sipahis/sipahi-3.jpg",
-      yearsWithIwm: "Multiple Years",
-      isHindi: true
-    },
-    {
-      id: 4,
-      name: "गंगा बाई साठे",
-      role: "सफाई मित्र",
-      statement: "मैं पिछले 2 वर्षों से इस कंपनी में सड़क सफाई का कार्य कर रही हूँ। यहाँ का माहौल अच्छा है और सभी एक-दूसरे का सहयोग करते हैं। कंपनी हमें जरूरी उपकरण और सुरक्षा का ध्यान रखती है। समय पर वेतन मिलने से परिवार चलाने में सुविधा होती है। मुझे यहाँ काम करके अच्छा लगता है।",
-      image: "assets/people/sipahis/sipahi-4.jpg",
-      yearsWithIwm: "2 Years",
-      isHindi: true
-    }
-  ]
-];
 
-export const SipahiVoices: React.FC = () => {
+type SipahiVoicesProps = {
+  content: SipahiVoicesContent;
+};
+
+export const SipahiVoices: React.FC<SipahiVoicesProps> = ({ content }) => {
   const [activeGroup, setActiveGroup] = useState(0);
 
   const nextGroup = () => {
-    setActiveGroup((prev) => (prev + 1) % sipahiGroups.length);
+    setActiveGroup((prev) => (prev + 1) % content.groups.length);
   };
 
   const prevGroup = () => {
-    setActiveGroup((prev) => (prev - 1 + sipahiGroups.length) % sipahiGroups.length);
+    setActiveGroup((prev) => (prev - 1 + content.groups.length) % content.groups.length);
   };
+
+  if (!content.groups.length) return null;
 
   return (
     <section className="w-full bg-[#1B5FB4] py-24 md:py-32 px-8 md:px-16 overflow-hidden min-h-screen flex flex-col justify-center">
@@ -73,12 +31,14 @@ export const SipahiVoices: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 md:mb-24">
           <div className="flex flex-col gap-6 max-w-2xl">
-            <SectionHeader label="VOICE FROM THE GROUND" className="text-white/90" />
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white font-agrandir leading-[1.1]">
-              Radical Dignity in <br /> Every Action
-            </h2>
+            <SectionHeader label={content.sectionLabel} className="text-white/90" />
+            <CMSHeading
+              as="h2"
+              text={content.heading}
+              className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white font-agrandir leading-[1.1]"
+            />
             <p className="text-white/90 font-sans text-lg md:text-xl leading-relaxed">
-              Our Swachhata Sipahis are the backbone of everything we do. Professionalism, discipline, and pride define their journey.
+              {content.description}
             </p>
           </div>
 
@@ -110,7 +70,7 @@ export const SipahiVoices: React.FC = () => {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="grid grid-cols-1 md:grid-cols-2 gap-8"
             >
-              {sipahiGroups[activeGroup].map((quote) => (
+              {content.groups[activeGroup].map((quote) => (
                 <div 
                   key={quote.id} 
                   className="bg-[#002846] p-10 md:p-12 flex flex-col gap-10 group relative border border-white/5 h-full"

@@ -1,7 +1,5 @@
 import { Plug, Bridge, Handshake } from '@phosphor-icons/react';
-import type {
-  HomePageContent
-} from '../content/homeContent';
+import type { HomePageContent } from '../content/homeContent';
 import { homePageFallback } from '../content/homeContent';
 
 const ASSET_BASE_URL = import.meta.env.VITE_CMS_ASSET_URL || '';
@@ -19,16 +17,52 @@ function toAssetUrl(path?: string | null): string {
   return `${cleanBase}/${cleanPath}`;
 }
 
+function cleanText(value?: string | null): string {
+  return String(value || '')
+    .replace(/\u2028/g, ' ')
+    .replace(/\r\n/g, ' ')
+    .replace(/\r/g, ' ')
+    .replace(/\n/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 const iconMap = {
   Plug,
   Bridge,
   Handshake,
 };
 
-function getIcon(iconName?: string) {
-  if (!iconName) return Plug;
+function getIcon(iconName?: string | null) {
+  const cleanIconName = cleanText(iconName);
 
-  return iconMap[iconName as keyof typeof iconMap] || Plug;
+  if (!cleanIconName) return Plug;
+
+  return iconMap[cleanIconName as keyof typeof iconMap] || Plug;
+}
+
+function normalizeHomeAboutCards(cards: any[] | undefined) {
+  if (!Array.isArray(cards) || !cards.length) {
+    return homePageFallback.about.features;
+  }
+
+  return cards.map((card: any, index: number) => {
+    const fallbackFeature =
+      homePageFallback.about.features[index] ||
+      homePageFallback.about.features[0];
+
+    return {
+      icon: getIcon(card.icon) || fallbackFeature.icon,
+
+      title:
+        cleanText(card.title) ||
+        fallbackFeature.title,
+
+      description:
+        cleanText(card.description) ||
+        fallbackFeature.description,
+    };
+  });
 }
 
 type ApiHomeResponse = {
@@ -45,90 +79,179 @@ export function normalizeHomePageResponse(
     return {};
   }
 
+  const apiAboutDescription = cleanText(data.about?.description);
+
+  /**
+   * Important:
+   * Home API sends the complete About paragraph in one field:
+   * data.about.description
+   *
+   * So when API description exists, highlightText must be empty.
+   * Otherwise fallback highlightText gets appended and the paragraph repeats.
+   */
+  const aboutText = apiAboutDescription
+    ? {
+        mainText: apiAboutDescription,
+        highlightText: '',
+      }
+    : {
+        mainText: homePageFallback.about.mainText,
+        highlightText: homePageFallback.about.highlightText,
+      };
+
   return {
     hero: {
       eyebrow: homePageFallback.hero.eyebrow,
-      headline: data.hero?.title,
-      description: data.hero?.subtitle,
-      ctaLabel: data.hero?.cta_label,
-      ctaLink: data.hero?.cta_link,
+
+      headline:
+        cleanText(data.hero?.title) ||
+        homePageFallback.hero.headline,
+
+      description:
+        cleanText(data.hero?.subtitle) ||
+        homePageFallback.hero.description,
+
+      ctaLabel:
+        cleanText(data.hero?.cta_label) ||
+        homePageFallback.hero.ctaLabel,
+
+      ctaLink:
+        cleanText(data.hero?.cta_link) ||
+        homePageFallback.hero.ctaLink,
+
       image: {
-        src: toAssetUrl(data.hero?.image),
+        src:
+          toAssetUrl(data.hero?.image) ||
+          homePageFallback.hero.image.src,
+
         alt: homePageFallback.hero.image.alt,
+
         fallbackSrc: homePageFallback.hero.image.fallbackSrc,
       },
     },
 
     about: {
-      sectionLabel: data.about?.heading,
-      mainText: data.about?.description,
-      highlightText: homePageFallback.about.highlightText,
-      ctaLabel: data.about?.cta_label,
-      features: Array.isArray(data.about?.cards)
-        ? data.about.cards.map((card: any) => ({
-            icon: getIcon(card.icon),
-            title: card.title,
-            description: card.description,
-          }))
-        : undefined,
+      sectionLabel:
+        cleanText(data.about?.heading) ||
+        homePageFallback.about.sectionLabel,
+
+      mainText: aboutText.mainText,
+
+      /**
+       * This is intentionally allowed to be an empty string.
+       * Do not replace it with fallback here.
+       */
+      highlightText: aboutText.highlightText,
+
+      ctaLabel:
+        cleanText(data.about?.cta_label) ||
+        homePageFallback.about.ctaLabel,
+
+      ctaLink:
+        cleanText(data.about?.cta_link) ||
+        homePageFallback.about.ctaLink,
+
+      features: normalizeHomeAboutCards(data.about?.cards),
     },
 
     impact: {
-      sectionLabel: data.state?.heading,
-      heading: data.state?.headline,
-      cards: Array.isArray(data.state?.cards)
-        ? data.state.cards.map((card: any) => ({
-            number: card.value,
-            text: card.description,
-            image: toAssetUrl(card.image),
-            fallback: homePageFallback.impact.cards[0]?.fallback,
-          }))
-        : undefined,
+      sectionLabel:
+        cleanText(data.state?.heading) ||
+        homePageFallback.impact.sectionLabel,
+
+      heading:
+        cleanText(data.state?.headline) ||
+        homePageFallback.impact.heading,
+
+      cards: Array.isArray(data.state?.cards) && data.state.cards.length
+        ? data.state.cards.map((card: any, index: number) => {
+            const fallbackCard =
+              homePageFallback.impact.cards[index] ||
+              homePageFallback.impact.cards[0];
+
+            return {
+              number:
+                cleanText(card.value) ||
+                fallbackCard.number,
+
+              text:
+                cleanText(card.description) ||
+                fallbackCard.text,
+
+              image:
+                toAssetUrl(card.image) ||
+                fallbackCard.image,
+
+              fallback:
+                fallbackCard.fallback,
+            };
+          })
+        : homePageFallback.impact.cards,
     },
 
     animatedText: {
-      label: data.cta?.heading,
-      mainText: data.cta?.description,
-      buttonLabel: data.cta?.cta_label,
-      buttonLink: data.cta?.cta_link,
+      label:
+        cleanText(data.cta?.heading) ||
+        homePageFallback.animatedText.label,
+
+      mainText:
+        cleanText(data.cta?.description) ||
+        homePageFallback.animatedText.mainText,
+
+      buttonLabel:
+        cleanText(data.cta?.cta_label) ||
+        homePageFallback.animatedText.buttonLabel,
+
+      buttonLink:
+        cleanText(data.cta?.cta_link) ||
+        homePageFallback.animatedText.buttonLink,
     },
 
     discoverServices: {
-  introLine1: homePageFallback.discoverServices.introLine1,
-  introLine2: homePageFallback.discoverServices.introLine2,
-  headerLabel: homePageFallback.discoverServices.headerLabel,
+      introLine1: homePageFallback.discoverServices.introLine1,
+      introLine2: homePageFallback.discoverServices.introLine2,
+      headerLabel: homePageFallback.discoverServices.headerLabel,
 
-  items: Array.isArray(data.services)
-    ? data.services.map((service: any, index: number) => {
-        const fallbackItem =
-          homePageFallback.discoverServices.items[index] ||
-          homePageFallback.discoverServices.items[0];
+      items: Array.isArray(data.services) && data.services.length
+        ? data.services.map((service: any, index: number) => {
+            const fallbackItem =
+              homePageFallback.discoverServices.items[index] ||
+              homePageFallback.discoverServices.items[0];
 
-        const apiImage = service.image ? toAssetUrl(service.image) : '';
+            const apiImage = service.image ? toAssetUrl(service.image) : '';
 
-        return {
-          name: service.title || fallbackItem?.name,
-          img: apiImage || fallbackItem?.img,
-          fallback: fallbackItem?.fallback,
+            return {
+              name:
+                cleanText(service.title) ||
+                fallbackItem.name,
 
-          modalTitle:
-            service.title ||
-            fallbackItem?.modalTitle ||
-            fallbackItem?.name,
+              img:
+                apiImage ||
+                fallbackItem.img,
 
-          modalEyebrow:
-            fallbackItem?.modalEyebrow || 'Service Specialization',
+              fallback:
+                fallbackItem.fallback,
 
-          modalDescription:
-            service.description ||
-            fallbackItem?.modalDescription ||
-            'More details about this service will be available soon.',
+              modalTitle:
+                cleanText(service.title) ||
+                fallbackItem.modalTitle ||
+                fallbackItem.name,
 
-          modalDetails: fallbackItem?.modalDetails,
-        };
-      })
-    : undefined,
-},
+              modalEyebrow:
+                fallbackItem.modalEyebrow ||
+                'Service Specialization',
+
+              modalDescription:
+                cleanText(service.description) ||
+                fallbackItem.modalDescription ||
+                'More details about this service will be available soon.',
+
+              modalDetails:
+                fallbackItem.modalDetails,
+            };
+          })
+        : homePageFallback.discoverServices.items,
+    },
 
     industries: {
       sectionLabel: homePageFallback.industries.sectionLabel,
@@ -136,23 +259,52 @@ export function normalizeHomePageResponse(
       prevLabel: homePageFallback.industries.prevLabel,
       nextLabel: homePageFallback.industries.nextLabel,
       pageLabel: homePageFallback.industries.pageLabel,
-      items: Array.isArray(data.industries)
-        ? data.industries.map((industry: any) => ({
-            id: String(industry.id),
-            name: industry.title,
-            image: toAssetUrl(industry.image),
-            fallbackImage: homePageFallback.industries.items[0]?.fallbackImage,
-            clients: Array.isArray(industry.logos)
-              ? industry.logos.map((logo: any, index: number) => ({
-                  name: `${industry.title} Logo ${index + 1}`,
-                  logo: toAssetUrl(logo.logo),
-                  fallbackLogo:
-                    homePageFallback.industries.items[0]?.clients[0]
-                      ?.fallbackLogo,
-                }))
-              : [],
-          }))
-        : undefined,
+
+      items: Array.isArray(data.industries) && data.industries.length
+        ? data.industries.map((industry: any, index: number) => {
+            const fallbackIndustry =
+              homePageFallback.industries.items[index] ||
+              homePageFallback.industries.items[0];
+
+            return {
+              id: String(industry.id || fallbackIndustry.id),
+
+              name:
+                cleanText(industry.title) ||
+                fallbackIndustry.name,
+
+              image:
+                toAssetUrl(industry.image) ||
+                fallbackIndustry.image,
+
+              fallbackImage:
+                fallbackIndustry.fallbackImage,
+
+              clients: Array.isArray(industry.logos)
+                ? industry.logos.map((logo: any, logoIndex: number) => {
+                    const fallbackClient =
+                      fallbackIndustry.clients?.[logoIndex] ||
+                      fallbackIndustry.clients?.[0];
+
+                    return {
+                      name:
+                        cleanText(logo.name) ||
+                        `${cleanText(industry.title) || 'Industry'} Logo ${logoIndex + 1}`,
+
+                      logo:
+                        toAssetUrl(logo.logo) ||
+                        fallbackClient?.logo ||
+                        '',
+
+                      fallbackLogo:
+                        fallbackClient?.fallbackLogo ||
+                        homePageFallback.industries.items[0]?.clients[0]?.fallbackLogo,
+                    };
+                  })
+                : fallbackIndustry.clients,
+            };
+          })
+        : homePageFallback.industries.items,
     },
   };
 }
