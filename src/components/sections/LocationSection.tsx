@@ -4,11 +4,10 @@ import { SectionHeader } from '../common/SectionHeader';
 
 const locations = [
   { state: "MADHYA PRADESH", city: "INDORE" },
-  { state: "TAMIL NADU", city: "CHENNAI" },
-  { state: "MADHYA PRADESH", city: "UJJAIN" },
+  { state: "MADHYA PRADESH", city: "RATLAM" },
   { state: "GUJRAT", city: "SURAT" },
-  { state: "MADHYA PRADESH", city: "INDORE" },
-  { state: "TAMIL NADU", city: "CHENNAI" },
+  { state: "MADHYA PRADESH", city: "UJJAIN" },
+  { state: "ANDHRA PRADESH", city: "TIRUPATI" },
   { state: "MADHYA PRADESH", city: "UJJAIN" },
 ];
 
