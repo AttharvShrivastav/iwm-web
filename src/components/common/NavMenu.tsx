@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Minus } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Logo } from './Logo';
 import { Copy } from './Copy';
 import { MenuButton } from './MenuButton';
+import { useSiteContent } from '../../hooks/useSiteContent';
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -20,37 +20,64 @@ const mainLinks = [
   { label: 'CONTACT', href: '/contact' },
 ];
 
-const socialLinks = [
-  { label: 'Instagram', href: '#' },
-  { label: 'Facebook', href: '#' },
-  { label: 'Whatsapp', href: '#' },
-  { label: 'Linkedin', href: '#' },
-  { label: 'X', href: '#' },
-];
-
-// 1. Replaced single address array with an array of office objects
-const offices = [
-  {
-    city: 'INDORE OFFICE',
-    lines: [
-      '663, East, Ring Rd, Near Bombay Hospital,',
-      'Indore, Madhya Pradesh 452018',
-    ]
-  },
-  {
-    city: 'CHENNAI OFFICE',
-    lines: [
-      '506 PM House, Sri Shipping Building Alandru St,',
-      'St Thomas Mount, Chennai — 600016',
-    ]
-  }
-];
-
 export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [comingSoonMessage, setComingSoonMessage] = useState('');
+
   const container = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<HTMLDivElement[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const { content: siteContent } = useSiteContent();
+
+  const socialLinks = [
+    { label: 'Instagram', href: siteContent?.socialLinks.instagram },
+    { label: 'Facebook', href: siteContent?.socialLinks.facebook },
+    {
+      label: 'Whatsapp',
+      href: siteContent?.whatsappHref
+        ? `https://wa.me/${siteContent.whatsappHref.replace(/[^\d]/g, '')}`
+        : undefined,
+    },
+    { label: 'Linkedin', href: siteContent?.socialLinks.linkedin },
+    { label: 'X', href: siteContent?.socialLinks.twitter },
+  ];
+
+  const offices = [
+    {
+      city: 'INDORE OFFICE',
+      lines: [
+        '663, East, Ring Rd, Near Bombay Hospital,',
+        'Indore, Madhya Pradesh 452018',
+      ],
+    },
+    {
+      city: 'CHENNAI OFFICE',
+      lines: [
+        siteContent?.address ||
+          '506 PM House, Sri Shipping Building Alandru St, St Thomas Mount, Chennai — 600016',
+      ],
+    },
+  ];
+
+  const showComingSoon = (label: string) => {
+    setComingSoonMessage(`${label} link coming soon`);
+
+    window.setTimeout(() => {
+      setComingSoonMessage('');
+    }, 2200);
+  };
+
+  const handleSocialClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    label: string,
+    href?: string
+  ) => {
+    if (!href) {
+      e.preventDefault();
+      showComingSoon(label);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -63,7 +90,7 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
 
     if (isOpen) {
       const tl = gsap.timeline();
-      
+
       gsap.set(panelsRef.current, { y: '-100%' });
       gsap.set(contentRef.current, { opacity: 0 });
 
@@ -72,26 +99,32 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         duration: 1.2,
         stagger: 0.1,
         ease: 'expo.inOut',
-      })
-      .to(contentRef.current, {
-        opacity: 1,
-        duration: 0.4,
-      }, '-=0.6');
+      }).to(
+        contentRef.current,
+        {
+          opacity: 1,
+          duration: 0.4,
+        },
+        '-=0.6'
+      );
     } else {
       const tl = gsap.timeline({
-        onComplete: () => setIsVisible(false)
+        onComplete: () => setIsVisible(false),
       });
 
       tl.to(contentRef.current, {
         opacity: 0,
         duration: 0.3,
-      })
-      .to(panelsRef.current, {
-        y: '-100%',
-        duration: 0.8,
-        stagger: 0.05,
-        ease: 'expo.inOut',
-      }, '-=0.1');
+      }).to(
+        panelsRef.current,
+        {
+          y: '-100%',
+          duration: 0.8,
+          stagger: 0.05,
+          ease: 'expo.inOut',
+        },
+        '-=0.1'
+      );
     }
   }, { scope: container, dependencies: [isOpen, isVisible] });
 
@@ -102,22 +135,28 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
       ref={container}
       className="fixed inset-0 z-[100] overflow-hidden pointer-events-none"
     >
-      {/* Animated Background Panels - Stacked to show bottom bars */}
-      <div 
+      {comingSoonMessage && (
+        <div className="fixed left-1/2 bottom-8 z-[999] -translate-x-1/2 bg-black text-white px-5 py-3 text-xs md:text-sm font-sans shadow-2xl pointer-events-auto">
+          {comingSoonMessage}
+        </div>
+      )}
+
+      {/* Animated Background Panels */}
+      <div
         ref={(el) => el && (panelsRef.current[0] = el)}
         className="absolute inset-x-0 top-0 bg-[#005696] z-10 h-[100dvh] md:h-[85vh]"
       />
-      <div 
+      <div
         ref={(el) => el && (panelsRef.current[1] = el)}
         className="absolute inset-x-0 top-0 bg-[#729fcf] z-20 h-[100dvh] md:h-[81vh]"
       />
-      <div 
+      <div
         ref={(el) => el && (panelsRef.current[2] = el)}
         className="absolute inset-x-0 top-0 bg-[#f8f7f2] z-30 h-[100dvh] md:h-[77vh]"
       />
 
-      {/* Content Layer - Constrained to the white panel height (77vh) */}
-      <div 
+      {/* Content Layer */}
+      <div
         ref={contentRef}
         className="relative z-40 h-[100dvh] md:h-[77vh] w-full flex flex-col px-6 py-6 pb-12 md:px-16 md:py-12 md:pb-16 text-[#005696] pointer-events-auto"
       >
@@ -128,28 +167,37 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div className="flex-1 flex justify-end md:justify-center items-center">
-            <MenuButton 
-              isOpen={isOpen} 
-              onClick={onClose} 
+            <MenuButton
+              isOpen={isOpen}
+              onClick={onClose}
               className="text-[#005696]"
             />
           </div>
-          
-          <div className="hidden md:block flex-1"></div>
+
+          <div className="hidden md:block flex-1" />
         </div>
 
         {/* Main Grid */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-2 md:gap-8 items-center mt-2 md:mt-8 overflow-hidden">
-          
-          {/* Left Column: Socials & Legal */}
+          {/* Left Column */}
           <div className="flex flex-row md:flex-col gap-6 md:gap-10 h-full justify-between md:justify-center items-end md:items-start order-2 md:order-1">
-            
             <div className="flex flex-col gap-1">
               {socialLinks.map((link, i) => (
-                <Copy key={link.label} animateOnScroll={false} delay={1.2 + i * 0.05}>
-                  <a 
-                    href={link.href} 
-                    className="text-[13px] md:text-[14px] font-medium hover:text-[#729fcf] transition-colors inline-block"
+                <Copy
+                  key={link.label}
+                  animateOnScroll={false}
+                  delay={1.2 + i * 0.05}
+                >
+                  <a
+                    href={link.href || '#'}
+                    target={link.href ? '_blank' : undefined}
+                    rel={link.href ? 'noreferrer' : undefined}
+                    onClick={(e) =>
+                      handleSocialClick(e, link.label, link.href)
+                    }
+                    className={`text-[13px] md:text-[14px] font-medium hover:text-[#729fcf] transition-colors inline-block ${
+                      link.href ? '' : 'cursor-pointer'
+                    }`}
                   >
                     {link.label}
                   </a>
@@ -157,16 +205,19 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
               ))}
             </div>
 
-            {/* 2. Updated to map over the offices array */}
             <div className="flex flex-col gap-6">
               {offices.map((office, index) => (
                 <div key={office.city} className="flex flex-col gap-1">
                   <p className="text-[10px] md:text-[11px] font-bold opacity-40 uppercase tracking-wider mb-1">
                     {office.city}
                   </p>
+
                   {office.lines.map((line, i) => (
-                    /* Added staggering to the delay based on office index so they cascade nicely */
-                    <Copy key={line} animateOnScroll={false} delay={1.5 + (index * 0.1) + (i * 0.05)}>
+                    <Copy
+                      key={`${office.city}-${line}-${i}`}
+                      animateOnScroll={false}
+                      delay={1.5 + index * 0.1 + i * 0.05}
+                    >
                       <p className="text-[10px] md:text-[11px] font-medium opacity-80 leading-tight">
                         {line}
                       </p>
@@ -175,15 +226,14 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                 </div>
               ))}
             </div>
-
           </div>
 
-          {/* Center Column: Main Links */}
+          {/* Center Column */}
           <div className="flex flex-col items-center md:items-start gap-0.5 md:gap-1 order-1 md:order-2">
             {mainLinks.map((link, i) => (
               <Copy key={link.label} animateOnScroll={false} delay={1 + i * 0.1}>
-                <Link 
-                  to={link.href} 
+                <Link
+                  to={link.href}
                   onClick={onClose}
                   className="text-[24px] md:text-[36px] lg:text-[42px] font-light tracking-tighter leading-[1.1] hover:text-[#729fcf] hover:translate-x-4 transition-all duration-500 ease-out inline-block uppercase"
                 >

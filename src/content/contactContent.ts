@@ -69,7 +69,7 @@ export const contactPageFallback: ContactPageContent = {
       {
         label: 'Indore Office',
         address: [
-          '663, East, Ring Rd, Near Bombay Hospital,',
+          '663, East Ring Rd, Near Bombay Hospital,',
           'Indore, Madhya Pradesh 452018',
         ],
       },

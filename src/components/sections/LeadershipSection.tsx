@@ -19,9 +19,11 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({ content })
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = (email: string, name: string) => {
-    navigator.clipboard.writeText(email);
-    setCopiedId(name);
-    setTimeout(() => setCopiedId(null), 2000);
+  if (!email) return;
+
+  navigator.clipboard.writeText(email);
+  setCopiedId(name);
+  setTimeout(() => setCopiedId(null), 2000);
   };
 
   useGSAP(() => {

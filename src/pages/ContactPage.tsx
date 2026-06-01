@@ -5,6 +5,7 @@ import { Button } from '../components/common/Button';
 import { Envelope, Phone, MapPin } from '@phosphor-icons/react';
 import { CMSHeading } from '../cms/CMSHeading';
 import { useContactPageContent } from '../hooks/useContactPageContent';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export const ContactPage: React.FC = () => {
   const {
@@ -14,6 +15,10 @@ export const ContactPage: React.FC = () => {
     isFallback,
     error,
   } = useContactPageContent();
+
+
+  const { content: siteContent } = useSiteContent();
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -153,28 +158,42 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-12">
-                {contactContent.contactInfo.offices.map((office) => (
-                  <div key={office.label} className="flex gap-6 items-start">
-                    <div className="w-12 h-12 bg-zinc-50 flex items-center justify-center rounded-sm text-black flex-shrink-0">
-                      <MapPin size={24} weight="light" />
-                    </div>
+                {contactContent.contactInfo.offices.map((office, officeIndex) => {
+  /**
+   * Office rule:
+   * 0 = Indore Office stays static fallback
+   * 1 = Chennai Office can come from backend/WebInfo API
+   */
+  const isEditableOffice = officeIndex === 1;
 
-                    <div className="flex flex-col gap-2">
-                      <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
-                        {office.label}
-                      </p>
+  const officeAddress =
+    isEditableOffice && siteContent?.address
+      ? [siteContent.address]
+      : office.address;
 
-                      <p className="text-lg text-black font-sans leading-relaxed">
-                        {office.address.map((line, index) => (
-                          <React.Fragment key={`${office.label}-${line}`}>
-                            {line}
-                            {index < office.address.length - 1 && <br />}
-                          </React.Fragment>
-                        ))}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+  return (
+    <div key={office.label} className="flex gap-6 items-start">
+      <div className="w-12 h-12 bg-zinc-50 flex items-center justify-center rounded-sm text-black flex-shrink-0">
+        <MapPin size={24} weight="light" />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
+          {office.label}
+        </p>
+
+        <p className="text-lg text-black font-sans leading-relaxed">
+          {officeAddress.map((line, index) => (
+            <React.Fragment key={`${office.label}-${line}-${index}`}>
+              {line}
+              {index < officeAddress.length - 1 && <br />}
+            </React.Fragment>
+          ))}
+        </p>
+      </div>
+    </div>
+  );
+})}
 
                 <div className="flex gap-6 items-start">
                   <div className="w-12 h-12 bg-zinc-50 flex items-center justify-center rounded-sm text-black flex-shrink-0">
@@ -187,11 +206,11 @@ export const ContactPage: React.FC = () => {
                     </p>
 
                     <a
-                      href={`mailto:${contactContent.contactInfo.email}`}
+                      href={`mailto:${siteContent?.email || contactContent.contactInfo.email}`}
                       className="text-lg text-black font-sans hover:text-[#005696] transition-colors"
                     >
-                      {contactContent.contactInfo.email}
-                    </a>
+                      {siteContent?.email || contactContent.contactInfo.email}
+                  </a>
                   </div>
                 </div>
 
@@ -206,10 +225,10 @@ export const ContactPage: React.FC = () => {
                     </p>
 
                     <a
-                      href={`tel:${contactContent.contactInfo.phoneHref}`}
+                      href={`tel:${siteContent?.contactNumberHref || contactContent.contactInfo.phoneHref}`}
                       className="text-lg text-black font-sans hover:text-[#005696] transition-colors"
                     >
-                      {contactContent.contactInfo.phone}
+                      {siteContent?.contactNumber || contactContent.contactInfo.phone}
                     </a>
                   </div>
                 </div>
