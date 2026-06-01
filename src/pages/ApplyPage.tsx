@@ -18,6 +18,7 @@ export const ApplyPage: React.FC = () => {
 
   const { content: jobsContent, isLoading } = useJobsContent();
 
+
   const jobs = jobsContent?.jobs || [];
 
   const queryParams = new URLSearchParams(location.search);
@@ -34,6 +35,14 @@ export const ApplyPage: React.FC = () => {
 
   const [resume, setResume] = useState<File | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | '';
+    message: string;
+  }>({
+    type: '',
+    message: '',
+  });
 
   const selectedJob = jobs.find((job) => job.title === formData.position);
 
@@ -52,23 +61,153 @@ export const ApplyPage: React.FC = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setResume(e.target.files[0]);
-    }
-  };
+  const file = e.target.files?.[0];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  if (!file) return;
+
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
+
+  const maxSizeInBytes = 5 * 1024 * 1024;
+
+  if (!allowedTypes.includes(file.type)) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please upload a PDF, DOC, or DOCX file.',
+    });
+
+    e.target.value = '';
+    setResume(null);
+    return;
+  }
+
+  if (file.size > maxSizeInBytes) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Resume size must be less than 5MB.',
+    });
+
+    e.target.value = '';
+    setResume(null);
+    return;
+  }
+
+  setSubmitStatus({
+    type: '',
+    message: '',
+  });
+
+  setResume(file);
+};
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  setSubmitStatus({
+    type: '',
+    message: '',
+  });
+
+  const cleanName = formData.name.trim();
+  const cleanEmail = formData.email.trim().toLowerCase();
+  const cleanPhone = formData.phone.trim();
+  const cleanPosition = formData.position.trim();
+  const cleanLinkedin = formData.linkedin.trim() || 'N/A';
+  const cleanMessage = formData.message.trim() || 'N/A';
+
+  if (!cleanName || !cleanEmail || !cleanPhone || !cleanPosition) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please fill all required fields.',
+    });
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(cleanEmail)) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please enter a valid email address.',
+    });
+    return;
+  }
+
+  const phoneRegex = /^[0-9+\-\s()]{7,20}$/;
+
+  if (!phoneRegex.test(cleanPhone)) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please enter a valid phone number.',
+    });
+    return;
+  }
+
+  if (!resume) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please upload your resume.',
+    });
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const formEndpoint =
+      import.meta.env.VITE_JOB_APPLICATION_API_URL ||
+      'https://iwm.shristitch.com/api/job-post';
+
+    const data = new FormData();
+
+    data.append('name', cleanName);
+    data.append('email', cleanEmail);
+    data.append('phone', cleanPhone);
+    data.append('position', cleanPosition);
+    data.append('linkedin', cleanLinkedin);
+    data.append('message', cleanMessage);
+    data.append('resume', resume);
+
+    const response = await fetch(formEndpoint, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: data,
+    });
 
     /**
-     * Keeping existing local submit behavior for now.
-     * We will wire Apply form route later with all form routes together.
+     * Important:
+     * Do not manually set Content-Type for FormData.
+     * Browser will set multipart/form-data with the correct boundary.
      */
-    console.log('Application submitted:', { ...formData, resume });
+    const result = await response.json().catch(() => null);
+
+    if (!response.ok || result?.status === false) {
+      throw new Error(
+        result?.message ||
+          result?.error ||
+          'Could not submit your application. Please try again.'
+      );
+    }
 
     setIsSubmitted(true);
     window.scrollTo(0, 0);
-  };
+  } catch (error) {
+    setSubmitStatus({
+      type: 'error',
+      message:
+        error instanceof Error
+          ? error.message
+          : 'Could not submit your application. Please try again.',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   if (isSubmitted) {
     return (
@@ -332,12 +471,26 @@ export const ApplyPage: React.FC = () => {
               </div>
 
               <div className="pt-8">
-                <Button
-                  label="SUBMIT APPLICATION"
-                  bgColor="bg-black"
-                  textColor="text-white"
-                  className="w-full md:w-auto px-16 py-5 text-xs tracking-widest"
-                />
+                <div className="flex flex-col gap-4">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    label={isSubmitting ? 'SUBMITTING...' : 'SUBMIT APPLICATION'}
+                    bgColor="bg-black"
+                    textColor="text-white"
+                    className="px-16 py-5 text-xs tracking-widest disabled:opacity-60 disabled:cursor-not-allowed"
+                  />
+
+                  {submitStatus.message && (
+                    <p
+                      className={`text-sm font-sans ${
+                        submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'
+                      }`}
+                    >
+                      {submitStatus.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </form>
           </div>

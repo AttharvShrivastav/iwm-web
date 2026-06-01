@@ -51,73 +51,118 @@ export const ContactPage: React.FC = () => {
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!contactContent) return;
+  if (!contactContent) return;
 
-    setIsSubmitting(true);
+  setSubmitStatus({
+    type: '',
+    message: '',
+  });
+
+  const cleanName = formData.name.trim();
+  const cleanEmail = formData.email.trim().toLowerCase();
+  const cleanSubject = formData.subject.trim();
+  const cleanMessage = formData.message.trim();
+
+  /**
+   * Honeypot spam protection.
+   * Real users will never fill this hidden field.
+   */
+  if (formData.website.trim()) {
     setSubmitStatus({
-      type: '',
-      message: '',
+      type: 'success',
+      message: contactContent.form.successMessage,
     });
 
-    try {
-      const formEndpoint =
-        import.meta.env.VITE_CONTACT_FORM_API_URL || '/api/contact';
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+      website: '',
+    });
 
-      const response = await fetch(formEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          website: formData.website,
-          pageUrl: window.location.href,
-        }),
-      });
+    return;
+  }
 
-      const result = await response.json().catch(() => null);
+  if (!cleanName || !cleanEmail || !cleanSubject || !cleanMessage) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please fill all required fields.',
+    });
+    return;
+  }
 
-      const isSuccess =
-        response.ok && (result?.success === true || result?.status === true);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!isSuccess) {
-        throw new Error(
-          result?.message ||
-            result?.error ||
-            contactContent.form.errorMessage
-        );
-      }
+  if (!emailRegex.test(cleanEmail)) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please enter a valid email address.',
+    });
+    return;
+  }
 
-      setSubmitStatus({
-        type: 'success',
-        message: result?.message || contactContent.form.successMessage,
-      });
+  setIsSubmitting(true);
 
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-        website: '',
-      });
-    } catch (error) {
-      setSubmitStatus({
-        type: 'error',
-        message:
-          error instanceof Error
-            ? error.message
-            : contactContent.form.errorMessage,
-      });
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const formEndpoint =
+      import.meta.env.VITE_CONTACT_FORM_API_URL ||
+      'https://iwm.shristitch.com/api/inquiry-post';
+
+    const response = await fetch(formEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        name: cleanName,
+        email: cleanEmail,
+        subject: cleanSubject,
+        message: cleanMessage,
+      }),
+    });
+
+    const result = await response.json().catch(() => null);
+
+    if (!response.ok || result?.status === false) {
+      throw new Error(
+        result?.message ||
+          result?.error ||
+          contactContent.form.errorMessage
+      );
     }
-  };
+
+    setSubmitStatus({
+      type: 'success',
+      message:
+        result?.message ||
+        contactContent.form.successMessage ||
+        'Thank you for your message. We will get back to you soon!',
+    });
+
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+      website: '',
+    });
+  } catch (error) {
+    setSubmitStatus({
+      type: 'error',
+      message:
+        error instanceof Error
+          ? error.message
+          : contactContent.form.errorMessage ||
+            'Something went wrong. Please try again.',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -341,7 +386,7 @@ export const ContactPage: React.FC = () => {
                     }
                     bgColor="bg-black"
                     textColor="text-white"
-                    className="w-full md:w-auto px-12 py-4 text-xs tracking-widest disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="px-12 py-4 text-xs tracking-widest disabled:opacity-60 disabled:cursor-not-allowed"
                   />
 
                   {submitStatus.message && (

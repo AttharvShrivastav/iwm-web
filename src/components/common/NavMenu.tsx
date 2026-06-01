@@ -178,7 +178,7 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Main Grid */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-2 md:gap-8 items-center mt-2 md:mt-8 overflow-hidden">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-2 md:gap-8 items-center mt-2 md:mt-8 overflow-visible">
           {/* Left Column */}
           <div className="flex flex-row md:flex-col gap-6 md:gap-10 h-full justify-between md:justify-center items-end md:items-start order-2 md:order-1">
             <div className="flex flex-col gap-1">
@@ -235,7 +235,7 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                 <Link
                   to={link.href}
                   onClick={onClose}
-                  className="text-[24px] md:text-[36px] lg:text-[42px] font-light tracking-tighter leading-[1.1] hover:text-[#729fcf] hover:translate-x-4 transition-all duration-500 ease-out inline-block uppercase"
+                  className="text-[24px] md:text-[36px] lg:text-[42px] font-light tracking-tighter leading-[1.1] hover:text-[#729fcf] hover:translate-x-4 transition-all duration-500 ease-out inline-block uppercase px-1 md:px-2"
                 >
                   {link.label}
                 </Link>
