@@ -91,7 +91,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 text-[#005696]"
       >
         <div className="text-xs tracking-widest uppercase opacity-50 font-medium font-agrandir">
-          SYSTEM INITIALIZATION
+          INTERNATIONAL WASTE MANAGEMENT
         </div>
         <div className="text-6xl md:text-8xl font-light font-sans tracking-tighter">
           {count}%
