@@ -1,4 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, type RefObject } from "react";
+import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,10 +12,234 @@ import { servicesData, Service } from "../../pages/ServicesPage";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type CursorMode = "Scroll" | "View" | "Close";
+
+interface FloatingSpotlightCursorProps {
+  spotlightRef: RefObject<HTMLDivElement | null>;
+  titleElementsRef: RefObject<NodeListOf<HTMLHeadingElement> | null>;
+  currentActiveIndexRef: RefObject<number>;
+  selectedServiceRef: RefObject<Service | null>;
+  closeButtonRef: RefObject<HTMLButtonElement | null>;
+}
+
+const FloatingSpotlightCursor = ({
+  spotlightRef,
+  titleElementsRef,
+  currentActiveIndexRef,
+  selectedServiceRef,
+  closeButtonRef,
+}: FloatingSpotlightCursorProps) => {
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const modeRef = useRef<CursorMode>("Scroll");
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    const label = labelRef.current;
+
+    if (!cursor || !label) return;
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+
+    let rafId: number | null = null;
+    let isRunning = false;
+
+    const setCursorLabel = (mode: CursorMode) => {
+      if (modeRef.current === mode) return;
+
+      modeRef.current = mode;
+      label.textContent = mode;
+    };
+
+    const getCursorTransform = (scale: number) => {
+      return `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%) scale(${scale})`;
+    };
+
+    const showCursor = () => {
+      cursor.style.opacity = "1";
+      cursor.style.transform = getCursorTransform(1);
+    };
+
+    const hideCursor = () => {
+      cursor.style.opacity = "0";
+      cursor.style.transform = getCursorTransform(0);
+    };
+
+    const updateCursorState = () => {
+      if (selectedServiceRef.current) {
+        showCursor();
+
+        if (isNearCloseButton()) {
+          setCursorLabel("Close");
+        } else {
+          setCursorLabel("Scroll");
+        }
+
+        return;
+      }
+
+      if (!isInsideSpotlight()) {
+        hideCursor();
+        setCursorLabel("Scroll");
+        return;
+      }
+
+      showCursor();
+
+      if (isNearActiveTitle()) {
+        setCursorLabel("View");
+      } else {
+        setCursorLabel("Scroll");
+      }
+    };
+
+    const animateCursor = () => {
+      // Lower = more delay, higher = tighter follow
+      const ease = 0.14;
+
+      currentX += (mouseX - currentX) * ease;
+      currentY += (mouseY - currentY) * ease;
+
+      updateCursorState();
+
+      rafId = window.requestAnimationFrame(animateCursor);
+    };
+
+    const isInsideSpotlight = () => {
+      const spotlight = spotlightRef.current;
+
+      if (!spotlight) return false;
+
+      const rect = spotlight.getBoundingClientRect();
+
+      return (
+        mouseX >= rect.left &&
+        mouseX <= rect.right &&
+        mouseY >= rect.top &&
+        mouseY <= rect.bottom
+      );
+    };
+
+    const isNearActiveTitle = () => {
+      const titleElements = titleElementsRef.current;
+
+      if (!titleElements) return false;
+
+      const activeTitle = titleElements[
+        currentActiveIndexRef.current
+      ] as HTMLElement | undefined;
+
+      if (!activeTitle) return false;
+
+      const rect = activeTitle.getBoundingClientRect();
+
+      const horizontalPadding = window.innerWidth < 768 ? 80 : 180;
+      const verticalPadding = window.innerWidth < 768 ? 45 : 80;
+
+      return (
+        mouseX >= rect.left - horizontalPadding &&
+        mouseX <= rect.right + horizontalPadding &&
+        mouseY >= rect.top - verticalPadding &&
+        mouseY <= rect.bottom + verticalPadding
+      );
+    };
+
+    const isNearCloseButton = () => {
+      const closeButton = closeButtonRef.current;
+
+      if (!closeButton) return false;
+
+      const rect = closeButton.getBoundingClientRect();
+      const padding = 70;
+
+      return (
+        mouseX >= rect.left - padding &&
+        mouseX <= rect.right + padding &&
+        mouseY >= rect.top - padding &&
+        mouseY <= rect.bottom + padding
+      );
+    };
+
+    const updateCursor = () => {
+      rafId = null;
+
+      if (selectedServiceRef.current) {
+        showCursor();
+
+        if (isNearCloseButton()) {
+          setCursorLabel("Close");
+        } else {
+          setCursorLabel("Scroll");
+        }
+
+        return;
+      }
+
+      if (!isInsideSpotlight()) {
+        hideCursor();
+        setCursorLabel("Scroll");
+        return;
+      }
+
+      showCursor();
+
+      if (isNearActiveTitle()) {
+        setCursorLabel("View");
+      } else {
+        setCursorLabel("Scroll");
+      }
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!isRunning) {
+        isRunning = true;
+        currentX = mouseX;
+        currentY = mouseY;
+        rafId = window.requestAnimationFrame(animateCursor);
+      }
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+
+      isRunning = false;
+    };
+  }, [
+    spotlightRef,
+    titleElementsRef,
+    currentActiveIndexRef,
+    selectedServiceRef,
+    closeButtonRef,
+  ]);
+
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="floating-spotlight-cursor" ref={cursorRef}>
+      <ArrowDown />
+      <span ref={labelRef}>Scroll</span>
+    </div>,
+    document.body
+  );
+};
+
 export const DiscoverServices = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const cursorLabelRef = useRef<HTMLSpanElement>(null);
-  const cursorModeRef = useRef<"Scroll" | "View">("Scroll");
 
   const spotlightRef = useRef<HTMLDivElement>(null);
   const titlesContainerRef = useRef<HTMLDivElement>(null);
@@ -22,10 +248,14 @@ export const DiscoverServices = () => {
   const titlesContainerElementRef = useRef<HTMLDivElement>(null);
   const introText1Ref = useRef<HTMLDivElement>(null);
   const introText2Ref = useRef<HTMLDivElement>(null);
+
   const imageElementsRef = useRef<(HTMLDivElement | null)[]>([]);
   const titleElementsRef = useRef<NodeListOf<HTMLHeadingElement> | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
+
+  const selectedServiceRef = useRef<Service | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
   const currentActiveIndexRef = useRef<number>(0);
   const bgImgRef = useRef<HTMLImageElement>(null);
 
@@ -92,19 +322,6 @@ export const DiscoverServices = () => {
     },
   ];
 
-  useEffect(() => {
-  if (selectedService) {
-    document.body.style.overflow = "hidden";
-    updateCursorLabel("Scroll");
-  } else {
-    document.body.style.overflow = "unset";
-  }
-
-  return () => {
-    document.body.style.overflow = "unset";
-  };
-}, [selectedService]);
-
   const normalizeText = (value: string) => {
     return value
       .toLowerCase()
@@ -118,24 +335,37 @@ export const DiscoverServices = () => {
     );
 
     if (matchedService) {
+      selectedServiceRef.current = matchedService;
       setSelectedService(matchedService);
       return;
     }
 
     if (typeof index === "number" && servicesData[index]) {
+      selectedServiceRef.current = servicesData[index];
       setSelectedService(servicesData[index]);
     }
   };
 
-  const updateCursorLabel = (label: "Scroll" | "View") => {
-  if (cursorModeRef.current === label) return;
+  const closeServiceModal = () => {
+    selectedServiceRef.current = null;
+    setSelectedService(null);
+  };
 
-  cursorModeRef.current = label;
+  useEffect(() => {
+    selectedServiceRef.current = selectedService;
+  }, [selectedService]);
 
-  if (cursorLabelRef.current) {
-    cursorLabelRef.current.textContent = label;
-  }
-};
+  useEffect(() => {
+    if (selectedService) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedService]);
 
   useGSAP(() => {
     if (!spotlightRef.current) return;
@@ -167,7 +397,7 @@ export const DiscoverServices = () => {
 
         titleElement.textContent = item.name;
         titleElement.style.opacity = index === 0 ? "1" : "0.35";
-        titleElement.style.cursor = "pointer";
+        titleElement.style.cursor = "none";
         titleElement.style.pointerEvents = "auto";
 
         titleElement.addEventListener("click", (e) => {
@@ -230,7 +460,7 @@ export const DiscoverServices = () => {
     const isCursorNearActiveTitle = (e: MouseEvent) => {
       const activeTitle = titleElements[
         currentActiveIndexRef.current
-      ] as HTMLElement;
+      ] as HTMLElement | undefined;
 
       if (!activeTitle) return false;
 
@@ -239,18 +469,11 @@ export const DiscoverServices = () => {
       const horizontalPadding = window.innerWidth < 768 ? 80 : 180;
       const verticalPadding = window.innerWidth < 768 ? 45 : 80;
 
-      const expandedRect = {
-        left: rect.left - horizontalPadding,
-        right: rect.right + horizontalPadding,
-        top: rect.top - verticalPadding,
-        bottom: rect.bottom + verticalPadding,
-      };
-
       return (
-        e.clientX >= expandedRect.left &&
-        e.clientX <= expandedRect.right &&
-        e.clientY >= expandedRect.top &&
-        e.clientY <= expandedRect.bottom
+        e.clientX >= rect.left - horizontalPadding &&
+        e.clientX <= rect.right + horizontalPadding &&
+        e.clientY >= rect.top - verticalPadding &&
+        e.clientY <= rect.bottom + verticalPadding
       );
     };
 
@@ -271,7 +494,6 @@ export const DiscoverServices = () => {
     arcStartX = Math.min(arcStartX, maxSafeX - 50);
 
     let arcControlPointX = arcStartX + (isMobile ? 250 : 600);
-
     const currentPeakX = (arcStartX + arcControlPointX) / 2;
 
     if (currentPeakX > maxSafeX) {
@@ -507,126 +729,47 @@ export const DiscoverServices = () => {
       },
     });
 
-    const cursor = cursorRef.current;
+    const handleSpotlightClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
 
-    if (cursor) {
-      const xTo = gsap.quickTo(cursor, "x", {
-        duration: 0.6,
-        ease: "power3",
-      });
+      if (target.closest("[data-service-modal]")) return;
 
-      const yTo = gsap.quickTo(cursor, "y", {
-        duration: 0.6,
-        ease: "power3",
-      });
+      if (!isCursorNearActiveTitle(e)) return;
 
-      let lastMouseCheck = 0;
+      const activeIndex = currentActiveIndexRef.current;
+      const activeItem = spotlightItems[activeIndex];
 
-      const handleMouseMove = (e: MouseEvent) => {
-  if (selectedService) return;
-
-  xTo(e.clientX);
-  yTo(e.clientY);
-
-  if (isCursorNearActiveTitle(e)) {
-    updateCursorLabel("View");
-  } else {
-    updateCursorLabel("Scroll");
-  }
-};
-
-      const handleMouseEnter = () => {
-        if (selectedService) return;
-
-        gsap.to(cursor, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          overwrite: true,
-        });
-      };
-
-      const handleMouseLeave = () => {
-        gsap.to(cursor, {
-          opacity: 0,
-          scale: 0,
-          duration: 0.3,
-        });
-
-        updateCursorLabel("Scroll");
-      };
-
-      const handleSpotlightClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-
-        if (target.closest("[data-service-modal]")) return;
-
-        if (!isCursorNearActiveTitle(e)) return;
-
-        const activeIndex = currentActiveIndexRef.current;
-        const activeItem = spotlightItems[activeIndex];
-
-        if (activeItem) {
-          openServiceModal(activeItem.name, activeIndex);
-        }
-      };
-
-      const spotlight = spotlightRef.current;
-
-      if (spotlight) {
-        spotlight.addEventListener("mousemove", handleMouseMove);
-        spotlight.addEventListener("mouseenter", handleMouseEnter);
-        spotlight.addEventListener("mouseleave", handleMouseLeave);
-        spotlight.addEventListener("click", handleSpotlightClick);
+      if (activeItem) {
+        openServiceModal(activeItem.name, activeIndex);
       }
+    };
 
-      return () => {
-        if (scrollTriggerRef.current) {
-          scrollTriggerRef.current.kill();
-        }
+    const spotlight = spotlightRef.current;
 
-        if (spotlight) {
-          spotlight.removeEventListener("mousemove", handleMouseMove);
-          spotlight.removeEventListener("mouseenter", handleMouseEnter);
-          spotlight.removeEventListener("mouseleave", handleMouseLeave);
-          spotlight.removeEventListener("click", handleSpotlightClick);
-        }
-      };
+    if (spotlight) {
+      spotlight.addEventListener("click", handleSpotlightClick);
     }
 
     return () => {
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
       }
+
+      if (spotlight) {
+        spotlight.removeEventListener("click", handleSpotlightClick);
+      }
     };
   }, []);
 
-  useEffect(() => {
-  const cursor = cursorRef.current;
-
-  if (!cursor) return;
-
-  if (selectedService) {
-    gsap.to(cursor, {
-      opacity: 0,
-      scale: 0,
-      duration: 0.25,
-      ease: "power2.out",
-      overwrite: true,
-    });
-  }
-}, [selectedService]);
-
   return (
     <section className="spotlight" ref={spotlightRef}>
-      {/* Custom Cursor */}
-      <div
-        ref={cursorRef}
-        className={`spotlight-cursor ${selectedService ? "hidden" : ""}`}
-      >
-        <ArrowDown />
-        <span ref={cursorLabelRef}>Scroll</span>
-      </div>
+      <FloatingSpotlightCursor
+        spotlightRef={spotlightRef}
+        titleElementsRef={titleElementsRef}
+        currentActiveIndexRef={currentActiveIndexRef}
+        selectedServiceRef={selectedServiceRef}
+        closeButtonRef={closeButtonRef}
+      />
 
       <div className="spotlight-inner">
         <div className="spotlight-intro-text-wrapper">
@@ -682,14 +825,14 @@ export const DiscoverServices = () => {
         {selectedService && (
           <div
             data-service-modal
-            className="fixed inset-0 z-[100] flex items-center justify-center cursor-auto p-4 md:p-8"
+            className="fixed inset-0 z-[100] flex items-center justify-center cursor-none p-4 md:p-8"
           >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedService(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+              onClick={closeServiceModal}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-none"
             />
 
             <motion.div
@@ -701,11 +844,12 @@ export const DiscoverServices = () => {
                 damping: 25,
                 stiffness: 300,
               }}
-              className="relative w-full max-w-4xl max-h-[85vh] bg-white rounded-sm overflow-hidden flex flex-col shadow-2xl z-10 cursor-auto"
+              className="relative w-full max-w-4xl max-h-[85vh] bg-white rounded-sm overflow-hidden flex flex-col shadow-2xl z-10 cursor-none"
             >
               <button
-                onClick={() => setSelectedService(null)}
-                className="absolute top-6 right-6 z-20 text-zinc-400 hover:text-black transition-colors p-2 bg-white/50 rounded-full backdrop-blur-md cursor-pointer"
+                ref={closeButtonRef}
+                onClick={closeServiceModal}
+                className="absolute top-6 right-6 z-20 text-zinc-400 hover:text-black transition-colors p-2 bg-white/50 rounded-full backdrop-blur-md cursor-none"
                 aria-label="Close service popup"
               >
                 <X size={24} />
@@ -713,7 +857,7 @@ export const DiscoverServices = () => {
 
               <div
                 data-lenis-prevent
-                className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white"
+                className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white cursor-none"
               >
                 <div className="max-w-2xl mx-auto flex flex-col gap-12 lg:gap-16">
                   <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
@@ -745,14 +889,15 @@ export const DiscoverServices = () => {
                   </div>
 
                   <div className="pt-8">
-                    <button
-                      onClick={() => setSelectedService(null)}
-                      className="relative overflow-hidden w-full md:w-auto bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none"
+                    <Link
+                      to="/contact"
+                      onClick={closeServiceModal}
+                      className="relative overflow-hidden w-full md:w-auto inline-flex items-center justify-center bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none cursor-none"
                     >
                       <span className="relative z-10 block">
                         CONTACT OUR TEAM
                       </span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
