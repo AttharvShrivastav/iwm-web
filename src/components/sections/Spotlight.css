@@ -231,7 +231,7 @@
   }
 }
 
-.spotlight-cursor {
+.floating-spotlight-cursor {
   position: fixed;
   top: 0;
   left: 0;
@@ -245,22 +245,23 @@
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 9999;
-  font-family: 'JetBrains Mono', monospace;
+  z-index: 999999;
+  font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  will-change: transform, opacity;
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: translate3d(0, 0, 0) translate(-50%, -50%) scale(0);
+  transition: opacity 0.2s ease;
 }
 
-.spotlight-cursor span {
+.floating-spotlight-cursor span {
   margin-top: 2px;
 }
 
-.spotlight-cursor svg {
+.floating-spotlight-cursor svg {
   width: 12px;
   height: 12px;
 }

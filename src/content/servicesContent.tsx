@@ -366,7 +366,7 @@ export const servicesPageFallback: ServicesPageContent = {
           { label: 'CONTROL', value: 'Odour Control', icon: <Shield size={14} /> },
           { label: 'USE', value: 'River Cleanup', icon: <Waves size={14} /> },
         ],
-        image: '/assets/machinery/sdox-oxygen-system.png',
+        image: '/assets/machinery/machine-7.png',
         fallback:
           'https://images.unsplash.com/photo-1473773508845-188df298d2d1?q=80&w=2070&auto=format&fit=crop',
       },

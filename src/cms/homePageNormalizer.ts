@@ -241,13 +241,26 @@ export function normalizeHomePageResponse(
                 fallbackItem.modalEyebrow ||
                 'Service Specialization',
 
+                            /**
+               * Homepage modal should show only the short service description.
+               *
+               * Service title        -> service.title
+               * Short description    -> service.description
+               * Long description     -> service.long_description
+               *
+               * Important:
+               * Homepage Discover modal uses short description only.
+               * Service Page modal will continue using long_description separately.
+               */
               modalDescription:
                 cleanText(service.description) ||
-                fallbackItem.modalDescription ||
                 'More details about this service will be available soon.',
 
-              modalDetails:
-                fallbackItem.modalDetails,
+              /**
+               * Do not pull fallback modal bullets for API services.
+               * This keeps homepage modal content fully CMS/API-driven.
+               */
+              modalDetails: [],
             };
           })
         : homePageFallback.discoverServices.items,

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowDown, X } from "lucide-react";
 import gsap from "gsap";
@@ -15,6 +17,199 @@ gsap.registerPlugin(ScrollTrigger);
 type DiscoverServicesProps = {
   content: DiscoverServicesContent;
   canAnimate?: boolean;
+};
+
+type CursorMode = "SCROLL" | "VIEW" | "CLOSE";
+
+interface FloatingSpotlightCursorProps {
+  spotlightRef: RefObject<HTMLDivElement | null>;
+  titleElementsRef: RefObject<NodeListOf<HTMLHeadingElement> | null>;
+  currentActiveIndexRef: RefObject<number>;
+  selectedServiceRef: RefObject<DiscoverServiceItemContent | null>;
+  closeButtonRef: RefObject<HTMLButtonElement | null>;
+}
+
+const FloatingSpotlightCursor = ({
+  spotlightRef,
+  titleElementsRef,
+  currentActiveIndexRef,
+  selectedServiceRef,
+  closeButtonRef,
+}: FloatingSpotlightCursorProps) => {
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const modeRef = useRef<CursorMode>("SCROLL");
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    const label = labelRef.current;
+
+    if (!cursor || !label) return;
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+
+    let rafId: number | null = null;
+    let hasStarted = false;
+
+    const setCursorLabel = (mode: CursorMode) => {
+      if (modeRef.current === mode) return;
+
+      modeRef.current = mode;
+      label.textContent = mode;
+    };
+
+    const applyTransform = (scale: number) => {
+      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%) scale(${scale})`;
+    };
+
+    const showCursor = () => {
+      cursor.style.opacity = "1";
+      applyTransform(1);
+    };
+
+    const hideCursor = () => {
+      cursor.style.opacity = "0";
+      applyTransform(0);
+    };
+
+    const isInsideSpotlight = () => {
+      const spotlight = spotlightRef.current;
+
+      if (!spotlight) return false;
+
+      const rect = spotlight.getBoundingClientRect();
+
+      return (
+        mouseX >= rect.left &&
+        mouseX <= rect.right &&
+        mouseY >= rect.top &&
+        mouseY <= rect.bottom
+      );
+    };
+
+    const isNearActiveTitle = () => {
+      const titleElements = titleElementsRef.current;
+
+      if (!titleElements) return false;
+
+      const activeTitle = titleElements[
+        currentActiveIndexRef.current
+      ] as HTMLElement | undefined;
+
+      if (!activeTitle) return false;
+
+      const rect = activeTitle.getBoundingClientRect();
+
+      const horizontalPadding = window.innerWidth < 768 ? 80 : 180;
+      const verticalPadding = window.innerWidth < 768 ? 45 : 75;
+
+      return (
+        mouseX >= rect.left - horizontalPadding &&
+        mouseX <= rect.right + horizontalPadding &&
+        mouseY >= rect.top - verticalPadding &&
+        mouseY <= rect.bottom + verticalPadding
+      );
+    };
+
+    const isNearCloseButton = () => {
+      const closeButton = closeButtonRef.current;
+
+      if (!closeButton) return false;
+
+      const rect = closeButton.getBoundingClientRect();
+      const padding = 70;
+
+      return (
+        mouseX >= rect.left - padding &&
+        mouseX <= rect.right + padding &&
+        mouseY >= rect.top - padding &&
+        mouseY <= rect.bottom + padding
+      );
+    };
+
+    const updateCursorState = () => {
+      if (selectedServiceRef.current) {
+        showCursor();
+
+        if (isNearCloseButton()) {
+          setCursorLabel("CLOSE");
+        } else {
+          setCursorLabel("SCROLL");
+        }
+
+        return;
+      }
+
+      if (!isInsideSpotlight()) {
+        hideCursor();
+        setCursorLabel("SCROLL");
+        return;
+      }
+
+      showCursor();
+
+      if (isNearActiveTitle()) {
+        setCursorLabel("VIEW");
+      } else {
+        setCursorLabel("SCROLL");
+      }
+    };
+
+    const animateCursor = () => {
+      const ease = 0.11;
+
+      currentX += (mouseX - currentX) * ease;
+      currentY += (mouseY - currentY) * ease;
+
+      updateCursorState();
+
+      rafId = window.requestAnimationFrame(animateCursor);
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!hasStarted) {
+        hasStarted = true;
+        currentX = mouseX;
+        currentY = mouseY;
+        rafId = window.requestAnimationFrame(animateCursor);
+      }
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [
+    spotlightRef,
+    titleElementsRef,
+    currentActiveIndexRef,
+    selectedServiceRef,
+    closeButtonRef,
+  ]);
+
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="floating-spotlight-cursor" ref={cursorRef}>
+      <ArrowDown />
+      <span ref={labelRef}>SCROLL</span>
+    </div>,
+    document.body
+  );
 };
 
 export const DiscoverServices = ({
@@ -40,8 +235,10 @@ export const DiscoverServices = ({
   const imageElementsRef = useRef<(HTMLDivElement | null)[]>([]);
   const titleElementsRef = useRef<NodeListOf<HTMLHeadingElement> | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const cursorTextRef = useRef<HTMLSpanElement>(null);
+
+  const selectedServiceRef =
+    useRef<DiscoverServiceItemContent | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const currentActiveIndexRef = useRef<number>(0);
   const bgImgRef = useRef<HTMLImageElement>(null);
@@ -49,6 +246,10 @@ export const DiscoverServices = ({
   const config = {
     speed: 0.4,
   };
+
+  useEffect(() => {
+    selectedServiceRef.current = selectedService;
+  }, [selectedService]);
 
   useEffect(() => {
     if (selectedService) {
@@ -63,7 +264,13 @@ export const DiscoverServices = ({
   }, [selectedService]);
 
   const openServiceModal = (service: DiscoverServiceItemContent) => {
+    selectedServiceRef.current = service;
     setSelectedService(service);
+  };
+
+  const closeServiceModal = () => {
+    selectedServiceRef.current = null;
+    setSelectedService(null);
   };
 
   useGSAP(
@@ -95,12 +302,18 @@ export const DiscoverServices = ({
 
         spotlightItems.forEach((item, index) => {
           const titleElement = document.createElement("h1");
+
           titleElement.textContent = item.name;
           titleElement.style.opacity = index === 0 ? "1" : "0.35";
-          titleElement.style.cursor = "pointer";
+          titleElement.style.cursor = "none";
+          titleElement.style.pointerEvents = "auto";
 
-          titleElement.addEventListener("click", () => {
+          titleElement.addEventListener("click", (e) => {
+            e.stopPropagation();
+
+            if (index === currentActiveIndexRef.current) {
               openServiceModal(item);
+            }
           });
 
           titlesContainer.appendChild(titleElement);
@@ -111,6 +324,7 @@ export const DiscoverServices = ({
           const imgElement = document.createElement("img");
           imgElement.src = item.img;
           imgElement.alt = "";
+
           imgElement.onerror = () => {
             imgElement.src = item.fallback;
           };
@@ -179,15 +393,14 @@ export const DiscoverServices = ({
       const isCursorNearActiveTitle = (e: MouseEvent) => {
         const activeTitle = titleElements[
           currentActiveIndexRef.current
-        ] as HTMLElement;
+        ] as HTMLElement | undefined;
 
         if (!activeTitle) return false;
 
         const rect = activeTitle.getBoundingClientRect();
 
-          const horizontalPadding = window.innerWidth < 768 ? 80 : 180;
-          const verticalPadding = window.innerWidth < 768 ? 45 : 75;
-
+        const horizontalPadding = window.innerWidth < 768 ? 80 : 180;
+        const verticalPadding = window.innerWidth < 768 ? 45 : 75;
 
         return (
           e.clientX >= rect.left - horizontalPadding &&
@@ -250,7 +463,10 @@ export const DiscoverServices = ({
               "--after-opacity": "0",
             });
 
-            if (bgImgRef.current && bgImgRef.current.src !== spotlightItems[0].img) {
+            if (
+              bgImgRef.current &&
+              bgImgRef.current.getAttribute("src") !== spotlightItems[0].img
+            ) {
               bgImgRef.current.src = spotlightItems[0].img;
               currentActiveIndexRef.current = 0;
 
@@ -268,8 +484,13 @@ export const DiscoverServices = ({
               transform: "scale(1)",
             });
 
-            if (introTextElements[0]) gsap.set(introTextElements[0], { opacity: 0 });
-            if (introTextElements[1]) gsap.set(introTextElements[1], { opacity: 0 });
+            if (introTextElements[0]) {
+              gsap.set(introTextElements[0], { opacity: 0 });
+            }
+
+            if (introTextElements[1]) {
+              gsap.set(introTextElements[1], { opacity: 0 });
+            }
 
             imageElements.forEach((img) => {
               if (img) gsap.set(img, { opacity: 0 });
@@ -291,8 +512,13 @@ export const DiscoverServices = ({
               transform: "scale(1)",
             });
 
-            if (introTextElements[0]) gsap.set(introTextElements[0], { opacity: 0 });
-            if (introTextElements[1]) gsap.set(introTextElements[1], { opacity: 0 });
+            if (introTextElements[0]) {
+              gsap.set(introTextElements[0], { opacity: 0 });
+            }
+
+            if (introTextElements[1]) {
+              gsap.set(introTextElements[1], { opacity: 0 });
+            }
 
             if (isMobile) {
               spotlightHeader.style.opacity = "0";
@@ -367,7 +593,8 @@ export const DiscoverServices = ({
 
             if (closestIndex !== currentActiveIndexRef.current) {
               if (titleElements[currentActiveIndexRef.current]) {
-                titleElements[currentActiveIndexRef.current].style.opacity = "0.35";
+                titleElements[currentActiveIndexRef.current].style.opacity =
+                  "0.35";
               }
 
               if (titleElements[closestIndex]) {
@@ -391,92 +618,26 @@ export const DiscoverServices = ({
         },
       });
 
-      const cursor = cursorRef.current;
+      const handleSpotlightClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
 
-      if (cursor) {
-        const xTo = gsap.quickTo(cursor, "x", {
-          duration: 0.6,
-          ease: "power3",
-        });
+        if (target.closest("[data-service-modal]")) return;
+        if (!isCursorNearActiveTitle(e)) return;
 
-        const yTo = gsap.quickTo(cursor, "y", {
-          duration: 0.6,
-          ease: "power3",
-        });
+        const activeService = spotlightItems[currentActiveIndexRef.current];
 
-        let currentCursorText: "SCROLL" | "VIEW" = "SCROLL";
+        if (activeService) {
+          openServiceModal(activeService);
+        }
+      };
 
-        const handleMouseMove = (e: MouseEvent) => {
-          xTo(e.clientX);
-          yTo(e.clientY);
+      const spotlight = spotlightRef.current;
 
-          const nextCursorText = isCursorNearActiveTitle(e) ? "VIEW" : "SCROLL";
-
-          if (nextCursorText !== currentCursorText) {
-            currentCursorText = nextCursorText;
-
-            if (cursorTextRef.current) {
-              cursorTextRef.current.textContent = nextCursorText;
-            }
-          }
-        };
-
-        const handleMouseEnter = () => {
-          gsap.to(cursor, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.3,
-          });
-        };
-
-        const handleMouseLeave = () => {
-          gsap.to(cursor, {
-            opacity: 0,
-            scale: 0,
-            duration: 0.3,
-          });
-
-          currentCursorText = "SCROLL";
-
-          if (cursorTextRef.current) {
-            cursorTextRef.current.textContent = "SCROLL";
-          }
-        };
-
-        const spotlight = spotlightRef.current;
-
-        const handleSpotlightClick = (e: MouseEvent) => {
-  const target = e.target as HTMLElement;
-
-  // Do not reopen modal when clicking inside the modal itself.
-  if (target.closest("[data-service-modal]")) return;
-
-  if (!isCursorNearActiveTitle(e)) return;
-
-  const activeService = spotlightItems[currentActiveIndexRef.current];
-
-  if (activeService) {
-    openServiceModal(activeService);
-  }
-};
-
-        spotlight?.addEventListener("mousemove", handleMouseMove);
-        spotlight?.addEventListener("mouseenter", handleMouseEnter);
-        spotlight?.addEventListener("mouseleave", handleMouseLeave);
-        spotlight?.addEventListener("click", handleSpotlightClick);
-
-        return () => {
-          scrollTriggerRef.current?.kill();
-
-          spotlight?.removeEventListener("mousemove", handleMouseMove);
-          spotlight?.removeEventListener("mouseenter", handleMouseEnter);
-          spotlight?.removeEventListener("mouseleave", handleMouseLeave);
-          spotlight?.removeEventListener("click", handleSpotlightClick);
-        };
-      }
+      spotlight?.addEventListener("click", handleSpotlightClick);
 
       return () => {
         scrollTriggerRef.current?.kill();
+        spotlight?.removeEventListener("click", handleSpotlightClick);
       };
     },
     {
@@ -490,10 +651,13 @@ export const DiscoverServices = ({
 
   return (
     <section className="spotlight" ref={spotlightRef}>
-      <div ref={cursorRef} className="spotlight-cursor">
-        <ArrowDown />
-        <span ref={cursorTextRef}>SCROLL</span>
-      </div>
+      <FloatingSpotlightCursor
+        spotlightRef={spotlightRef}
+        titleElementsRef={titleElementsRef}
+        currentActiveIndexRef={currentActiveIndexRef}
+        selectedServiceRef={selectedServiceRef}
+        closeButtonRef={closeButtonRef}
+      />
 
       <div className="spotlight-inner">
         <div className="spotlight-intro-text-wrapper">
@@ -545,95 +709,88 @@ export const DiscoverServices = ({
       <div className="spotlight-outline"></div>
 
       <AnimatePresence>
-  {selectedService && (
-    <div
-      data-service-modal
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-    >
-      {/* Backdrop */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={() => setSelectedService(null)}
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
-      />
+        {selectedService && (
+          <div
+            data-service-modal
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 cursor-none"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeServiceModal}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-none"
+            />
 
-      {/* Modal Content */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="relative w-full max-w-4xl max-h-[85vh] bg-white rounded-sm overflow-hidden flex flex-col shadow-2xl z-10"
-      >
-        {/* Close Button */}
-        <button
-          onClick={() => setSelectedService(null)}
-          className="absolute top-6 right-6 z-20 text-zinc-400 hover:text-black transition-colors p-2 bg-white/50 rounded-full backdrop-blur-md"
-          aria-label="Close service popup"
-        >
-          <X size={24} />
-        </button>
-
-        {/* Text Content Area */}
-        <div
-          data-lenis-prevent
-          className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white"
-        >
-          <div className="max-w-2xl mx-auto flex flex-col gap-12 lg:gap-16">
-            {/* Header - Editorial Style */}
-            <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
-              <div className="flex items-center gap-3">
-                <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">
-                  SERVICE SPECIALIZATION
-                </span>
-              </div>
-
-              <h2 className="text-2xl md:text-4xl font-medium text-black font-agrandir leading-tight">
-                {selectedService.modalTitle || selectedService.name}
-              </h2>
-            </div>
-
-            {/* Body Text - Editorial Style */}
-            <div className="flex flex-col gap-8 pt-4">
-              <p className="text-lg md:text-xl text-zinc-700 leading-relaxed font-sans">
-                {selectedService.modalDescription ||
-                  'More details about this service will be available soon.'}
-              </p>
-
-              <div className="flex flex-col gap-4 pt-4">
-                <p className="text-zinc-500 text-sm leading-relaxed max-w-lg italic border-l-2 border-zinc-200 pl-4">
-                  At IWM, our operational philosophy is built on three pillars:
-                  visibility of results, relentless innovation, and radical
-                  dignity for our staff. This approach allows us to deliver
-                  scale and consistency where others see only complexity.
-                </p>
-              </div>
-
-              
-            </div>
-
-            {/* Action */}
-            <div className="pt-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-4xl max-h-[85vh] bg-white rounded-sm overflow-hidden flex flex-col shadow-2xl z-10 cursor-none"
+            >
               <button
-                onClick={() => {
-                  setSelectedService(null);
-                  window.location.href = '/contact';
-                }}
-                className="relative overflow-hidden w-full md:w-auto bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none"
+                ref={closeButtonRef}
+                onClick={closeServiceModal}
+                className="absolute top-6 right-6 z-20 text-zinc-400 hover:text-black transition-colors p-2 bg-white/50 rounded-full backdrop-blur-md cursor-none"
+                aria-label="Close service popup"
               >
-                <span className="relative z-10 block">CONTACT OUR TEAM</span>
+                <X size={24} />
               </button>
-            </div>
-          </div>
-        </div>
 
-        <div className="h-1.5 w-full bg-zinc-100" />
-      </motion.div>
-    </div>
-  )}
-</AnimatePresence>
+              <div
+                data-lenis-prevent
+                className="w-full p-8 md:p-16 lg:p-24 overflow-y-auto bg-white cursor-none"
+              >
+                <div className="max-w-2xl mx-auto flex flex-col gap-12 lg:gap-16">
+                  <div className="flex flex-col gap-4 border-b border-zinc-200 pb-8">
+                    <div className="flex items-center gap-3">
+                      <span className="text-zinc-500 font-bold tracking-[0.2em] text-[10px] uppercase">
+                        SERVICE SPECIALIZATION
+                      </span>
+                    </div>
+
+                    <h2 className="text-2xl md:text-4xl font-medium text-black font-agrandir leading-tight">
+                      {selectedService.modalTitle || selectedService.name}
+                    </h2>
+                  </div>
+
+                  <div className="flex flex-col gap-8 pt-4">
+                    <p className="text-lg md:text-xl text-zinc-700 leading-relaxed font-sans">
+                      {selectedService.modalDescription ||
+                        "More details about this service will be available soon."}
+                    </p>
+
+                    <div className="flex flex-col gap-4 pt-4">
+                      <p className="text-zinc-500 text-sm leading-relaxed max-w-lg italic border-l-2 border-zinc-200 pl-4">
+                        At IWM, our operational philosophy is built on three
+                        pillars: visibility of results, relentless innovation,
+                        and radical dignity for our staff. This approach allows
+                        us to deliver scale and consistency where others see
+                        only complexity.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-8">
+                    <Link
+                      to="/contact"
+                      onClick={closeServiceModal}
+                      className="relative overflow-hidden w-full md:w-auto inline-flex items-center justify-center bg-black text-white px-10 py-5 text-[12px] font-bold tracking-widest hover:bg-zinc-800 transition-colors whitespace-nowrap rounded-none cursor-none"
+                    >
+                      <span className="relative z-10 block">
+                        CONTACT OUR TEAM
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-1.5 w-full bg-zinc-100" />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
