@@ -94,11 +94,11 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
   ];
 
   const socialLinks = [
-    { label: 'Instagram', href: '#' },
-    { label: 'Facebook', href: '#' },
+    { label: 'Instagram', href: 'https://www.instagram.com/internationalwastemanagement?igsh=MTQ3emI5cWQ5eTBrNw==' },
+    { label: 'Facebook', href: 'https://www.facebook.com/iwmpl/' },
     { label: 'Linkedin', href: '#' },
     { label: 'Whatsapp', href: '#' },
-    { label: 'X', href: '#' },
+    { label: 'X', href: 'https://x.com/IWM_India' },
   ];
 
   return (
