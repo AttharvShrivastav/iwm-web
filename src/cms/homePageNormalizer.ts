@@ -301,7 +301,9 @@ export function normalizeHomePageResponse(
 
                     return {
                       name:
+                        cleanText(logo.logo_name) ||
                         cleanText(logo.name) ||
+                        fallbackClient?.name ||
                         `${cleanText(industry.title) || 'Industry'} Logo ${logoIndex + 1}`,
 
                       logo:
