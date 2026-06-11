@@ -41,7 +41,7 @@ const leaders: Leader[] = [
     image: "/assets/people/leadership/hardik.webp"
   },
   {
-    name: "Ms. Radhika Patidar",
+    name: "Mrs. Radhika Patidar",
     designation: "Hr & Admin Head",
     email: "radhika@iwm-india.com",
     image: "/assets/people/leadership/radhika.webp"
