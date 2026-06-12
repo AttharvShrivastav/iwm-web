@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
 
   const chennaiAddress =
     siteContent?.address ||
-    '506 PM House, Sri Shipping Bldg, Alandru St, St Thomas Mount, Chennai — 600016';
+    '506 PM House, Sri Shipping Bldg, Alandur St, St Thomas Mount, Chennai — 600016';
 
   const copyrightText =
     siteContent?.copyrightText ||
