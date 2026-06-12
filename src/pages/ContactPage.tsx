@@ -116,7 +116,7 @@ export const ContactPage: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Indore Office</p>
                     <p className="text-lg text-black font-sans leading-relaxed">
-                      663, East, Ring Rd, Near Bombay Hospital,<br />
+                      663, East Ring Rd, Near Bombay Hospital,<br />
                       Indore, Madhya Pradesh 452018
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export const ContactPage: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Chennai Office</p>
                     <p className="text-lg text-black font-sans leading-relaxed">
-                      506 PM House, Sri Shipping Building Alandru St,<br />
+                      506 PM House, Sri Shipping Building Alandur St,<br />
                       St Thomas Mount, Chennai — 600016
                     </p>
                   </div>

@@ -236,7 +236,7 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">Chennai Office</span>
                     <p className="text-[14px] font-light opacity-80 leading-relaxed font-sans">
                       506 PM House, Sri Shipping Bldg <br />
-                      Alandru St, St Thomas Mount, <br />
+                      Alandur St, St Thomas Mount, <br />
                       Chennai — 600016
                     </p>
                   </div>

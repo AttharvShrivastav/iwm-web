@@ -39,7 +39,7 @@ const offices = [
   {
     city: 'CHENNAI OFFICE',
     lines: [
-      '506 PM House, Sri Shipping Building Alandru St,',
+      '506 PM House, Sri Shipping Building Alandur St,',
       'St Thomas Mount, Chennai — 600016',
     ]
   }
