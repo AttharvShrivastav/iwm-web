@@ -42,22 +42,23 @@ export const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
     { label: 'Linkedin', href: siteContent?.socialLinks.linkedin },
     { label: 'X', href: siteContent?.socialLinks.twitter },
   ];
+  
 
   const offices = [
-    {
-      city: 'INDORE OFFICE',
-      lines: [
-        '663, East, Ring Rd, Near Bombay Hospital,',
-        'Indore, Madhya Pradesh 452018',
-      ],
-    },
-    {
-      city: 'CHENNAI OFFICE',
-      lines: [
-        siteContent?.address ||
-          '506 PM House, Sri Shipping Building Alandru St, St Thomas Mount, Chennai — 600016',
-      ],
-    },
+  {
+    city: 'INDORE OFFICE',
+    lines: [
+      siteContent?.address ||
+        '663, East Ring Rd, Near Bombay Hospital, Indore, Madhya Pradesh 452018',
+    ],
+  },
+  {
+    city: 'CHENNAI OFFICE',
+    lines: [
+      siteContent?.secondaryAddress ||
+        '506 PM House, Sri Shipping Building Alandur St, St Thomas Mount, Chennai — 600016',
+    ],
+  },
   ];
 
   const showComingSoon = (label: string) => {

@@ -22,6 +22,7 @@ export type SiteContent = {
   email: string;
   supportEmail?: string;
   address: string;
+  secondaryAddress: string;
   mapLink?: string;
   socialLinks: SocialLinksContent;
   footerText?: string;
@@ -50,6 +51,9 @@ export const siteFallback: SiteContent = {
 
   address:
     '663, East, Ring Rd, near Bombay Hospital, Indore, Madhya Pradesh 452018',
+
+  secondaryAddress:
+  '506 PM House, Sri Shipping Building Alandur St, St Thomas Mount, Chennai — 600016',
 
   mapLink: undefined,
 

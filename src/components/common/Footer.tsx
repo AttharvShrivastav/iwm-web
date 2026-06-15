@@ -41,9 +41,13 @@ export const Footer: React.FC = () => {
     { label: 'X', href: siteContent?.socialLinks.twitter },
   ];
 
+  const indoreAddress =
+  siteContent?.address ||
+  '663, East Ring Rd, Near Bombay Hospital, Indore, Madhya Pradesh 452018';
+
   const chennaiAddress =
-    siteContent?.address ||
-    '506 PM House, Sri Shipping Bldg, Alandur St, St Thomas Mount, Chennai — 600016';
+  siteContent?.secondaryAddress ||
+  '506 PM House, Sri Shipping Building Alandur St, St Thomas Mount, Chennai — 600016';
 
   const copyrightText =
     siteContent?.copyrightText ||
@@ -292,9 +296,7 @@ export const Footer: React.FC = () => {
                       Indore Office
                     </span>
                     <p className="text-[14px] font-light opacity-80 leading-relaxed font-sans">
-                      663, East, Ring Rd, <br />
-                      Near Bombay Hospital, <br />
-                      Indore, MP 452018
+                      {indoreAddress}
                     </p>
                   </div>
 

@@ -209,12 +209,14 @@ export const ContactPage: React.FC = () => {
    * 0 = Indore Office stays static fallback
    * 1 = Chennai Office can come from backend/WebInfo API
    */
-  const isEditableOffice = officeIndex === 1;
+  const cmsOfficeAddress =
+  officeIndex === 0
+    ? siteContent?.address
+    : siteContent?.secondaryAddress;
 
-  const officeAddress =
-    isEditableOffice && siteContent?.address
-      ? [siteContent.address]
-      : office.address;
+  const officeAddress = cmsOfficeAddress
+    ? [cmsOfficeAddress]
+    : office.address;
 
   return (
     <div key={office.label} className="flex gap-6 items-start">

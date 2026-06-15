@@ -95,7 +95,12 @@ export function normalizeSiteContentResponse(
       cleanText(data.support_email) || siteFallback.supportEmail,
 
     address:
-      cleanText(data.address) || siteFallback.address,
+    cleanText(data.address) ||
+    siteFallback.address,
+
+    secondaryAddress:
+      cleanText(data.map_link) ||
+      siteFallback.secondaryAddress,
 
     mapLink:
       cleanText(data.map_link) || siteFallback.mapLink,
